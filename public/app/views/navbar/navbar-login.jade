@@ -1,0 +1,16 @@
+.navbar.navbar-inverse.navbar-fixed-top(ng-controller="navbarLoginCtrl")
+  .container-fluid
+    .navbar-header
+      a.navbar-brand(href="/")
+        img(src="/img/navbarBrand.png")
+    .navbar-right(ng-if="identityService.isAuthenticated()")
+      ul.nav.navbar-nav.navbar-right
+        li.dropdown
+          a.logged-in.dropdown-toggle(href="", data-toggle="dropdown")
+            b.logged-in {{identityService.currentUser.firstName}} {{identityService.currentUser.lastName}}
+              .caret
+          ul.dropdown-menu
+            li
+              a(href="/views/profile/profile") Profile
+            li
+              a(href="", ng-click="signout()") Sign Out

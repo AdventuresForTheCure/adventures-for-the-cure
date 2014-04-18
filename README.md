@@ -5,6 +5,16 @@
  * npm init
  * npm install --save express jade
  * git init
- * (create .gitignore file)
+ * (create /README.md file)
+ * (create /.gitignore file)
  * git add -A
  * git commit -m "first commit"
+ * npm install bower -g
+ * (create /server directory)
+ * (create /public directory)
+ * (create /.bowerrc file)
+ * bower init
+ * bower install jquery --save
+ * bower install toastr --save
+ * bower install angular angular-resource angular-route --save
+ * (create /server.js file)

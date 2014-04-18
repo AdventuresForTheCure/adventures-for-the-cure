@@ -1,0 +1,11 @@
+extends ../includes/layout
+block main-content
+  div(ng-include="'/partials/navbar/navbar-login'")
+  .container
+    .row
+      .col-md-9
+        div(ng-view)
+      .col-md-3
+        div(ng-include="'/partials/sponsors/sponsors'")
+  footer.container.text-center
+    div(ng-include="'/partials/footer/footer'")
