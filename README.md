@@ -1,6 +1,9 @@
 # Adventures For the Cure
 
-## Create this project
+## Deployment links
+* Development: http://enigmatic-eyrie-7804.herokuapp.com/
+
+## How to recreate a project like this one
 * To create a project like this one perform the following steps:
  * npm init
  * npm install --save express jade
@@ -18,3 +21,13 @@
  * bower install toastr --save
  * bower install angular angular-resource angular-route --save
  * (create /server.js file)
+
+* To add to heroku
+ * git remote add heroku git@INSERT_HEROKU_APP_NAME.git
+  * for example: git remote add heroku git@heroku.com:enigmatic-eyrie-7804.git
+ * git push heroku master
+
+* To add to github
+ * git remote add origin https://github.com/INSERT_GITHUB_USERNAME/INSERT_PROJECT_NAME.git
+  * for example: git remote add origin https://github.com/pblair12/adventures-for-the-cure.git
+ * git push -u origin master
