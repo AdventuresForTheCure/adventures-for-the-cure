@@ -18,9 +18,9 @@ module.exports = function(config) {
       'public/vendor/angular/angular.js',
       'public/vendor/angular-resource/angular-resource.js',
       'public/vendor/angular-mocks/angular-mocks.js',
-      'test/test-app.js',
+      'test/public/test-app.js',
       'public/app/**/*.js',
-      'test/tests/**/*.js'
+      'test/public/**/*.js'
     ],
 
 

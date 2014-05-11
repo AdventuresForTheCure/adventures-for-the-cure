@@ -22,6 +22,11 @@
   * bower install angular angular-resource angular-route --save
   * (create /server.js file)
 
+## How to write tests
+* npm install mocha -g
+* npm install karma-mocha karma-chai-plugins superagent expect.js --save-dev
+* npm install jasmine-node-karma --save-dev
+
 * To add to heroku
   * git remote add heroku git@INSERT_HEROKU_APP_NAME.git
     * for example: git remote add heroku git@heroku.com:enigmatic-eyrie-7804.git

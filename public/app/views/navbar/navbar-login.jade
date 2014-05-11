@@ -3,6 +3,26 @@
     .navbar-header
       a.navbar-brand(href="/")
         img(src="/img/navbarBrand.png")
+    .navbar-left
+      ul.nav.navbar-nav.navbar-left
+        li
+          a(href="") Home
+        li
+          a(href="") Donate
+        li
+          a(href="") Events
+        li
+          a(href="") Campaigns
+        li
+          a(href="") Rides
+        li
+          a(href="") Members/Join
+        li
+          a(href="") Results/Media
+        li
+          a(href="") Inventory
+        li
+          a(href="") Contact/About
     .navbar-right(ng-if="identityService.isAuthenticated()")
       ul.nav.navbar-nav.navbar-right
         li.dropdown
