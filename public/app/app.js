@@ -17,8 +17,11 @@ angular.module('app').config(function($routeProvider, $locationProvider) {
 
   // configure the available routes
   $routeProvider
-    .when('/', { templateUrl: '/partials/home/home',
-      controller: 'homeCtrl'
+    .when('/', { templateUrl: '/partials/home/home'
+    })
+    .when('/home', { templateUrl: '/partials/home/home'
+    })
+    .when('/views/javascript/javascript', { templateUrl: '/partials/javascript/javascript'
     })
     .when('/login', { templateUrl: '/partials/login/login',
       controller: 'loginCtrl'
@@ -64,3 +67,11 @@ angular.module('app').run(function($rootScope, $location, notifierService) {
     }
   });
 });
+
+angular.module('ui.bootstrap.carousel', ['ui.bootstrap.transition'])
+  .controller('CarouselController', ['$scope', '$timeout', '$transition', '$q', function ($scope, $timeout, $transition, $q) {
+  }]).directive('carousel', [function () {
+    return {
+
+    }
+  }]);
