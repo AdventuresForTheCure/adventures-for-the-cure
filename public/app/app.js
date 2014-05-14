@@ -21,7 +21,21 @@ angular.module('app').config(function($routeProvider, $locationProvider) {
     })
     .when('/home', { templateUrl: '/partials/home/home'
     })
-    .when('/views/javascript/javascript', { templateUrl: '/partials/javascript/javascript'
+    .when('/donate', { templateUrl: '/partials/donate/donate'
+    })
+    .when('/events', { templateUrl: '/partials/events/events'
+    })
+    .when('/campaigns', { templateUrl: '/partials/campaigns/campaigns'
+    })
+    .when('/rides', { templateUrl: '/partials/rides/rides'
+    })
+    .when('/members', { templateUrl: '/partials/members/members'
+    })
+    .when('/results', { templateUrl: '/partials/results/results'
+    })
+    .when('/inventory', { templateUrl: '/partials/inventory/inventory'
+    })
+    .when('/contact', { templateUrl: '/partials/contact/contact'
     })
     .when('/login', { templateUrl: '/partials/login/login',
       controller: 'loginCtrl'
@@ -32,12 +46,6 @@ angular.module('app').config(function($routeProvider, $locationProvider) {
     .when('/views/profile/profile', { templateUrl: '/partials/profile/profile',
       controller: 'profileCtrl', resolve: routeRoleChecks.user
     })
-    .when('/views/groupCreateOrEdit/group-create-or-edit', { templateUrl: '/partials/groupCreateOrEdit/group-create-or-edit',
-      controller: 'groupCreateOrEditCtrl', resolve: routeRoleChecks.user
-    })
-    .when('/views/groupCreateOrEdit/group-create-or-edit/:id', { templateUrl: '/partials/groupCreateOrEdit/group-create-or-edit',
-      controller: 'groupCreateOrEditCtrl', resolve: routeRoleChecks.user
-    })
     .when('/views/userEdit/user-edit/:id', { templateUrl: '/partials/userEdit/user-edit',
       controller: 'userEditCtrl', resolve: routeRoleChecks.admin
     })
@@ -47,12 +55,6 @@ angular.module('app').config(function($routeProvider, $locationProvider) {
     .when('/views/userCreate/user-create', { templateUrl: '/partials/userCreate/user-create',
       controller: 'userCreateCtrl', resolve: routeRoleChecks.admin
     })
-    .when('/views/groupList/group-list', { templateUrl: '/partials/groupList/group-list',
-      controller: 'groupListCtrl'
-    })
-    .when('/views/groupJoin/group-join/:id', { templateUrl: '/partials/groupJoin/group-join',
-      controller: 'groupJoinCtrl'
-    });
 });
 
 /**

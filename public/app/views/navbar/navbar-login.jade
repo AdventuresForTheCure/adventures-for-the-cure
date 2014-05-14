@@ -2,27 +2,27 @@
   .container-fluid
     .navbar-header
       a.navbar-brand(href="/")
-        img(src="/img/navbarBrand.png")
+        img(src="/img/afc.jpg")
     .navbar-left
       ul.nav.navbar-nav.navbar-left
         li
-          a(href="") Home
+          a(href="/home") Home
         li
-          a(href="") Donate
+          a(href="/donate") Donate
         li
-          a(href="") Events
+          a(href="/events") Events
         li
-          a(href="") Campaigns
+          a(href="/campaigns") Campaigns
         li
-          a(href="") Rides
+          a(href="/rides") Rides
         li
-          a(href="") Members/Join
+          a(href="/members") Members/Join
         li
-          a(href="") Results/Media
+          a(href="/results") Results/Media
         li
-          a(href="") Inventory
+          a(href="/inventory") Inventory
         li
-          a(href="") Contact/About
+          a(href="/contact") Contact/About
     .navbar-right(ng-if="identityService.isAuthenticated()")
       ul.nav.navbar-nav.navbar-right
         li.dropdown
