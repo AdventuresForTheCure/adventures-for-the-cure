@@ -1,4 +1,4 @@
-angular.module('app').controller('navbarLoginCtrl', function($scope, $http, $location, identityService, notifierService, authorizationService) {
+angular.module('app').controller('navbarLoginCtrl', function($scope, $location, identityService, notifierService, authorizationService) {
   $scope.identityService = identityService;
 
   $scope.signout = function() {
