@@ -1,11 +1,10 @@
 var auth = require('./auth'),
-  cache = require('./cache'),
-  path = require('path');
+  cache = require('./cache');
 
 module.exports = function(app, config) {
   // static html files are in this directory
   app.get('/partials/campaigns/campaigns/*', function(req, res) {
-    res.sendfile(path.resolve('public/app/views/campaigns/campaigns/' + req.params));
+    res.sendfile(config.rootPath + 'public/app/views/campaigns/campaigns/' + req.params);
   });
   // render jade files
   app.get('/partials/*', function(req, res) {
