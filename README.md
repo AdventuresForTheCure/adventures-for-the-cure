@@ -23,7 +23,7 @@
   * (create /.gitignore file)
   * git add -A
   * git commit -m "first commit"
-  * npm install bower -g
+  * npm install bower -g --save
   * (create /server directory)
   * (create /public directory)
   * (create /.bowerrc file)
@@ -34,7 +34,7 @@
   * (create /server.js file)
 
 ## How to write tests
-* npm install mocha -g
+* npm install mocha -g --save
 * npm install karma-mocha karma-chai-plugins superagent expect.js --save-dev
 * npm install jasmine-node-karma --save-dev
 
