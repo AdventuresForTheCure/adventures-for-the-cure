@@ -2,14 +2,14 @@
 
 ## Goals
 * To replace http://adventuresforthecure.com
-** Currently it is a php, javascript, html application running on a Go Daddy server
-** This new version will be a MEAN stack implementation running on a Heroku server with a Mongo database backend
+  * Currently it is a php, javascript, html application running on a Go Daddy server
+  * This new version will be a MEAN stack implementation running on a Heroku server with a Mongo database backend
 * After all funcationality has been replaced add in the following:
-** Team member login/roles
-** Board member login/roles
-** Secured member only resources/pages
-** Member profile update/delete/creation
-** Inventory management/order placement
+  * Team member login/roles
+  * Board member login/roles
+  * Secured member only resources/pages
+  * Member profile update/delete/creation
+  * Inventory management/order placement
 
 ## Deployment links
 * Development: http://enigmatic-eyrie-7804.herokuapp.com/
