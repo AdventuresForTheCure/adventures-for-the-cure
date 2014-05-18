@@ -1,10 +1,14 @@
 var auth = require('./auth'),
-  cache = require('./cache');
+  cache = require('./cache'),
+  campaigns = require('../controllers/campaignsController');
 
-module.exports = function(app, config) {
+module.exports = function(app, rootPath) {
+  app.get('/api/campaigns/:name', cache.disableBrowserCache, campaigns.getCampaign);
+  app.get('/api/campaigns', cache.disableBrowserCache, campaigns.getCampaigns);
+
   // static html files are in this directory
   app.get('/partials/campaigns/campaigns/*', function(req, res) {
-    res.sendfile(config.rootPath + 'public/app/views/campaigns/campaigns/' + req.params);
+    res.sendfile(rootPath + 'public/app/views/campaigns/campaigns/' + req.params);
   });
   // render jade files
   app.get('/partials/*', function(req, res) {

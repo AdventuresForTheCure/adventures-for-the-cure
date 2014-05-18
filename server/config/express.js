@@ -2,13 +2,13 @@ var express = require('express'),
     stylus = require('stylus'),
     passport = require('passport');
 
-module.exports = function(app, config) {
+module.exports = function(app, rootPath) {
   function compile(str, path) {
     return stylus(str).set('filename', path);
   }
 
   app.configure(function() {
-    app.set('views', config.rootPath + '/server/views');
+    app.set('views', rootPath + '/server/views');
     app.set('view engine', 'jade');
     app.use(express.logger('dev'));
     app.use(express.cookieParser());
@@ -18,11 +18,11 @@ module.exports = function(app, config) {
     app.use(passport.session());
     app.use(stylus.middleware(
       {
-        src: config.rootPath + '/public',
+        src: rootPath + '/public',
         compile: compile
       }
     ));
     // ensure that all public requests go to the /public directory
-    app.use(express.static(config.rootPath + '/public'));
+    app.use(express.static(rootPath + '/public'));
   });
 }

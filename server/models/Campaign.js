@@ -1,0 +1,4 @@
+var Campaign = {
+  name: "",
+  html: ""
+};

@@ -12,6 +12,7 @@
  */
 var path = require('path');
 var rootPath = path.normalize(__dirname + '/../../');
+var campaignsPath = rootPath + 'public/app/views/campaigns/campaigns/';
 
 module.exports = {
   development: {
@@ -19,7 +20,6 @@ module.exports = {
       url: 'mongodb://localhost:27017/adventuresforthecure',
       debugMode: true
     },
-    rootPath: rootPath,
     port: process.env.PORT || 3030
   },
   production: {
@@ -27,7 +27,10 @@ module.exports = {
       url: 'mongodb://'+process.env.AFC_MONGO_USERNAME+':'+process.env.AFC_MONGO_PASSWORD+'@ds027489.mongolab.com:27489/adventuresforthecure',
       debugMode: false
     },
-    rootPath: rootPath,
     port: process.env.PORT || 80
+  },
+  paths: { 
+    rootPath: rootPath,
+    campaignsPath: campaignsPath
   }
 }

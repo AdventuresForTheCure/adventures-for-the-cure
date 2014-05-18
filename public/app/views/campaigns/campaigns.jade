@@ -1,4 +1,4 @@
-.col-lg-12(ng-controller="campaignsController")
+.col-lg-12(ng-controller="campaignsCtrl")
   .well
     h4 What is an AFC Campaign?
     p
@@ -22,7 +22,8 @@
     .col-lg-4
       .well
         h4 AFC Campaign List
-        <?=$linkList?>
+        ul
+          li(ng-repeat="campaign in campaigns")
+            a(ng-click="selectCampaign(campaign)" href="") {{campaign.name}}
     .col-lg-8
-      .well
-        <div id="campaignContent</div>
+      .well(ng-bind-html="selectedCampaignHtml")

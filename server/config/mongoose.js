@@ -1,10 +1,10 @@
 var mongoose = require('mongoose'),
   userModel = require('../models/User');
 
-module.exports = function(env, config) {
-  mongoose.set('debug', config.db.debugMode)
+module.exports = function(env, configEnv) {
+  mongoose.set('debug', configEnv.db.debugMode)
   console.log("connecting to '" + env + "' mongo instance");
-  mongoose.connect(config.db.url)
+  mongoose.connect(configEnv.db.url)
   console.log("connected...");
 
   var db = mongoose.connection;
