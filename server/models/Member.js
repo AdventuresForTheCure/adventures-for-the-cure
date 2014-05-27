@@ -1,0 +1,4 @@
+var Member = {
+  name: "",
+  html: ""
+};

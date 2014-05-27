@@ -13,6 +13,7 @@
 var path = require('path');
 var rootPath = path.normalize(__dirname + '/../../');
 var campaignsPath = rootPath + 'public/app/views/campaigns/campaigns/';
+var membersPath = rootPath + 'public/app/views/members/members/';
 
 module.exports = {
   development: {
@@ -31,6 +32,7 @@ module.exports = {
   },
   paths: { 
     rootPath: rootPath,
-    campaignsPath: campaignsPath
+    campaignsPath: campaignsPath,
+    membersPath: membersPath
   }
 }

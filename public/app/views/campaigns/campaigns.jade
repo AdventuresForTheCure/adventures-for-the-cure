@@ -22,7 +22,7 @@
     .col-lg-4
       .well
         h4 AFC Campaign List
-        ul
+        ul(style='padding-left:10px')
           li(ng-repeat="campaign in campaigns")
             a(ng-click="selectCampaign(campaign)" href="") {{campaign.name}}
     .col-lg-8

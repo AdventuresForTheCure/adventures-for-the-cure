@@ -1,15 +1,25 @@
 var auth = require('./auth'),
   cache = require('./cache'),
-  campaigns = require('../controllers/campaignsController');
+  campaigns = require('../controllers/campaignsController'),
+  members = require('../controllers/membersController');
 
 module.exports = function(app, rootPath) {
   app.get('/api/campaigns/:name', cache.disableBrowserCache, campaigns.getCampaign);
   app.get('/api/campaigns', cache.disableBrowserCache, campaigns.getCampaigns);
 
-  // static html files are in this directory
+  app.get('/api/members/:name', cache.disableBrowserCache, members.getMember);
+  app.get('/api/members', cache.disableBrowserCache, members.getMembers);
+
+  // static html files for the campaigns are in this directory
   app.get('/partials/campaigns/campaigns/*', function(req, res) {
     res.sendfile(rootPath + 'public/app/views/campaigns/campaigns/' + req.params);
   });
+
+  // static html files for the member profiles are in this directory
+  app.get('/partials/members/members/*', function(req, res) {
+    res.sendfile(rootPath + 'public/app/views/members/members/' + req.params);
+  });
+
   // render jade files
   app.get('/partials/*', function(req, res) {
     res.render('../../public/app/views/' + req.params);

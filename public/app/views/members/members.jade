@@ -1,0 +1,20 @@
+.col-lg-12(ng-controller="membersCtrl")
+  .col-lg-5
+    .well
+      h4
+        a(href="/join") Join The Team
+    .well
+      h4 Member Search
+      input.memberSearch(title="Member Search" type="text" data-provide="typeahead")
+      table
+        tr
+          td
+            ul(style='padding-left:10px')
+              li(ng-repeat="member in members")
+                a(ng-click="selectMember(member)" href="") {{member.name}}
+          td
+            ul(style='padding-left:10px')
+              li(ng-repeat="member in members2")
+                a(ng-click="selectMember(member)" href="") {{member.name}}
+  .col-lg-7
+    .well(ng-bind-html="selectedMemberHtml")

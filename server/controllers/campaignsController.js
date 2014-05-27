@@ -16,7 +16,7 @@ exports.getCampaigns = function(req, res) {
     if(err) { errorHandler.sendError(req, res, err); }
     foreach(files, function (fileContents, fileName, object) {
       var campaign = Object.create(Campaign);
-      campaign.name = fileName;
+      campaign.name = fileName.replace('.html', '');
       campaigns.push(campaign);
     });
     return res.send(campaigns);
@@ -26,9 +26,8 @@ exports.getCampaigns = function(req, res) {
 exports.getCampaign = function(req, res) {
   var dir = config.paths.campaignsPath;
   var campaignName = req.params.name;
-  fs.readFile(dir + campaignName, 'utf8', function (err, data) {
+  fs.readFile(dir + campaignName + '.html', 'utf8', function (err, data) {
     if(err) { errorHandler.sendError(req, res, err); }
-    console.log(data);
     res.set('Content-Type', 'text/html');
     return res.send(data);
   });
