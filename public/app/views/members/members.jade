@@ -1,4 +1,4 @@
-.col-lg-12(ng-controller="membersCtrl")
+.row(ng-controller="membersCtrl")
   .col-lg-5
     .well
       h4
@@ -9,11 +9,11 @@
       table
         tr
           td
-            ul(style='padding-left:10px')
+            ul(style='padding-left:8px')
               li(ng-repeat="member in members")
                 a(ng-click="selectMember(member)" href="") {{member.name}}
           td
-            ul(style='padding-left:10px')
+            ul(style='padding-left:20px')
               li(ng-repeat="member in members2")
                 a(ng-click="selectMember(member)" href="") {{member.name}}
   .col-lg-7
