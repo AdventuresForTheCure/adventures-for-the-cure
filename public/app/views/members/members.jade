@@ -5,16 +5,20 @@
         a(href="/join") Join The Team
     .well
       h4 Member Search
-      input.memberSearch(title="Member Search" type="text" data-provide="typeahead")
+      input.memberSearch(title="Member Search" type="text" ng-model="selectedMember" typeahead="member.name for member in allMembers | filter:$viewValue | limitTo:8" typeahead-on-select="selectMember($item)")
+    .well
+      h4 Member List
       table
         tr
           td
             ul(style='padding-left:8px')
-              li(ng-repeat="member in members")
+              li(ng-repeat="member in membersColumn1")
                 a(ng-click="selectMember(member)" href="") {{member.name}}
           td
             ul(style='padding-left:20px')
-              li(ng-repeat="member in members2")
+              li(ng-repeat="member in membersColumn2")
                 a(ng-click="selectMember(member)" href="") {{member.name}}
   .col-lg-7
-    .well(ng-bind-html="selectedMemberHtml")
+    .well
+      h2(style='text-align:center') {{selectedMember.name}}
+      p(ng-bind-html="selectedMemberHtml")
