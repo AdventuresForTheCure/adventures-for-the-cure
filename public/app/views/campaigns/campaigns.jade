@@ -23,7 +23,7 @@
       .well
         h4 AFC Campaign List
         ul(style='padding-left:10px')
-          li(ng-repeat="campaign in campaigns")
+          li(ng-repeat="campaign in campaigns | orderBy:'name':true")
             a(ng-click="selectCampaign(campaign)" href="") {{campaign.name}}
     .col-lg-8
       .well(ng-bind-html="selectedCampaignHtml")

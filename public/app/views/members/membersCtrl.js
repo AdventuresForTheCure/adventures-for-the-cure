@@ -10,7 +10,7 @@ angular.module('app').controller('membersCtrl', function($scope, $sce, memberSer
         $scope.selectMember(members[i]);
       }
     }
-  })
+  });
 
   $scope.selectMember = function(member) {
     $scope.selectedMember = member;
@@ -18,5 +18,5 @@ angular.module('app').controller('membersCtrl', function($scope, $sce, memberSer
       // use $sce.trustAsHtml to tell angular that the html received is 'safe' to display
       $scope.selectedMemberHtml = $sce.trustAsHtml(memberHtml);
     })
-  }
+  };
 });

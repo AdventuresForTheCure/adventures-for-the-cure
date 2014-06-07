@@ -1,7 +1,7 @@
 angular.module('app').factory('campaignService', function($q, $http, Campaign) {
   return {
     getCampaigns: function() {
-      return Campaign.query();
+      return Campaign.query().$promise;
     },
     getCampaign: function(name) {
       // because we need to get a html file as the content for a given campaign
