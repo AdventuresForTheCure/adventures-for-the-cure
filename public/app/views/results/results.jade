@@ -1,0 +1,62 @@
+.row
+  .col-lg-6
+    .well
+      h4 Patapsco100 Race Results
+      a(href="https://docs.google.com/spreadsheet/ccc?key=0Alut4iF4Ef8ydFFSeDZuQkI0WWNYQ3YwcGZmTzFKNmc&usp=sharing" target="_blank") Patapsco100 2013
+    .well
+      h4 Sugar Hill Race Results
+      p AFC's annual cross country mountain bike race hosted at Patapsco State park (avalon area)
+      a(href="https://docs.google.com/file/d/0B0r-7S-3TpsmcnhzLWF0bWd5c2M/edit" target="_blank") Sugar Hill 2014
+      br
+      a(href="https://docs.google.com/spreadsheet/ccc?key=0Akr-7S-3TpsmdHdsdWdJUGNxS3Jjb2VVYU5WUDEwX3c#gid=0" target="_blank") Sugar Hill 2013
+      br
+      a(href="https://docs.google.com/spreadsheet/ccc?key=0Akr-7S-3TpsmdG9NYkxKU0F0TVdjVzF5bjhvUTllQXc#gid=0" target="_blank") Sugar Hill 2012
+      br
+      a(href="http://www.bikereg.com/Results/2011/03/19-AFC-Sugar-Hill-XC.asp" target="_blank") Sugar Hill 2011
+      br
+      a(href="http://www.bikereg.com/Results/2010/03/20-AFC-Sugar-Hill-XC.asp" target="_blank") Sugar Hill 2010
+      br
+      a(href="http://www.bikereg.com/Results/2009/04/05-AFC-Sugarhill-XC.asp" target="_blank") Sugar Hill 2009
+    .well
+      h4 Rockburn Cross Race Results
+      p AFC's annual cyclocross race hosted in Elkridge MD
+      a(href="http://www.crossresults.com/race/3762" target="_blank") Rockburn Cross 2013
+      br
+      a(href="http://www.crossresults.com/race/2912" target="_blank") Rockburn Cross 2012
+      br
+      a(href="http://www.crossresults.com/race/2183" target="_blank") Rockburn Cross 2011
+      br
+      a(href="http://www.crossresults.com/race/1528" target="_blank") Rockburn Cross 2010
+      br
+      a(href="http://www.crossresults.com/race/992" target="_blank") Rockburn Cross 2009
+    .well
+      h4 Cross Results
+      iframe(height='240px' width='100%' frameborder='0' allowtransparency='true' scrolling='no' src='http://www.crossresults.com/widget.php?teamid=27507&w=400&h=240' )
+    .well
+      h4 Strava
+      iframe(height='500' width='100%' frameborder='0' allowtransparency='true' scrolling='no' src='http://app.strava.com/clubs/adventures-for-the-cure-afc/latest-rides/dfd246839c2c8f05e5e486501d6339ec7149cee6?show_rides=true')
+  .col-lg-6
+    .well
+      h4 In The News
+      a(href="http://www.carrollcountytimes.com/news/local/cycling-through-the-cold/article_79f54f1c-0c9b-5527-93c7-bdf141d7ca8a.html#.ULQCTU_jqt8.email" target="_blank") 2012-11-26 Matt Cooper's Interview with the Carrol County Times
+    .well
+      h4 Videos
+      ul(style='padding-left:10px')
+        li(ng-repeat="video in videos | orderBy:'name':true")
+          a(ng-click="selectVideo(video)" href="") {{video.name}}
+      br
+      div(ng-bind-html="selectedVideoHtml")
+    .well
+      h4 2006 Cross Country Fixed Gear (Documentary Movie)
+      p
+       |Adam Driscoll, Patrick Blair, and Jesse Stump travel 6,000+ miles on fixies across the country to raise money for AFC.  Find more about the director of the documentary at <a href="http://phillyk.com" target="_blank">http://phillyk.com</a>
+      p
+       | Send us an email <span class="email">afc-board-of-directors@googlegroups.com</span> to get a copy of the full movie!
+      br
+      iframe(src="http://player.vimeo.com/video/5176381?badge=0" width="100%" height="375" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen)
+      p
+        a(href="http://vimeo.com/5176381Trailer for Adventures For The Cure: The Doc")
+        from
+        a(href="http://vimeo.com/adventures4cureAdventuresForTheCure")
+        br
+        iframe(width="100%" height="360" src="http://www.youtube.com/embed/VLVpXxkUDF4" frameborder="0" allowfullscreen)
