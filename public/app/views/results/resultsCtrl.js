@@ -1,6 +1,6 @@
-angular.module('app').controller('resultsCtrl', function($scope, $sce, resultsVideoService) {
+angular.module('app').controller('resultsCtrl', function($scope, $sce, videoService) {
   $scope.selectedVideoHtml = "";
-  resultsVideoService.getVideos().then(function(videos) {
+  videoService.getVideos().then(function(videos) {
     $scope.videos = videos;
     for (var i = 0; i < videos.length; i++) {
       if (videos[i].name === "2014--04-06 AFC Sugar Hill XC") {

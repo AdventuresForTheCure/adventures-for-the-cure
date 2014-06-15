@@ -1,4 +1,4 @@
-angular.module('app').factory('resultsVideoService', function($q, $http, Video) {
+angular.module('app').factory('videoService', function($q, $http, Video) {
   return {
     getVideos: function() {
       return Video.query().$promise;

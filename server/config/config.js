@@ -25,7 +25,7 @@ module.exports = {
   },
   production: {
     db: {
-      url: 'mongodb://'+process.env.AFC_MONGO_USERNAME+':'+process.env.AFC_MONGO_PASSWORD+'@ds027489.mongolab.com:27489/adventuresforthecure',
+      url: 'mongodb://' + process.env.AFC_MONGO_USERNAME + ':' + process.env.AFC_MONGO_PASSWORD + '@ds027489.mongolab.com:27489/adventuresforthecure',
       debugMode: false
     },
     port: process.env.PORT || 80

@@ -9,4 +9,8 @@ angular.module('app').controller('navbarLoginCtrl', function($scope, $location, 
       $location.path('/');
     })
   }
+
+  $scope.isActive = function (viewLocation) {
+    return viewLocation === $location.path();
+  };
 });

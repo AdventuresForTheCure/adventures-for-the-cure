@@ -5,23 +5,23 @@
         img(src="/img/afc.jpg")
     .navbar-left
       ul.nav.navbar-nav.navbar-left
-        li
+        li(ng-class="{ active: isActive('/home')}")
           a(href="/home") Home
-        li
+        li(ng-class="{ active: isActive('/donate')}")
           a(href="/donate") Donate
-        li
+        li(ng-class="{ active: isActive('/events')}")
           a(href="/events") Events
-        li
+        li(ng-class="{ active: isActive('/campaigns')}")
           a(href="/campaigns") Campaigns
-        li
+        li(ng-class="{ active: isActive('/rides')}")
           a(href="/rides") Rides
-        li
+        li(ng-class="{ active: isActive('/members')}")
           a(href="/members") Members/Join
-        li
+        li(ng-class="{ active: isActive('/results')}")
           a(href="/results") Results/Media
-        li
+        li(ng-class="{ active: isActive('/inventory')}")
           a(href="/inventory") Inventory
-        li
+        li(ng-class="{ active: isActive('/contact')}")
           a(href="/contact") Contact/About
     .navbar-right(ng-if="identityService.isAuthenticated()")
       ul.nav.navbar-nav.navbar-right

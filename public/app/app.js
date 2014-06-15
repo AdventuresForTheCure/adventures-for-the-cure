@@ -17,7 +17,7 @@ angular.module('app').config(function($routeProvider, $locationProvider) {
 
   // configure the available routes
   $routeProvider
-    .when('/', { templateUrl: '/partials/home/home'
+    .when('/', { redirectTo: '/home'
     })
     .when('/home', { templateUrl: '/partials/home/home'
     })
@@ -55,6 +55,9 @@ angular.module('app').config(function($routeProvider, $locationProvider) {
     .when('/views/userCreate/user-create', { templateUrl: '/partials/userCreate/user-create',
       controller: 'userCreateCtrl', resolve: routeRoleChecks.admin
     })
+    .otherwise({
+      templateUrl: '/partials/invalidPage/invalidPage'
+    });
 });
 
 /**
