@@ -33,12 +33,18 @@ var User = mongoose.model('User', userSchema);
 
 function createDefaultUsers() {
   User.find({}).exec(function(err, collection) {
-    if(collection.length === 0) {
+    if(collection.length < 2) {
       console.log("creating default users");
       var salt, hash;
       salt = encrypt.createSalt();
       hash = encrypt.hashPwd(salt, 'p');
-      User.create({firstName:'Pat',lastName:'Blair',username:'pblair12@gmail.com', salt: salt, hashed_pwd: hash, roles: ['board', 'admin']});
+      User.create({firstName:'Patrick',lastName:'Blair',username:'pblair12@gmail.com', salt: salt, hashed_pwd: hash,
+        roles: ['user', 'board', 'admin', 'inventory']});
+
+      salt = encrypt.createSalt();
+      hash = encrypt.hashPwd(salt, 'm');
+      User.create({firstName:'Mike',lastName:'Caputi',username:'mcaput1@gmail.com', salt: salt, hashed_pwd: hash,
+        roles: ['user', 'board', 'admin', 'inventory']});
     } else {
       console.log("not creating default users because %s users already exist", collection.length);
     }
