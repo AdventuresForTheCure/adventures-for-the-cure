@@ -1,5 +1,6 @@
 var mongoose = require('mongoose'),
-  userModel = require('../models/User');
+  userModel = require('../models/User'),
+  inventoryItemModel = require('../models/InventoryItem');
 
 module.exports = function(env, configEnv) {
   mongoose.set('debug', configEnv.db.debugMode)
@@ -18,4 +19,5 @@ module.exports = function(env, configEnv) {
   });
 
   userModel.createDefaultUsers();
+  inventoryItemModel.createDefaultInventoryItems();
 };

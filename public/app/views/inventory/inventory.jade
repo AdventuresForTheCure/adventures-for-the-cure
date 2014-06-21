@@ -1,4 +1,4 @@
-.col-lg-12
+.col-lg-12(ng-controller="inventoryCtrl")
   .well
     b To make an order:
     ol
@@ -12,5 +12,11 @@
         input(type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_buynowCC_LG.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!")
         img(alt="" border="0" src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" width="1" height="1")
   .well.pagination-centered
-    h4 AFC Inventory
-    p Coming soon...
+    h3 AFC Inventory
+    div(ng-repeat="(category, categoryItems) in inventoryItems")
+      hr
+      h4 {{category}}
+      div(ng-repeat="inventoryItem in inventoryItems[category]")
+        p
+          | {{inventoryItem.name}} {{inventoryItem.price}}
+          | <span ng-if="inventoryItem.salePrice">(Sale Price: {{inventoryItem.salePrice}})</span>

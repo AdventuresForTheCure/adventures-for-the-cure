@@ -1,7 +1,8 @@
 var auth = require('./auth'),
   cache = require('./cache'),
   campaigns = require('../controllers/campaignsController'),
-  members = require('../controllers/membersController');
+  members = require('../controllers/membersController'),
+  inventoryItems = require('../controllers/inventoryItemsController');
 
 module.exports = function(app, rootPath) {
   app.get('/api/campaigns/:name', cache.disableBrowserCache, campaigns.getCampaign);
@@ -9,6 +10,8 @@ module.exports = function(app, rootPath) {
 
   app.get('/api/members/:name', cache.disableBrowserCache, members.getMember);
   app.get('/api/members', cache.disableBrowserCache, members.getMembers);
+
+  app.get('/api/inventoryItems', cache.disableBrowserCache, inventoryItems.getInventoryItems);
 
   // static html files for the campaigns are in this directory
   app.get('/partials/campaigns/campaigns/*', function(req, res) {
