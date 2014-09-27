@@ -1,28 +1,18 @@
-var express = require('express'),
-    stylus = require('stylus'),
-    passport = require('passport');
+var express = require('express');
+var passport = require('passport');
+var logger = require('morgan');
+var bodyParser = require('body-parser');
+var cookieSession = require('cookie-session');
 
-module.exports = function(app, rootPath) {
-  function compile(str, path) {
-    return stylus(str).set('filename', path);
-  }
+module.exports = function(app, config) {
+  app.set('views', config.rootPath + '/server/views');
+  app.set('view engine', 'jade');
+  app.use(logger('combined'));
+  app.use(bodyParser());
+  app.use(cookieSession({secret: 'afc anyth!ng is possible'}));
+  app.use(passport.initialize());
+  app.use(passport.session());
 
-  app.configure(function() {
-    app.set('views', rootPath + '/server/views');
-    app.set('view engine', 'jade');
-    app.use(express.logger('dev'));
-    app.use(express.cookieParser());
-    app.use(express.bodyParser());
-    app.use(express.session({secret: 'afc anyth!ng is possible'}));
-    app.use(passport.initialize());
-    app.use(passport.session());
-    app.use(stylus.middleware(
-      {
-        src: rootPath + '/public',
-        compile: compile
-      }
-    ));
-    // ensure that all public requests go to the /public directory
-    app.use(express.static(rootPath + '/public'));
-  });
+  // ensure that all public requests go to the /public directory
+  app.use(express.static(config.rootPath + '/public'));
 }

@@ -1,4 +1,6 @@
-angular.module('app').factory('authorizationService', function($http, $q, identityService, User) {
+angular.module('app').factory('authorizationService', authorizationService);
+authorizationService.$inject = ['$http', '$q', 'identityService', 'User'];
+function authorizationService($http, $q, identityService, User) {
   return {
     authenticateUser: function(username, password) {
       var deferred = $q.defer();
@@ -42,16 +44,16 @@ angular.module('app').factory('authorizationService', function($http, $q, identi
 
     createUser: function(newUserData) {
       var newUser = new User(newUserData);
-      var dfd = $q.defer();
+      var deferred = $q.defer();
 
       newUser.$save().then(function() {
         identityService.currentUser = newUser;
-        dfd.resolve();
+        deferred.resolve();
       }, function(response) {
-        dfd.reject(response.data.reason);
+        deferred.reject(response.data.reason);
       });
 
-      return dfd.promise;
+      return deferred.promise;
     }
   }
-})
+}

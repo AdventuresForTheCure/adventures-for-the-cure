@@ -4,7 +4,7 @@ var auth = require('./auth'),
   members = require('../controllers/membersController'),
   inventoryItems = require('../controllers/inventoryItemsController');
 
-module.exports = function(app, rootPath) {
+module.exports = function(app, config) {
   app.get('/api/campaigns/:name', cache.disableBrowserCache, campaigns.getCampaign);
   app.get('/api/campaigns', cache.disableBrowserCache, campaigns.getCampaigns);
 
@@ -15,17 +15,17 @@ module.exports = function(app, rootPath) {
 
   // static html files for the campaigns are in this directory
   app.get('/partials/campaigns/campaigns/*', function(req, res) {
-    res.sendfile(rootPath + 'public/app/views/campaigns/campaigns/' + req.params);
+    res.sendfile(config.rootPath + 'public/app/views/campaigns/campaigns/' + req.params[0]);
   });
 
   // static html files for the member profiles are in this directory
   app.get('/partials/members/members/*', function(req, res) {
-    res.sendfile(rootPath + 'public/app/views/members/members/' + req.params);
+    res.sendfile(config.rootPath + 'public/app/views/members/members/' + req.params[0]);
   });
 
   // render jade files
   app.get('/partials/*', function(req, res) {
-    res.render('../../public/app/views/' + req.params);
+    res.render('../../public/app/views/' + req.params[0]);
   });
 
   app.post('/login', auth.login);

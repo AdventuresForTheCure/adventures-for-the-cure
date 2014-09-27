@@ -1,4 +1,6 @@
-angular.module('app').controller('navbarLoginCtrl', function($scope, $location, identityService, notifierService, authorizationService) {
+angular.module('app').controller('navbarLoginCtrl', navbarLoginCtrl);
+navbarLoginCtrl.$inject = ['$scope', '$location', 'identityService', 'notifierService', 'authorizationService'];
+function navbarLoginCtrl($scope, $location, identityService, notifierService, authorizationService) {
   $scope.identityService = identityService;
 
   $scope.signout = function() {
@@ -13,4 +15,4 @@ angular.module('app').controller('navbarLoginCtrl', function($scope, $location, 
   $scope.isActive = function (viewLocation) {
     return viewLocation === $location.path();
   };
-});
+}

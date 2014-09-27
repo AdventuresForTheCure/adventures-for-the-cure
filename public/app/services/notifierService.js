@@ -1,4 +1,6 @@
-angular.module('app').factory('notifierService', function(toastrService) {
+angular.module('app').factory('notifierService', notifierService);
+notifierService.$inject = ['toastrService'];
+function notifierService(toastrService) {
   return {
     notify: function(msg) {
       toastrService.success(msg);
@@ -7,4 +9,4 @@ angular.module('app').factory('notifierService', function(toastrService) {
       toastrService.error(msg);
     }
   }
-})
+}

@@ -21,6 +21,9 @@ module.exports = {
       url: 'mongodb://localhost:27017/adventuresforthecure',
       debugMode: true
     },
+    rootPath: rootPath,
+    campaignsPath: campaignsPath,
+    membersPath: membersPath,
     port: process.env.PORT || 3030
   },
   production: {
@@ -28,11 +31,9 @@ module.exports = {
       url: 'mongodb://' + process.env.AFC_MONGO_USERNAME + ':' + process.env.AFC_MONGO_PASSWORD + '@ds037688.mongolab.com:37688/adventuresforthecure',
       debugMode: false
     },
-    port: process.env.PORT || 80
-  },
-  paths: { 
     rootPath: rootPath,
     campaignsPath: campaignsPath,
-    membersPath: membersPath
+    membersPath: membersPath,
+    port: process.env.PORT || 80
   }
 }

@@ -1,4 +1,6 @@
-angular.module('app').factory('memberService', function($q, $http, Member) {
+angular.module('app').factory('memberService', memberService);
+memberService.$inject = ['$q', '$http', 'Member'];
+function memberService($q, $http, Member) {
   return {
     getMembers: function() {
       return Member.query().$promise;
@@ -15,4 +17,4 @@ angular.module('app').factory('memberService', function($q, $http, Member) {
       return deferred.promise;
     }
   };
-})
+}

@@ -1,4 +1,6 @@
-angular.module('app').controller('resultsCtrl', function($scope, $sce, videoService) {
+angular.module('app').controller('resultsCtrl', resultsCtrl);
+resultsCtrl.$inject = ['$scope', '$sce', 'videoService'];
+function resultsCtrl($scope, $sce, videoService) {
   $scope.selectedVideoHtml = "";
   videoService.getVideos().then(function(videos) {
     $scope.videos = videos;
@@ -15,5 +17,5 @@ angular.module('app').controller('resultsCtrl', function($scope, $sce, videoServ
       $scope.selectedVideoHtml = $sce.trustAsHtml(videoHtml);
     })
   };
-});
+}
 

@@ -1,4 +1,6 @@
-angular.module('app').factory('campaignService', function($q, $http, Campaign) {
+angular.module('app').factory('campaignService', campaignService);
+campaignService.$inject = ['$q', '$http', 'Campaign'];
+function campaignService($q, $http, Campaign) {
   return {
     getCampaigns: function() {
       return Campaign.query().$promise;
@@ -15,4 +17,4 @@ angular.module('app').factory('campaignService', function($q, $http, Campaign) {
       return deferred.promise;
     }
   };
-})
+}

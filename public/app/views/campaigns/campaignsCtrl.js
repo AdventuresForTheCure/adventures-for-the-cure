@@ -1,4 +1,6 @@
-angular.module('app').controller('campaignsCtrl', function($scope, $sce, campaignService) {
+angular.module('app').controller('campaignsCtrl', campaignsCtrl);
+campaignsCtrl.$inject = ['$scope', '$sce', 'campaignService'];
+function campaignsCtrl($scope, $sce, campaignService) {
   $scope.selectedCampaignHtml = "";
   campaignService.getCampaigns().then(function(campaigns) {
     $scope.campaigns = campaigns;
@@ -15,5 +17,5 @@ angular.module('app').controller('campaignsCtrl', function($scope, $sce, campaig
       $scope.selectedCampaignHtml = $sce.trustAsHtml(campaignHtml);
     })
   };
-});
+}
 

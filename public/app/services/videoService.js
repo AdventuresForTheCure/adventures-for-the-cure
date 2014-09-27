@@ -1,4 +1,6 @@
-angular.module('app').factory('videoService', function($q, $http, Video) {
+angular.module('app').factory('videoService', videoService);
+videoService.$inject = ['$q', '$http', 'Video'];
+function videoService($q, $http, Video) {
   return {
     getVideos: function() {
       return Video.query().$promise;
@@ -15,4 +17,4 @@ angular.module('app').factory('videoService', function($q, $http, Video) {
       return deferred.promise;
     }
   };
-})
+}

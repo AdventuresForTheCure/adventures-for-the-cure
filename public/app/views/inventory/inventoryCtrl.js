@@ -1,4 +1,6 @@
-angular.module('app').controller('inventoryCtrl', function($scope, inventoryService) {
+angular.module('app').controller('inventoryCtrl', inventoryCtrl);
+inventoryCtrl.$inject = ['$scope', 'inventoryService'];
+function inventoryCtrl($scope, inventoryService) {
   $scope.inventoryItems = {};
   inventoryService.getInventoryItems().then(function(inventoryItems) {
     for (var i = 0; i < inventoryItems.length; i++) {
@@ -9,5 +11,5 @@ angular.module('app').controller('inventoryCtrl', function($scope, inventoryServ
       $scope.inventoryItems[inventoryItem.category].push(inventoryItem);
     }
   });
-});
+}
 

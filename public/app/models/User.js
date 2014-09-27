@@ -1,4 +1,6 @@
-angular.module('app').factory('User', function($resource) {
+angular.module('app').factory('User', User);
+User.$inject = ['$resource'];
+function User($resource) {
   var User = $resource('/api/users/:id', {id: "@_id"}, {});
 
   User.prototype.isAdmin = function() {
@@ -10,4 +12,4 @@ angular.module('app').factory('User', function($resource) {
   }
 
   return User;
-})
+}

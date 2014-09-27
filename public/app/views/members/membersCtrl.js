@@ -1,4 +1,6 @@
-angular.module('app').controller('membersCtrl', function($scope, $sce, $location, $window, memberService) {
+angular.module('app').controller('membersCtrl', membersCtrl);
+membersCtrl.$inject = ['$scope', '$sce', '$location', 'memberService'];
+function membersCtrl($scope, $sce, $location, memberService) {
   $scope.selectedMember = undefined;
   $scope.selectedMemberHtml = "";
 
@@ -25,4 +27,4 @@ angular.module('app').controller('membersCtrl', function($scope, $sce, $location
       $location.hash(member.name);
     })
   };
-});
+}
