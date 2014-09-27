@@ -20,3 +20,5 @@
         p
           | {{inventoryItem.name}} {{inventoryItem.price}}
           | <span ng-if="inventoryItem.salePrice">(Sale Price: {{inventoryItem.salePrice}})</span>
+          | <span ng-if="inventoryItem.quantity <= 0">- SOLD OUT!</span>
+          | <span ng-if="inventoryItem.quantity > 0">- {{inventoryItem.quantity}} remaining</span>

@@ -17,6 +17,9 @@ var inventoryItemSchema = mongoose.Schema({
   price: {
     type:String,
     required:'{PATH} is required!'},
+  imageUrl: {
+    type:String
+  },
   salePrice: {
     type:String}
 });
