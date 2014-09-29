@@ -14,22 +14,24 @@ var path = require('path');
 var rootPath = path.normalize(__dirname + '/../../');
 var campaignsPath = rootPath + 'public/app/views/campaigns/campaigns/';
 var membersPath = rootPath + 'public/app/views/members/members/';
+var env = process.env.NODE_ENV = process.env.NODE_ENV || 'development';
 
-module.exports = {
+var environments = {
   development: {
+    env: env,
     db: {
       url: 'mongodb://localhost:27017/adventuresforthecure',
-      debugMode: true
+        debugMode: true
     },
     rootPath: rootPath,
     campaignsPath: campaignsPath,
     membersPath: membersPath,
     port: process.env.PORT || 3030
-  },
-  production: {
+  }, production: {
+    env: env,
     db: {
       url: 'mongodb://' + process.env.AFC_MONGO_USERNAME + ':' + process.env.AFC_MONGO_PASSWORD + '@ds037688.mongolab.com:37688/adventuresforthecure',
-      debugMode: false
+        debugMode: false
     },
     rootPath: rootPath,
     campaignsPath: campaignsPath,
@@ -37,3 +39,5 @@ module.exports = {
     port: process.env.PORT || 80
   }
 }
+
+module.exports = environments[env];

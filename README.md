@@ -17,7 +17,7 @@
 ## How to recreate a project like this one
 * To create a project like this one perform the following steps:
   * npm init
-  * npm install --save express jade
+  * npm install express jade --save
   * git init
   * (create /README.md file)
   * (create /.gitignore file)

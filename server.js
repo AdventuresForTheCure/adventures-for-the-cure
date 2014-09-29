@@ -1,16 +1,14 @@
 var express = require('express');
 
-var env = process.env.NODE_ENV = process.env.NODE_ENV || 'development'
-
 var app = express();
 
-var config = require('./server/config/config')[env];
+var config = require('./server/config/config');
 
 console.log('configuring express');
 require('./server/config/express')(app, config);
 
 console.log('configuring mongoose');
-require('./server/config/mongoose')(env, config);
+require('./server/config/mongoose')(config);
 
 console.log('configuring passport');
 require('./server/config/passport')();

@@ -3,15 +3,15 @@ angular.module('app', ['ngResource', 'ngRoute', 'ui.bootstrap']);
 angular.module('app').config(function($routeProvider, $locationProvider) {
   var routeRoleChecks = {
     admin: { auth: function(authorizationService) {
-      return authorizationService.authorizeAuthorizedUserForRoute('admin')
+      return authorizationService.authorizeAuthorizedUserForRoute('admin');
     }},
     board: { auth: function(authorizationService) {
-      return authorizationService.authorizeAuthorizedUserForRoute('board')
+      return authorizationService.authorizeAuthorizedUserForRoute('board');
     }},
     user: { auth: function(authorizationService) {
-      return authorizationService.authorizeAuthenticatedUserForRoute()
+      return authorizationService.authorizeAuthenticatedUserForRoute();
     }}
-  }
+  };
 
   $locationProvider.html5Mode(true);
 
