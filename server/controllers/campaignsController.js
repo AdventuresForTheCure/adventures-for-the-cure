@@ -27,7 +27,7 @@ exports.getCampaigns = function(req, res) {
 exports.getCampaign = function(req, res) {
   var dir = config.campaignsPath;
   var campaignName = req.params.name;
-  dirReader.getFileContents(dir, campaignName + '.html', 'utf8', function (err, data) {
+  dirReader.getFileContents(dir, campaignName + '.html', function (err, data) {
     if(err) { errorHandler.sendError(req, res, err); }
     res.set('Content-Type', 'text/html');
     return res.send(data.fileContent);
