@@ -1,6 +1,6 @@
-var mongoose = require('mongoose'),
-  userModel = require('../models/User'),
-  inventoryItemModel = require('../models/InventoryItem');
+var mongoose = require('mongoose');
+var userModel = require('../models/User');
+var inventoryItemModel = require('../models/InventoryItem');
 
 module.exports = function(config) {
   mongoose.set('debug', config.db.debugMode)
@@ -17,7 +17,4 @@ module.exports = function(config) {
   db.once('open', function callback() {
     console.log('adventuresforthecure db opened');
   });
-
-  userModel.createDefaultUsers();
-  inventoryItemModel.createDefaultInventoryItems();
 };

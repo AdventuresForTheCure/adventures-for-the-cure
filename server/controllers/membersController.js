@@ -7,7 +7,7 @@ var Member = require('../models/Member'),
 
 exports.getMembers = function(req, res) {
   var members = [];
-  var dir = config.paths.membersPath;
+  var dir = config.membersPath;
   var options = {
     recursive: false,
     normalize: true
@@ -24,7 +24,7 @@ exports.getMembers = function(req, res) {
 };
 
 exports.getMember = function(req, res) {
-  var dir = config.paths.membersPath;
+  var dir = config.membersPath;
   var memberName = req.params.name;
   fs.readFile(dir + memberName + '.html', 'utf8', function (err, data) {
     if(err) { errorHandler.sendError(req, res, err); }

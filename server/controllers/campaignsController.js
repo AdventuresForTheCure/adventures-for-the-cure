@@ -1,9 +1,9 @@
-var Campaign = require('../models/Campaign'),
-  dirReader = require('dir-reader'),
-  fs = require('fs'),
-  foreach = require('foreach'),
-  config = require('../config/config'),
-  errorHandler = require('../utilities/errorHandler');
+var Campaign = require('../models/Campaign');
+var dirReader = require('dir-reader');
+var fs = require('fs');
+var foreach = require('foreach');
+var config = require('../config/config');
+var errorHandler = require('../utilities/errorHandler');
 
 exports.getCampaigns = function(req, res) {
   var campaigns = [];

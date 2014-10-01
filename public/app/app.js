@@ -25,8 +25,6 @@ angular.module('app').config(function($routeProvider, $locationProvider) {
     })
     .when('/events', { templateUrl: '/partials/events/events'
     })
-    .when('/campaigns', { templateUrl: '/partials/campaigns/campaigns'
-    })
     .when('/rides', { templateUrl: '/partials/rides/rides'
     })
     .when('/members', { templateUrl: '/partials/members/members'
