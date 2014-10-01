@@ -1,9 +1,9 @@
-var Member = require('../models/Member'),
-  readDirFiles = require('read-dir-files')
-  fs = require('fs'),
-  foreach = require('foreach'),
-  config = require('../config/config'),
-  errorHandler = require('../utilities/errorHandler');
+var Member = require('../models/Member');
+var dirReader = require('dir-reader');
+var fs = require('fs');
+var foreach = require('foreach');
+var config = require('../config/config');
+var errorHandler = require('../utilities/errorHandler');
 
 exports.getMembers = function(req, res) {
   var members = [];
@@ -12,13 +12,14 @@ exports.getMembers = function(req, res) {
     recursive: false,
     normalize: true
   }
-  readDirFiles.read(dir, options, function(err, files) {
+  dirReader.getDirItems(dir, function(err, files) {
     if(err) { errorHandler.sendError(req, res, err); }
-    foreach(files, function (fileContents, fileName, object) {
-      var member = Object.create(Member);
-      member.name = fileName.replace('.html', '');;
+    var i = 0;
+    for(i = 0; i < files.length; i++) {
+      var member = new Member();
+      member.name = files[i].fileName.replace('.html', '');
       members.push(member);
-    });
+    }
     return res.send(members);
   });
 };
@@ -26,9 +27,9 @@ exports.getMembers = function(req, res) {
 exports.getMember = function(req, res) {
   var dir = config.membersPath;
   var memberName = req.params.name;
-  fs.readFile(dir + memberName + '.html', 'utf8', function (err, data) {
+  dirReader.getFileContents(dir, memberName + '.html', function (err, data) {
     if(err) { errorHandler.sendError(req, res, err); }
     res.set('Content-Type', 'text/html');
-    return res.send(data);
+    return res.send(data.fileContent);
   });
 };

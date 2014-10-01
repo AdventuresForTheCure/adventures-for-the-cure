@@ -1,4 +1,6 @@
-var Member = {
-  name: "",
-  html: ""
+var Member = function() {
+  var member = {};
+  member.name = "";
+  member.html = "";
 };
+module.exports = Member;
