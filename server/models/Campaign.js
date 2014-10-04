@@ -1,6 +1,9 @@
 var Campaign = function() {
-  var campaign = {};
-  campaign.name = "";
-  campaign.html = "";
+  var campaign = {
+    name: '',
+    html: ''
+  };
+  campaign.name = '';
+  campaign.html = '';
 };
 module.exports = Campaign;

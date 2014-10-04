@@ -1,24 +1,24 @@
-.row(ng-controller="membersCtrl")
+.row(ng-controller='membersCtrl')
   .col-lg-5
     .well
       h4
-        a(href="/join") Join The Team
+        a(href='/join') Join The Team
     .well
       h4 Member Search
-      input.memberSearch(title="Member Search" type="text" ng-model="selectedMember" typeahead="member.name for member in allMembers | filter:$viewValue | limitTo:8" typeahead-on-select="selectMember($item)")
+      input.memberSearch(title='Member Search' type='text' ng-model='selectedMember' typeahead='member.name for member in allMembers | filter:$viewValue | limitTo:8' typeahead-on-select='selectMember($item)')
     .well
       h4 Member List
       table
         tr
           td
             ul(style='padding-left:8px')
-              li(ng-repeat="member in membersColumn1")
-                a(ng-click="selectMember(member)" href="") {{member.name}}
+              li(ng-repeat='member in membersColumn1')
+                a(ng-click='selectMember(member)' href='') {{member.name}}
           td
             ul(style='padding-left:20px')
-              li(ng-repeat="member in membersColumn2")
-                a(ng-click="selectMember(member)" href="") {{member.name}}
+              li(ng-repeat='member in membersColumn2')
+                a(ng-click='selectMember(member)' href='') {{member.name}}
   .col-lg-7
     .well
       h2(style='text-align:center') {{selectedMember.name}}
-      p(ng-bind-html="selectedMemberHtml")
+      p(ng-bind-html='selectedMemberHtml')

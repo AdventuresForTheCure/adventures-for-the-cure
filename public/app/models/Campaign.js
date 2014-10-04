@@ -1,6 +1,5 @@
-angular.module('app').factory('Campaign', Campaign);
-Campaign.$inject = ['$resource'];
+angular.module('app').factory('Campaign', ['$resource', Campaign]);
 function Campaign($resource) {
-  var Campaign = $resource('/api/campaigns', {}, {});
-  return Campaign;
+  var campaign = $resource('/api/campaigns', {}, {});
+  return campaign;
 }

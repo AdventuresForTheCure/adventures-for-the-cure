@@ -5,12 +5,12 @@ function navbarLoginCtrl($scope, $location, identityService, notifierService, au
 
   $scope.signout = function() {
     authorizationService.logoutUser().then(function() {
-      $scope.username = "";
-      $scope.password = "";
+      $scope.username = '';
+      $scope.password = '';
       notifierService.notify('You have successfully signed out!');
       $location.path('/');
-    })
-  }
+    });
+  };
 
   $scope.isActive = function (viewLocation) {
     return viewLocation === $location.path();

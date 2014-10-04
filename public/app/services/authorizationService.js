@@ -1,5 +1,4 @@
-angular.module('app').factory('authorizationService', authorizationService);
-authorizationService.$inject = ['$http', '$q', 'identityService', 'User'];
+angular.module('app').factory('authorizationService', ['$http', '$q', 'identityService', 'User', authorizationService]);
 function authorizationService($http, $q, identityService, User) {
   return {
     authenticateUser: function(username, password) {
@@ -55,5 +54,5 @@ function authorizationService($http, $q, identityService, User) {
 
       return deferred.promise;
     }
-  }
+  };
 }

@@ -1,8 +1,7 @@
-angular.module('app').factory('Member', Member);
-Member.$inject = ['$resource'];
+angular.module('app').factory('Member', ['$resource', Member]);
 function Member($resource) {
-  var Member = $resource('/api/members', {}, {
+  var member = $resource('/api/members', {}, {
     'query':  {method:'GET', isArray:true, cache: true}
   });
-  return Member;
+  return member;
 }

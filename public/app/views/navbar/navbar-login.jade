@@ -1,34 +1,34 @@
-.navbar.navbar-inverse.navbar-fixed-top(ng-controller="navbarLoginCtrl")
+.navbar.navbar-inverse.navbar-fixed-top(ng-controller='navbarLoginCtrl')
   .container-fluid
     .navbar-header
-      a.navbar-brand(href="/")
-        img(src="/img/afc.jpg")
+      a.navbar-brand(href='/')
+        img(src='/img/afc.jpg')
     .navbar-left
       ul.nav.navbar-nav.navbar-left
-        li(ng-class="{ active: isActive('/home')}")
-          a(href="/home") Home
-        li(ng-class="{ active: isActive('/donate')}")
-          a(href="/donate") Donate
-        li(ng-class="{ active: isActive('/events')}")
-          a(href="/events") Events
-        li(ng-class="{ active: isActive('/rides')}")
-          a(href="/rides") Rides
-        li(ng-class="{ active: isActive('/members')}")
-          a(href="/members") Members/Join
-        li(ng-class="{ active: isActive('/results')}")
-          a(href="/results") Results/Media
-        li(ng-class="{ active: isActive('/inventory')}")
-          a(href="/inventory") Inventory
-        li(ng-class="{ active: isActive('/contact')}")
-          a(href="/contact") Contact/About
-    .navbar-right(ng-if="identityService.isAuthenticated()")
+        li(ng-class='{ active: isActive('/home')}')
+          a(href='/home') Home
+        li(ng-class='{ active: isActive('/donate')}')
+          a(href='/donate') Donate
+        li(ng-class='{ active: isActive('/events')}')
+          a(href='/events') Events
+        li(ng-class='{ active: isActive('/rides')}')
+          a(href='/rides') Rides
+        li(ng-class='{ active: isActive('/members')}')
+          a(href='/members') Members/Join
+        li(ng-class='{ active: isActive('/results')}')
+          a(href='/results') Results/Media
+        li(ng-class='{ active: isActive('/inventory')}')
+          a(href='/inventory') Inventory
+        li(ng-class='{ active: isActive('/contact')}')
+          a(href='/contact') Contact/About
+    .navbar-right(ng-if='identityService.isAuthenticated()')
       ul.nav.navbar-nav.navbar-right
         li.dropdown
-          a.logged-in.dropdown-toggle(href="", data-toggle="dropdown")
+          a.logged-in.dropdown-toggle(href='', data-toggle='dropdown')
             b.logged-in {{identityService.currentUser.firstName}} {{identityService.currentUser.lastName}}
               .caret
           ul.dropdown-menu
             li
-              a(href="/views/profile/profile") Profile
+              a(href='/views/profile/profile') Profile
             li
-              a(href="", ng-click="signout()") Sign Out
+              a(href='', ng-click='signout()') Sign Out

@@ -1,15 +1,14 @@
-angular.module('app').factory('User', User);
-User.$inject = ['$resource'];
+angular.module('app').factory('User', ['$resource', User]);
 function User($resource) {
-  var User = $resource('/api/users/:id', {id: "@_id"}, {});
+  var user = $resource('/api/users/:id', {id: '@_id'}, {});
 
-  User.prototype.isAdmin = function() {
+  user.prototype.isAdmin = function() {
     return this.roles && this.roles.indexOf('admin') > -1;
-  }
+  };
 
-  User.prototype.isBoard = function() {
+  user.prototype.isBoard = function() {
     return this.roles && this.roles.indexOf('board') > -1;
-  }
+  };
 
-  return User;
+  return user;
 }

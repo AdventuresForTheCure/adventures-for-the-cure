@@ -1,17 +1,11 @@
 var Campaign = require('../models/Campaign');
 var dirReader = require('dir-reader');
-var fs = require('fs');
-var foreach = require('foreach');
 var config = require('../config/config');
 var errorHandler = require('../utilities/errorHandler');
 
 exports.getCampaigns = function(req, res) {
   var campaigns = [];
   var dir = config.campaignsPath;
-  var options = {
-    recursive: false,
-    normalize: true
-  }
   dirReader.getDirItems(dir, function(err, files) {
     if(err) { errorHandler.sendError(req, res, err); }
     var i = 0;

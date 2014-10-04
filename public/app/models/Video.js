@@ -1,8 +1,7 @@
-angular.module('app').factory('Video', Video);
-Video.$inject = ['$resource'];
+angular.module('app').factory('Video', ['$resource', Video]);
 function Video($resource) {
-  var Video = $resource('/api/video', {}, {
+  var video = $resource('/api/video', {}, {
     'query':  {method:'GET', isArray:true, cache: true}
   });
-  return Video;
+  return video;
 }

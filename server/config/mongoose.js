@@ -3,10 +3,10 @@ var userModel = require('../models/User');
 var inventoryItemModel = require('../models/InventoryItem');
 
 module.exports = function(config) {
-  mongoose.set('debug', config.db.debugMode)
-  console.log("connecting to '" + config.env + "' mongo instance");
-  mongoose.connect(config.db.url)
-  console.log("connected...");
+  mongoose.set('debug', config.db.debugMode);
+  console.log('connecting to "' + config.env + '" mongo instance');
+  mongoose.connect(config.db.url);
+  console.log('connected...');
 
   var db = mongoose.connection;
   db.on('error',

@@ -2,9 +2,9 @@ angular.module('app').controller('membersCtrl', membersCtrl);
 membersCtrl.$inject = ['$scope', '$sce', '$location', 'memberService'];
 function membersCtrl($scope, $sce, $location, memberService) {
   $scope.selectedMember = undefined;
-  $scope.selectedMemberHtml = "";
+  $scope.selectedMemberHtml = '';
 
-  var selectedMemberName = ($location.hash()) ? $location.hash() : "Adam Driscoll";
+  var selectedMemberName = ($location.hash()) ? $location.hash() : 'Adam Driscoll';
 
   memberService.getMembers().then(function(members) {
     if (angular.isUndefined($scope.allMembers)) {
@@ -25,6 +25,6 @@ function membersCtrl($scope, $sce, $location, memberService) {
       // use $sce.trustAsHtml to tell angular that the html received is 'safe' to display
       $scope.selectedMemberHtml = $sce.trustAsHtml(memberHtml);
       $location.hash(member.name);
-    })
+    });
   };
 }

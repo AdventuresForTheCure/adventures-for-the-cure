@@ -1,5 +1,4 @@
-angular.module('app').factory('memberService', memberService);
-memberService.$inject = ['$q', '$http', 'Member'];
+angular.module('app').factory('memberService', ['$q', '$http', 'Member', memberService]);
 function memberService($q, $http, Member) {
   return {
     getMembers: function() {

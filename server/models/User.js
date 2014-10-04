@@ -15,7 +15,7 @@ var userSchema = mongoose.Schema({
   salt: {
     type:String,
     required:'{PATH} is required!'},
-  hashed_pwd: {
+  hashedPwd: {
     type:String,
     required:'{PATH} is required!'},
   roles: [String]
@@ -23,7 +23,7 @@ var userSchema = mongoose.Schema({
 
 userSchema.methods = {
   authenticate: function(passwordToMatch) {
-    return encrypt.hashPwd(this.salt, passwordToMatch) === this.hashed_pwd;
+    return encrypt.hashPwd(this.salt, passwordToMatch) === this.hashedPwd;
   },
   hasRole: function(role) {
     return this.roles.indexOf(role) > -1;
@@ -34,21 +34,21 @@ var User = mongoose.model('User', userSchema);
 function createDefaultUsers() {
   User.find({}).exec(function(err, collection) {
     if(collection.length < 2) {
-      console.log("creating default users");
+      console.log('creating default users');
       var salt, hash;
       salt = encrypt.createSalt();
       hash = encrypt.hashPwd(salt, 'p');
-      User.create({firstName:'Patrick',lastName:'Blair',username:'pblair12@gmail.com', salt: salt, hashed_pwd: hash,
+      User.create({firstName:'Patrick',lastName:'Blair',username:'pblair12@gmail.com', salt: salt, hashedPwd: hash,
         roles: ['user', 'board', 'admin', 'inventory']});
 
       salt = encrypt.createSalt();
       hash = encrypt.hashPwd(salt, 'm');
-      User.create({firstName:'Mike',lastName:'Caputi',username:'mcaput1@gmail.com', salt: salt, hashed_pwd: hash,
+      User.create({firstName:'Mike',lastName:'Caputi',username:'mcaput1@gmail.com', salt: salt, hashedPwd: hash,
         roles: ['user', 'board', 'admin', 'inventory']});
     } else {
-      console.log("not creating default users because %s users already exist", collection.length);
+      console.log('not creating default users because %s users already exist', collection.length);
     }
-  })
-};
+  });
+}
 
 exports.createDefaultUsers = createDefaultUsers;

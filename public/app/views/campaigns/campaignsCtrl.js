@@ -1,11 +1,11 @@
 angular.module('app').controller('campaignsCtrl', campaignsCtrl);
 campaignsCtrl.$inject = ['$scope', '$sce', 'campaignService'];
 function campaignsCtrl($scope, $sce, campaignService) {
-  $scope.selectedCampaignHtml = "";
+  $scope.selectedCampaignHtml = '';
   campaignService.getCampaigns().then(function(campaigns) {
     $scope.campaigns = campaigns;
     for (var i = 0; i < campaigns.length; i++) {
-      if (campaigns[i].name === "2014-01-01 Miles To The Moon") {
+      if (campaigns[i].name === '2014-01-01 Miles To The Moon') {
         $scope.selectCampaign(campaigns[i]);
       }
     }
@@ -15,7 +15,7 @@ function campaignsCtrl($scope, $sce, campaignService) {
     campaignService.getCampaign(campaign.name).then(function(campaignHtml) {
       // use $sce.trustAsHtml to tell angular that the html received is 'safe' to display
       $scope.selectedCampaignHtml = $sce.trustAsHtml(campaignHtml);
-    })
+    });
   };
 }
 

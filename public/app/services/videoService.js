@@ -1,5 +1,4 @@
-angular.module('app').factory('videoService', videoService);
-videoService.$inject = ['$q', '$http', 'Video'];
+angular.module('app').factory('videoService', ['$q', '$http', 'Video', videoService]);
 function videoService($q, $http, Video) {
   return {
     getVideos: function() {

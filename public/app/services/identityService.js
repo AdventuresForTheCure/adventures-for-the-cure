@@ -1,5 +1,4 @@
-angular.module('app').factory('identityService', identityService);
-identityService.$inject = ['$window', 'User'];
+angular.module('app').factory('identityService', ['$window', 'User', identityService]);
 function identityService($window, User) {
   var currentUser;
   if ($window.bootstrappedUserObject) {
@@ -20,5 +19,5 @@ function identityService($window, User) {
     isBoard: function() {
       return !!this.currentUser && this.currentUser.roles.indexOf('board') > -1;
     }
-  }
+  };
 }

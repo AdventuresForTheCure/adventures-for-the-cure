@@ -1,5 +1,4 @@
-angular.module('app').factory('inventoryService', inventoryService);
-inventoryService.$inject = ['Inventory'];
+angular.module('app').factory('inventoryService', ['Inventory', inventoryService]);
 function inventoryService(Inventory) {
   return {
     getInventoryItems: function() {

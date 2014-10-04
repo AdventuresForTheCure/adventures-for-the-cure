@@ -1,5 +1,4 @@
-angular.module('app').factory('campaignService', campaignService);
-campaignService.$inject = ['$q', '$http', 'Campaign'];
+angular.module('app').factory('campaignService', ['$q', '$http', 'Campaign', campaignService]);
 function campaignService($q, $http, Campaign) {
   return {
     getCampaigns: function() {
