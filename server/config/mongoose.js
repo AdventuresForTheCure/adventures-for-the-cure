@@ -1,6 +1,7 @@
 var mongoose = require('mongoose');
 var userModel = require('../models/User');
 var inventoryItemModel = require('../models/InventoryItem');
+var member = require('../models/Member');
 
 module.exports = function(config) {
   mongoose.set('debug', config.db.debugMode);

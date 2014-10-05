@@ -50,6 +50,10 @@ gulp.task('watch', function() {
 
 gulp.task('development', ['clean'], function() {
   gulp.start('jshintserver', 'jshintpublic', 'bundlejs', 'watch');
+  plug.nodemon({script: 'server.js', ext: 'jade js'})
+    .on('restart', function() {
+      console.log('restarted');
+    })
 });
 
 gulp.task('default', ['clean'], function() {
