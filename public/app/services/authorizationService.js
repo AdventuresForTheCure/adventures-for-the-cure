@@ -12,7 +12,7 @@ function authorizationService($http, $q, identityService, User) {
         } else {
           deferred.resolve(false);
         }
-      });
+      } );
       return deferred.promise;
     },
 
