@@ -1,6 +1,6 @@
 var express = require('express');
-var userModel = require('../models/User');
-var inventoryItemModel = require('../models/InventoryItem');
+var userModel = require('./models/User');
+var inventoryItemModel = require('./models/InventoryItem');
 
 var app = express();
 
