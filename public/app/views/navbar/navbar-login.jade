@@ -30,5 +30,11 @@
           ul.dropdown-menu
             li
               a(href='/views/profile/profile') Profile
+            li(ng-if='identityService.isAdmin()')
+              a(href='/admin') Admin
             li
               a(href='', ng-click='signout()') Sign Out
+    .navbar-right(ng-if='!identityService.isAuthenticated()')
+      ul.nav.navbar-nav.navbar-right
+        li
+          a(href='/login') Login

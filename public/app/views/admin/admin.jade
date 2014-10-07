@@ -1,0 +1,27 @@
+.col-lg-12(ng-controller='adminCtrl')
+  .well
+    form.form-horizontal(name="createForm")
+      fieldset
+        legend Create New User
+        .form-group
+          label.col-md-3.control-label(for="username") Username (Email)
+          .col-md-9
+            input.form-control(name="username", type="email", placeholder="Username (Email)", ng-model="username", required, autocomplete="off" )
+        .form-group
+          label.col-md-3.control-label(for="fname") First Name
+          .col-md-9
+            input.form-control(name="fname", type="text", placeholder="First Name", ng-model="firstName", required, autocomplete="off" )
+        .form-group
+          label.col-md-3.control-label(for="lname") Last Name
+          .col-md-9
+            input.form-control(name="lname", type="text", placeholder="Last Name", ng-model="lastName", required, autocomplete="off" )
+        .form-group
+          label.col-md-3.control-label(for="password") Password
+          .col-md-9
+            input.form-control(name="password", type="password", placeholder="Password", ng-model="password", required, autocomplete="off" )
+        .form-group
+          .col-md-9.col-md-offset-2
+            .pull-right
+              button.btn.btn-primary(ng-click="createUser()", ng-disabled="createForm.$invalid") Submit
+              | &nbsp;
+              a.btn.btn-default(href="/") Cancel
