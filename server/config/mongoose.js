@@ -18,4 +18,9 @@ module.exports = function(config) {
   db.once('open', function callback() {
     console.log('adventuresforthecure db opened');
   });
+
+
+  // create default mongoose entries
+  userModel.createDefaultUsers();
+  //inventoryItemModel.createDefaultInventoryItems();
 };
