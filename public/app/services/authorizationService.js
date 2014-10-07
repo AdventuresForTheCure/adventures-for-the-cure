@@ -25,7 +25,7 @@ function authorizationService($http, $q, identityService, User) {
       return deferred.promise;
     },
 
-    authorizeAuthorizedUserForRoute: function(role) {
+    authorizeAuthorizedUserForRoute: function(role)  {
       if (identityService.isAuthorized(role)) {
         return true;
       } else {
