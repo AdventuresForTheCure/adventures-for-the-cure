@@ -1,6 +1,6 @@
 var express = require('express');
-//var userModel = require('../models/User');
-//var inventoryItemModel = require('../models/InventoryItem');
+var userModel = require('../models/User');
+var inventoryItemModel = require('../models/InventoryItem');
 
 var app = express();
 
@@ -19,7 +19,7 @@ console.log('configuring routes');
 require('./server/config/routes')(app, config);
 
 // create default mongoose entries
-//userModel.createDefaultUsers();
+userModel.createDefaultUsers();
 //inventoryItemModel.createDefaultInventoryItems();
 
 console.log('configuring listener');
