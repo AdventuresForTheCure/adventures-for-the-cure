@@ -1,4 +1,3 @@
-var del = require('del');
 var gulp   = require('gulp');
 var gulpLoadPlugins = require('gulp-load-plugins');
 var plug = gulpLoadPlugins();
@@ -8,7 +7,8 @@ var serverjs = './server/**/*.js';
 var publicdist = './public/dist';
 
 gulp.task('clean', function(cb) {
-  del(['dist'], cb)
+  return gulp.src('dist')
+    .pipe(plug.clean({force: true}));
 });
 
 gulp.task('jshintserver', function() {
