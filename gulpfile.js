@@ -59,3 +59,5 @@ gulp.task('development', ['clean'], function() {
 gulp.task('default', ['clean'], function() {
   gulp.start('jshintserver', 'jshintpublic', 'bundlejs');
 });
+
+gulp.task('heroku:production', ['default']);
