@@ -39,22 +39,7 @@ angular.module('app').config(["$routeProvider", "$locationProvider", function($r
       controller: 'loginCtrl'
     })
     .when('/admin', { templateUrl: '/partials/admin/admin',
-      controller: 'profileCtrl', resolve: routeRoleChecks.admin
-    })
-    .when('/views/login/login', { templateUrl: '/partials/login/login',
-      controller: 'loginCtrl'
-    })
-    .when('/views/profile/profile', { templateUrl: '/partials/profile/profile',
-      controller: 'profileCtrl', resolve: routeRoleChecks.user
-    })
-    .when('/views/userEdit/user-edit/:id', { templateUrl: '/partials/userEdit/user-edit',
-      controller: 'userEditCtrl', resolve: routeRoleChecks.admin
-    })
-    .when('/views/userList/user-list', { templateUrl: '/partials/userList/user-list',
-      controller: 'userListCtrl', resolve: routeRoleChecks.admin
-    })
-    .when('/views/userCreate/user-create', { templateUrl: '/partials/userCreate/user-create',
-      controller: 'userCreateCtrl', resolve: routeRoleChecks.admin
+      controller: 'adminCtrl', resolve: routeRoleChecks.admin
     })
     .otherwise({
       templateUrl: '/partials/invalidPage/invalidPage'
