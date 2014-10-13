@@ -1,12 +1,16 @@
 var auth = require('./auth'),
   cache = require('./cache'),
   campaigns = require('../controllers/campaignsController'),
+  videos = require('../controllers/videosController'),
   members = require('../controllers/membersController'),
   inventoryItems = require('../controllers/inventoryItemsController');
 
 module.exports = function(app, config) {
   app.get('/api/campaigns/:name', cache.disableBrowserCache, campaigns.getCampaign);
   app.get('/api/campaigns', cache.disableBrowserCache, campaigns.getCampaigns);
+
+  app.get('/api/videos/:name', cache.disableBrowserCache, videos.getVideo);
+  app.get('/api/videos', cache.disableBrowserCache, videos.getVideos);
 
   app.get('/api/members/:name', cache.disableBrowserCache, members.getMember);
   app.get('/api/members', cache.disableBrowserCache, members.getMembers);

@@ -91,7 +91,7 @@ function User($resource) {
 }
 angular.module('app').factory('Video', ['$resource', Video]);
 function Video($resource) {
-  var video = $resource('/api/video', {}, {
+  var video = $resource('/api/videos', {}, {
     'query':  {method:'GET', isArray:true, cache: true}
   });
   return video;
@@ -443,6 +443,7 @@ angular.module('app').controller('resultsCtrl', resultsCtrl);
 resultsCtrl.$inject = ['$scope', '$sce', 'videoService'];
 function resultsCtrl($scope, $sce, videoService) {
   $scope.selectedVideoHtml = '';
+
   videoService.getVideos().then(function(videos) {
     $scope.videos = videos;
     for (var i = 0; i < videos.length; i++) {

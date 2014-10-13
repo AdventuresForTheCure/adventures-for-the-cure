@@ -2,6 +2,7 @@ angular.module('app').controller('resultsCtrl', resultsCtrl);
 resultsCtrl.$inject = ['$scope', '$sce', 'videoService'];
 function resultsCtrl($scope, $sce, videoService) {
   $scope.selectedVideoHtml = '';
+
   videoService.getVideos().then(function(videos) {
     $scope.videos = videos;
     for (var i = 0; i < videos.length; i++) {

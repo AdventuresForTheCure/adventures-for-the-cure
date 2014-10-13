@@ -1,4 +1,4 @@
-.row
+.row(ng-controller='resultsCtrl')
   .col-lg-6
     .well
       h4 Patapsco100 Race Results
@@ -41,11 +41,11 @@
       a(href='http://www.carrollcountytimes.com/news/local/cycling-through-the-cold/article_79f54f1c-0c9b-5527-93c7-bdf141d7ca8a.html#.ULQCTU_jqt8.email' target='_blank') 2012-11-26 Matt Cooper's Interview with the Carrol County Times
     .well
       h4 Videos
+      div(ng-bind-html='selectedVideoHtml')
       ul(style='padding-left:10px')
-        li(ng-repeat='video in videos | orderBy:'name':true')
+        li(ng-repeat='video in videos | orderBy:"name":true')
           a(ng-click='selectVideo(video)' href='') {{video.name}}
       br
-      div(ng-bind-html='selectedVideoHtml')
     .well
       h4 2006 Cross Country Fixed Gear (Documentary Movie)
       p

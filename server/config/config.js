@@ -14,9 +14,13 @@ var path = require('path');
 var rootPath = path.normalize(__dirname + '/../../');
 var campaignsPath = rootPath + 'public/app/views/campaigns/campaigns/';
 var membersPath = rootPath + 'public/app/views/members/members/';
+var videosPath = rootPath + '/public/app/views/results/videos/';
 var env = process.env.NODE_ENV = process.env.NODE_ENV || 'development';
 
 var environments = {
+  /**
+   * Development configuration
+   */
   development: {
     env: env,
     db: {
@@ -26,8 +30,13 @@ var environments = {
     rootPath: rootPath,
     campaignsPath: campaignsPath,
     membersPath: membersPath,
+    videosPath: videosPath,
     port: process.env.PORT || 3030
-  }, production: {
+  },
+  /**
+   * Production configuration
+   */
+  production: {
     env: env,
     db: {
       url: 'mongodb://' + process.env.AFC_MONGO_USERNAME + ':' +
@@ -37,6 +46,7 @@ var environments = {
     rootPath: rootPath,
     campaignsPath: campaignsPath,
     membersPath: membersPath,
+    videosPath: videosPath,
     port: process.env.PORT || 80
   }
 };
