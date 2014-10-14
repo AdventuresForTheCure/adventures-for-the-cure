@@ -38,8 +38,8 @@ angular.module('app').config(["$routeProvider", "$locationProvider", function($r
     .when('/login', { templateUrl: '/partials/login/login',
       controller: 'loginCtrl'
     })
-    .when('/admin', { templateUrl: '/partials/admin/admin',
-      controller: 'adminCtrl', resolve: routeRoleChecks.admin
+    .when('/createMember', { templateUrl: '/partials/createMember/create-member',
+      resolve: routeRoleChecks.admin
     })
     .otherwise({
       templateUrl: '/partials/invalidPage/invalidPage'
@@ -359,26 +359,37 @@ function campaignsCtrl($scope, $sce, campaignService) {
 }
 
 
-angular.module('app').controller('inventoryCtrl', inventoryCtrl);
-inventoryCtrl.$inject = ['$scope', 'inventoryService'];
-function inventoryCtrl($scope, inventoryService) {
-  $scope.inventoryItems = {};
-  inventoryService.getInventoryItems().then(function(inventoryItems) {
-    for (var i = 0; i < inventoryItems.length; i++) {
-      var inventoryItem = inventoryItems[i];
-      if (angular.isUndefined($scope.inventoryItems[inventoryItem.category])) {
-        $scope.inventoryItems[inventoryItem.category] = [];
+angular.module('app').controller('createMemberCtrl', createMemberCtrl);
+createMemberCtrl.$inject = ['$scope', '$location', 'notifierService', 'userService'];
+function createMemberCtrl($scope, $location, notifierService, userService) {
+  $scope.username = '';
+  $scope.password = '';
+  $scope.roles = [];
+
+  $scope.createMember = function() {
+    // if the form is valid then submit to the server
+    if ($scope.createMemberForm.$valid) {
+      var newUser = {
+        username: $scope.username,
+        roles: $scope.roles
+      };
+      if($scope.password && $scope.password.length > 0) {
+        newUser.password = $scope.password;
       }
-      $scope.inventoryItems[inventoryItem.category].push(inventoryItem);
+
+      userService.saveUserDataAsNewUser(newUser).then(function() {
+        notifierService.notify('User ' + newUser.username + ' has been created');
+        $location.path('/views/userList/user-list');
+      }, function(reason) {
+        notifierService.error(reason);
+      });
     }
-  });
+  };
 }
-
-
 angular.module('app').controller('loginCtrl', loginCtrl);
 loginCtrl.$inject = ['$scope', '$location', 'notifierService', 'authorizationService'];
 function loginCtrl($scope, $location, notifierService, authorizationService) {
-  $scope.login = function(username, password) {
+  $scope.login = function() {
     authorizationService.authenticateUser($scope.loginUsername, $scope.loginPassword).then(function(success) {
       if (success) {
         notifierService.notify('You have successfully signed in!');
@@ -459,5 +470,21 @@ function resultsCtrl($scope, $sce, videoService) {
       $scope.selectedVideoHtml = $sce.trustAsHtml(videoHtml);
     });
   };
+}
+
+
+angular.module('app').controller('inventoryCtrl', inventoryCtrl);
+inventoryCtrl.$inject = ['$scope', 'inventoryService'];
+function inventoryCtrl($scope, inventoryService) {
+  $scope.inventoryItems = {};
+  inventoryService.getInventoryItems().then(function(inventoryItems) {
+    for (var i = 0; i < inventoryItems.length; i++) {
+      var inventoryItem = inventoryItems[i];
+      if (angular.isUndefined($scope.inventoryItems[inventoryItem.category])) {
+        $scope.inventoryItems[inventoryItem.category] = [];
+      }
+      $scope.inventoryItems[inventoryItem.category].push(inventoryItem);
+    }
+  });
 }
 

@@ -12,11 +12,11 @@ exports.getMember = function(req, res) {
   var memberId = req.params.id;
   if (!memberId) { errorHandler.sendError(req, res, 'memberId is a required request parameter'); }
   else {
-    Member.findOne({_id: memberId}).exec(function (err, user) {
+    Member.findOne({_id: memberId}).exec(function (err, member) {
       if (err) {
         errorHandler.sendError(req, res, err);
       }
-      res.send(user);
+      res.send(member);
     });
   }
 };
@@ -25,7 +25,7 @@ exports.saveMember = function (req, res, next) {
   var memberData = req.body;
 
   // only admins can create a new member
-  if (!req.user.hasRole('admin')) {
+  if (!req.member.hasRole('admin')) {
     res.status(403);
     errorHandler.sendError(req, res, 'you do not have permission to create a new member');
   }
@@ -33,7 +33,7 @@ exports.saveMember = function (req, res, next) {
     Member.create(memberData, function (err, member) {
       if (err) { errorHandler.sendError(req, res, err); }
       else {
-        emailer.sendAuditMessageEMail('Member: "' + memberData.username + '" was created by: ' + req.user.username);
+        emailer.sendAuditMessageEMail('Member: "' + memberData.username + '" was created by: ' + req.member.username);
         res.send(member);
       }
     });
@@ -45,9 +45,9 @@ exports.updateMember = function (req, res) {
   var memberId = memberUpdates._id;
   delete memberUpdates._id;
 
-  // users can only update their own member data
+  // members can only update their own member data
   // admins can update anyone's data
-  if (memberData.username !== req.user.username || !req.user.hasRole('admin')) {
+  if (memberData.username !== req.member.username || !req.member.hasRole('admin')) {
     res.status(403);
     errorHandler.sendError(req, res, 'you do not have permission to update this member');
   }
@@ -56,7 +56,7 @@ exports.updateMember = function (req, res) {
     if (err) { errorHandler.sendError(req, res, err); }
     else {
       memberUpdates._id = memberId;
-      emailer.sendAuditMessageEMail('Member: "' + memberUpdates.username + '" was updated by: ' + req.user.username);
+      emailer.sendAuditMessageEMail('Member: "' + memberUpdates.username + '" was updated by: ' + req.member.username);
       res.send(memberUpdates);
     }
   });

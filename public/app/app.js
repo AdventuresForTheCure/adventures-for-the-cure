@@ -38,8 +38,8 @@ angular.module('app').config(function($routeProvider, $locationProvider) {
     .when('/login', { templateUrl: '/partials/login/login',
       controller: 'loginCtrl'
     })
-    .when('/admin', { templateUrl: '/partials/admin/admin',
-      controller: 'adminCtrl', resolve: routeRoleChecks.admin
+    .when('/createMember', { templateUrl: '/partials/createMember/create-member',
+      resolve: routeRoleChecks.admin
     })
     .otherwise({
       templateUrl: '/partials/invalidPage/invalidPage'

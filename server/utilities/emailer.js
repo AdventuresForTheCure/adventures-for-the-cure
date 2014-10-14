@@ -1,5 +1,5 @@
 var nodemailer = require('nodemailer');
-var User = require('mongoose').model('User');
+var Member = require('mongoose').model('Member');
 
 var emailSubjectPrefix = '[afc-website]';
 
@@ -15,8 +15,8 @@ exports.sendErrorMessageEMail = function(message) {
 smtpTransport = nodemailer.createTransport('SMTP',{
   service: 'Gmail',
   auth: {
-    user: 'mosaic.groups@gmail.com',
-    pass: 'ilovemosiac!'
+    user: 'adventuresforthecure@gmail.com',
+    pass: '' //TODO
   }
 });
 
@@ -38,7 +38,7 @@ sendEmail = function(tos, subject, message) {
 };
 
 sendAdminOnlyEmail = function(subject, message) {
-  User.find({'roles': 'admin'}).exec(function(err, superadmins) {
+  Member.find({'roles': 'admin'}).exec(function(err, superadmins) {
     var adminTos = '';
     for (var i = 0; i < superadmins.length; i++) {
       adminTos += (adminTos.length === 0) ? superadmins[i].username : ',' + superadmins[i].username;

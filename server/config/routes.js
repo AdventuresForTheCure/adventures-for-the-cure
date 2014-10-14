@@ -14,6 +14,7 @@ module.exports = function(app, config) {
 
   app.get('/api/members/:name', cache.disableBrowserCache, members.getMember);
   app.get('/api/members', cache.disableBrowserCache, members.getMembers);
+  app.post('/api/members/:id', auth.requiresLoggedInRole('admin'), members.updateMember);
 
   app.get('/api/inventoryItems', cache.disableBrowserCache, inventoryItems.getInventoryItems);
 
@@ -37,9 +38,9 @@ module.exports = function(app, config) {
   app.post('/logout', auth.logout);
 
   // ensure that the client side application does ALL of the routing
-  app.get('*', function(req, res) {
-    res.render('index', {
-      bootstrappedUser: req.user
-    });
-  });
+//  app.get('*', function(req, res) {
+//    res.render('index', {
+//      bootstrappedUser: req.user
+//    });
+//  });
 };
