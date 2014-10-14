@@ -1,9 +1,15 @@
-.navbar.navbar-inverse.navbar-fixed-top(ng-controller='navbarLoginCtrl')
+.navbar.navbar-inverse.navbar-fixed-top(ng-controller='navbarLoginCtrl' role='navigation')
   .container-fluid
     .navbar-header
+      button(type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar")
+        span.sr-only)Toggle navigation</span>
+        span.icon-bar
+        span.icon-bar
+        span.icon-bar
+      </button>
       a.navbar-brand(href='/')
         img(src='/img/afc.jpg')
-    .navbar-left
+    .collapse.navbar-collapse(id='navbar')
       ul.nav.navbar-nav.navbar-left
         li(ng-class='{ active: isActive("/home")}')
           a(href='/home') Home
@@ -14,27 +20,27 @@
         li(ng-class='{ active: isActive("/rides")}')
           a(href='/rides') Rides
         li(ng-class='{ active: isActive("/members")}')
-          a(href='/members') Members/Join
+          a(href='/members') Members
         li(ng-class='{ active: isActive("/results")}')
-          a(href='/results') Results/Media
+          a(href='/results') Results
         li(ng-class='{ active: isActive("/inventory")}')
           a(href='/inventory') Inventory
         li(ng-class='{ active: isActive("/contact")}')
-          a(href='/contact') Contact/About
-    .navbar-right(ng-if='identityService.isAuthenticated()')
-      ul.nav.navbar-nav.navbar-right
-        li.dropdown
-          a.logged-in.dropdown-toggle(href='', data-toggle='dropdown')
-            b.logged-in {{identityService.currentUser.firstName}} {{identityService.currentUser.lastName}}
-              .caret
-          ul.dropdown-menu
-            li
-              a(href='/views/profile/profile') Profile
-            li(ng-if='identityService.isAdmin()')
-              a(href='/admin') Admin
-            li
-              a(href='', ng-click='signout()') Sign Out
-    .navbar-right(ng-if='!identityService.isAuthenticated()')
-      ul.nav.navbar-nav.navbar-right
-        li
-          a(href='/login') Login
+          a(href='/contact') Contact
+      .navbar-right(ng-if='identityService.isAuthenticated()')
+        ul.nav.navbar-nav.navbar-right
+          li.dropdown
+            a.logged-in.dropdown-toggle(href='', data-toggle='dropdown')
+              b.logged-in {{identityService.currentUser.firstName}} {{identityService.currentUser.lastName}}
+                .caret
+            ul.dropdown-menu
+              li
+                a(href='/views/profile/profile') Profile
+              li(ng-if='identityService.isAdmin()')
+                a(href='/admin') Admin
+              li
+                a(href='', ng-click='signout()') Sign Out
+      .navbar-right(ng-if='!identityService.isAuthenticated()')
+        ul.nav.navbar-nav.navbar-right
+          li
+            a(href='/login') Login
