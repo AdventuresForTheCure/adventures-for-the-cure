@@ -1,5 +1,5 @@
 var nodemailer = require('nodemailer');
-var Member = require('mongoose').model('Member');
+var User = require('mongoose').model('User');
 
 var emailSubjectPrefix = '[afc-website]';
 
@@ -38,7 +38,7 @@ sendEmail = function(tos, subject, message) {
 };
 
 sendAdminOnlyEmail = function(subject, message) {
-  Member.find({'roles': 'admin'}).exec(function(err, superadmins) {
+  User.find({'roles': 'admin'}).exec(function(err, superadmins) {
     var adminTos = '';
     for (var i = 0; i < superadmins.length; i++) {
       adminTos += (adminTos.length === 0) ? superadmins[i].username : ',' + superadmins[i].username;

@@ -362,6 +362,8 @@ function campaignsCtrl($scope, $sce, campaignService) {
 angular.module('app').controller('createMemberCtrl', createMemberCtrl);
 createMemberCtrl.$inject = ['$scope', '$location', 'notifierService', 'userService'];
 function createMemberCtrl($scope, $location, notifierService, userService) {
+  $scope.firstName = '';
+  $scope.lastName = '';
   $scope.username = '';
   $scope.password = '';
   $scope.roles = [];
@@ -370,6 +372,8 @@ function createMemberCtrl($scope, $location, notifierService, userService) {
     // if the form is valid then submit to the server
     if ($scope.createMemberForm.$valid) {
       var newUser = {
+        firstName: $scope.firstName,
+        lastName: $scope.lastName,
         username: $scope.username,
         roles: $scope.roles
       };
@@ -386,6 +390,22 @@ function createMemberCtrl($scope, $location, notifierService, userService) {
     }
   };
 }
+angular.module('app').controller('inventoryCtrl', inventoryCtrl);
+inventoryCtrl.$inject = ['$scope', 'inventoryService'];
+function inventoryCtrl($scope, inventoryService) {
+  $scope.inventoryItems = {};
+  inventoryService.getInventoryItems().then(function(inventoryItems) {
+    for (var i = 0; i < inventoryItems.length; i++) {
+      var inventoryItem = inventoryItems[i];
+      if (angular.isUndefined($scope.inventoryItems[inventoryItem.category])) {
+        $scope.inventoryItems[inventoryItem.category] = [];
+      }
+      $scope.inventoryItems[inventoryItem.category].push(inventoryItem);
+    }
+  });
+}
+
+
 angular.module('app').controller('loginCtrl', loginCtrl);
 loginCtrl.$inject = ['$scope', '$location', 'notifierService', 'authorizationService'];
 function loginCtrl($scope, $location, notifierService, authorizationService) {
@@ -470,21 +490,5 @@ function resultsCtrl($scope, $sce, videoService) {
       $scope.selectedVideoHtml = $sce.trustAsHtml(videoHtml);
     });
   };
-}
-
-
-angular.module('app').controller('inventoryCtrl', inventoryCtrl);
-inventoryCtrl.$inject = ['$scope', 'inventoryService'];
-function inventoryCtrl($scope, inventoryService) {
-  $scope.inventoryItems = {};
-  inventoryService.getInventoryItems().then(function(inventoryItems) {
-    for (var i = 0; i < inventoryItems.length; i++) {
-      var inventoryItem = inventoryItems[i];
-      if (angular.isUndefined($scope.inventoryItems[inventoryItem.category])) {
-        $scope.inventoryItems[inventoryItem.category] = [];
-      }
-      $scope.inventoryItems[inventoryItem.category].push(inventoryItem);
-    }
-  });
 }
 

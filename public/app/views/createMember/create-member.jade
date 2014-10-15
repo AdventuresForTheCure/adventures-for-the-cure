@@ -7,13 +7,21 @@
     h4 Create Member
     form.form-horizontal(name="createMemberForm" role='form')
       .form-group
+        label.col-md-2.control-label(for="firstName") First Name
+        .col-md-10
+          input.form-control(name="firstName", type="text", placeholder="First Name", ng-model="firstName", required, autocomplete="off" )
+      .form-group
+        label.col-md-2.control-label(for="lastName") Username (Email)
+        .col-md-10
+          input.form-control(name="lastName", type="text", placeholder="Last Name", ng-model="lastName", required, autocomplete="off" )
+      .form-group
         label.col-md-2.control-label(for="username") Username (Email)
         .col-md-10
-          input.form-control(name="username", type="email", placeholder="Username (Email)", ng-model="loginUsername", required, autocomplete="off" )
+          input.form-control(name="username", type="email", placeholder="Username (Email)", ng-model="username", required, autocomplete="off" )
       .form-group
         label.col-md-2.control-label(for="password") Temporary Password
         .col-md-10
-          input.form-control(name="password", type="password", placeholder="Password", ng-model="loginPassword", required, autocomplete="off" )
+          input.form-control(name="password", type="password", placeholder="Password", ng-model="password", required, autocomplete="off" )
       .form-group
         label.col-md-2.control-label(for="adminRole") Admin
         .col-md-10
