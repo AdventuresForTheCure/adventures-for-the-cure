@@ -38,8 +38,14 @@ angular.module('app').config(function($routeProvider, $locationProvider) {
     .when('/login', { templateUrl: '/partials/login/login',
       controller: 'loginCtrl'
     })
-    .when('/createMember', { templateUrl: '/partials/createMember/create-member',
-      resolve: routeRoleChecks.admin
+    .when('/user-edit/:id', { templateUrl: '/partials/userEdit/user-edit',
+      controller: 'userEditCtrl', resolve: routeRoleChecks.admin
+    })
+    .when('/user-list', { templateUrl: '/partials/userList/user-list',
+      controller: 'userListCtrl', resolve: routeRoleChecks.admin
+    })
+    .when('/user-create', { templateUrl: '/partials/userCreate/user-create',
+      controller: 'userCreateCtrl', resolve: routeRoleChecks.admin
     })
     .otherwise({
       templateUrl: '/partials/invalidPage/invalidPage'

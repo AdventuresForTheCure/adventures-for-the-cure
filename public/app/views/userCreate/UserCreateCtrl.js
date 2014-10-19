@@ -1,18 +1,16 @@
-angular.module('app').controller('createMemberCtrl', createMemberCtrl);
-createMemberCtrl.$inject = ['$scope', '$location', 'notifierService', 'userService'];
-function createMemberCtrl($scope, $location, notifierService, userService) {
-  $scope.firstName = '';
-  $scope.lastName = '';
+angular.module('app').controller('userCreateCtrl', userCreateCtrl);
+userCreateCtrl.$inject = ['$scope', '$location', 'notifierService', 'userService'];
+function userCreateCtrl($scope, $location, notifierService, userService) {
+  $scope.name = '';
   $scope.username = '';
   $scope.password = '';
   $scope.roles = [];
 
   $scope.createMember = function() {
     // if the form is valid then submit to the server
-    if ($scope.createMemberForm.$valid) {
+    if ($scope.userCreateForm.$valid) {
       var newUser = {
-        firstName: $scope.firstName,
-        lastName: $scope.lastName,
+        name: $scope.name,
         username: $scope.username,
         roles: $scope.roles
       };

@@ -3,6 +3,7 @@ var auth = require('./auth'),
   campaigns = require('../controllers/campaignsController'),
   videos = require('../controllers/videosController'),
   users = require('../controllers/usersController'),
+  members = require('../controllers/membersController'),
   inventoryItems = require('../controllers/inventoryItemsController');
 
 module.exports = function(app, config) {
@@ -12,12 +13,17 @@ module.exports = function(app, config) {
   app.get('/api/videos/:name', cache.disableBrowserCache, videos.getVideo);
   app.get('/api/videos', cache.disableBrowserCache, videos.getVideos);
 
-  app.get('/api/users/:name', cache.disableBrowserCache, users.getUser);
-  app.get('/api/users', cache.disableBrowserCache, users.getUsers);
+  app.get('/api/members', cache.disableBrowserCache, members.getMembers);
+
+  app.get('/api/users', auth.requiresLoggedInRole('admin'),cache.disableBrowserCache, users.getUsers);
   app.post('/api/users', auth.requiresLoggedInRole('admin'), users.saveUser);
-  app.post('/api/users/:id', auth.requiresLoggedIn, users.updateUser);
+  app.get('/api/users/:id', auth.requiresLoggedInRole('admin'), users.getUser);
 
   app.get('/api/inventoryItems', cache.disableBrowserCache, inventoryItems.getInventoryItems);
+
+  app.get('/dist/*.js', function(req, res) {
+    res.sendfile(config.rootPath + '/dist/' + req.params[0] + '.js');
+  });
 
   // static html files for the campaigns are in this directory
   app.get('/partials/campaigns/campaigns/*', function(req, res) {

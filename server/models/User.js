@@ -2,10 +2,7 @@ var mongoose = require('mongoose');
 var encrypt = require('../utilities/encryption');
 
 var userSchema = mongoose.Schema({
-  firstName: {
-    type:String,
-    required:'{PATH} is required!'},
-  lastName: {
+  name: {
     type:String,
     required:'{PATH} is required!'},
   username: {
@@ -18,6 +15,14 @@ var userSchema = mongoose.Schema({
   hashedPwd: {
     type:String,
     required:'{PATH} is required!'},
+  bio: {
+    type: String,
+    default: ''
+  },
+  img: {
+    type: String,
+    default: ''
+  },
   roles: [String]
 });
 
@@ -38,13 +43,14 @@ function createDefaultUsers() {
       var salt, hash;
       salt = encrypt.createSalt();
       hash = encrypt.hashPwd(salt, 'p');
-      User.create({firstName:'Patrick',lastName:'Blair',username:'pblair12@gmail.com', salt: salt, hashedPwd: hash,
-        roles: ['user', 'board', 'admin', 'inventory']});
-
+      User.create({name:'Patrick Blair',username:'pblair12@gmail.com', salt: salt, hashedPwd: hash,
+        bio: 'AFC Founder', img: '/img/Patrick Blair.jpg',
+        roles: ['admin', 'inventory']});
       salt = encrypt.createSalt();
       hash = encrypt.hashPwd(salt, 'm');
-      User.create({firstName:'Mike',lastName:'Caputi',username:'mcaput1@gmail.com', salt: salt, hashedPwd: hash,
-        roles: ['user', 'board', 'admin', 'inventory']});
+      User.create({name:'Mike Caputi',username:'mcaput1@gmail.com', salt: salt, hashedPwd: hash,
+        bio: 'AFC Tresurer', img: '/img/Mike Caputi.jpg',
+        roles: ['admin', 'inventory']});
     } else {
       console.log('not creating default users because %s users already exist', collection.length);
     }

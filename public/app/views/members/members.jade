@@ -21,4 +21,5 @@
   .col-lg-7
     .well
       h2(style='text-align:center') {{selectedMember.name}}
-      p(ng-bind-html='selectedMemberHtml')
+      img(src='{{selectedMember.img}}')
+      p(ng-bind-html='selectedMember.bio')

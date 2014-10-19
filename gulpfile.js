@@ -9,7 +9,7 @@ var publicjs = './public/app/**/*.js';
 var serverjs = './server/**/*.js';
 var publictestjs = './test/public/*.js';
 var servertestjs = './test/server/*.js';
-var publicdist = './public/dist';
+var publicdist = './dist';
 
 gulp.task('public-clean', function() {
   return gulp.src('dist')

@@ -37,7 +37,9 @@
               li
                 a(href='/views/profile/profile') Profile
               li(ng-if='identityService.isAdmin()')
-                a(href='/createMember') Create Member
+                a(href='/user-create') Create User
+              li(ng-if='identityService.isAdmin()')
+                a(href='/user-list') List Users
               li
                 a(href='', ng-click='signout()') Sign Out
       .navbar-right(ng-if='!identityService.isAuthenticated()')

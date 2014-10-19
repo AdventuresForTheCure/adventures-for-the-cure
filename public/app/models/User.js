@@ -6,8 +6,8 @@ function User($resource) {
     return this.roles && this.roles.indexOf('admin') > -1;
   };
 
-  user.prototype.isBoard = function() {
-    return this.roles && this.roles.indexOf('board') > -1;
+  user.prototype.isInventory = function() {
+    return this.roles && this.roles.indexOf('inventory') > -1;
   };
 
   return user;

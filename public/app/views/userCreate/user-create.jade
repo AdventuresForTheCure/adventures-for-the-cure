@@ -1,0 +1,35 @@
+.row
+  .col-lg-12(ng-controller='userCreateCtrl')
+    .well
+      p This is for 'admin' members only.  After a member is created an email will be sent to them with
+       | instructions on how to log in, setup their profile with a bio/pic, and fill out the
+       | 2015 membership form.
+    .well
+      h4 Create Member
+      form.form-horizontal(name="userCreateForm" role='form')
+        .form-group
+          label.col-md-2.control-label(for="name") Name
+          .col-md-10
+            input.form-control(name="name", type="text", placeholder="Name", ng-model="name", required, autocomplete="off" )
+        .form-group
+          label.col-md-2.control-label(for="username") Username (Email)
+          .col-md-10
+            input.form-control(name="username", type="email", placeholder="Username (Email)", ng-model="username", required, autocomplete="off" )
+        .form-group
+          label.col-md-2.control-label(for="password") Temporary Password
+          .col-md-10
+            input.form-control(name="password", type="password", placeholder="Password", ng-model="password", required, autocomplete="off" )
+        .form-group
+          label.col-md-2.control-label(for="adminRole") Admin
+          .col-md-10
+            input(name="adminRole", type="checkbox", ng-model="roles[0]", ng-true-value="admin", ng-false-value="")
+        .form-group
+          label.col-md-2.control-label(for="inventory") Inventory
+          .col-md-10
+            input(name="inventory", type="checkbox", ng-model="roles[2]", ng-true-value="inventory", ng-false-value="")
+        .form-group
+          .col-md-10.col-md-offset-2
+            .pull-right
+              button.btn.btn-primary(ng-click="createMember()", ng-disabled="createMemberForm.$invalid") Create
+              | &nbsp;
+              a.btn.btn-default(href="/") Cancel

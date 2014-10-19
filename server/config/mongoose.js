@@ -20,6 +20,6 @@ module.exports = function(config) {
 
 
   // create default mongoose entries
-//  userModel.createDefaultUsers();
+  user.createDefaultUsers();
   //inventoryItemModel.createDefaultInventoryItems();
 };

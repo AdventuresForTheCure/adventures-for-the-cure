@@ -1,0 +1,21 @@
+.row(ng-controller='resultsCtrl')
+  .col-lg-12
+    .well
+      table.table
+        thead
+          tr
+            th Username (Email)
+            th Name
+            th Admin
+            th Inventory
+            th Actions
+        tbody
+          tr(ng-repeat="user in users")
+            td {{user.username}}
+            td {{user.name}}
+            td {{user.isAdmin()}}
+            td {{user.isInventory()}}
+            td
+              button.btn(ng-click="editUser(user)") Edit
+              | &nbsp;
+              button.btn(ng-click="deleteUser(user)") Delete

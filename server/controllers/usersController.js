@@ -46,7 +46,7 @@ exports.saveUser = function(req, res, next) {
         res.send(user);
       }
     }
-  })
+  });
 };
 
 exports.updateUser = function (req, res) {
@@ -55,7 +55,7 @@ exports.updateUser = function (req, res) {
   delete userUpdates._id;
 
   // if not updating self or if this is an not admin user
-  if(req.user._id != userId && !req.user.hasRole('admin')) {
+  if(req.user._id !== userId && !req.user.hasRole('admin')) {
     res.status(403);
     return res.end();
   }

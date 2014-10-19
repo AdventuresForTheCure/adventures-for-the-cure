@@ -21,10 +21,5 @@ function membersCtrl($scope, $sce, $location, memberService) {
 
   $scope.selectMember = function(member) {
     $scope.selectedMember = member;
-    memberService.getMember(member.name).then(function(memberHtml) {
-      // use $sce.trustAsHtml to tell angular that the html received is 'safe' to display
-      $scope.selectedMemberHtml = $sce.trustAsHtml(memberHtml);
-      $location.hash(member.name);
-    });
   };
 }
