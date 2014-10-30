@@ -1,0 +1,32 @@
+.row(ng-controller='memberEditCtrl')
+  .col-lg-12
+    .well
+      form.form-horizontal(name="memberEditForm")
+        fieldset
+          legend Edit Member
+          .form-group
+            label.col-md-2.control-label(for="username") Email
+            .col-md-10
+              input.form-control(name="username", type="email", placeholder="Email", ng-model="memberToEdit.username", required, autocomplete="off" )
+          .form-group
+            label.col-md-2.control-label(for="name") Name
+            .col-md-10
+              input.form-control(name="name", type="text", placeholder="Name", ng-model="memberToEdit.name", required, autocomplete="off" )
+          .form-group
+            label.col-md-2.control-label(for="password") Password
+            .col-md-10
+              input.form-control(name="password", type="password", placeholder="Password", ng-model="memberToEdit.password", autocomplete="off" )
+          .form-group
+            label.col-md-2.control-label(for="adminRole") Admin
+            .col-md-10
+              input(name="adminRole", type="checkbox", ng-model="memberToEdit.roles[0]", ng-true-value="admin", ng-false-value="")
+          .form-group
+            label.col-md-2.control-label(for="inventoryRole") Inventory
+            .col-md-10
+              input(name="inventoryRole", type="checkbox", ng-model="memberToEdit.roles[1]", ng-true-value="inventory", ng-false-value="")
+          .form-group
+            .col-md-10.col-md-offset-2
+              .pull-right
+                button.btn.btn-primary(ng-click="saveMember()", ng-disabled="memberEditForm.$invalid") Submit
+                | &nbsp;
+                a.btn.btn-default(href="/") Cancel

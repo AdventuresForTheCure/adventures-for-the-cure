@@ -1,25 +1,47 @@
 angular.module('app').controller('membersCtrl', membersCtrl);
-membersCtrl.$inject = ['$scope', '$sce', '$location', 'memberService'];
-function membersCtrl($scope, $sce, $location, memberService) {
+membersCtrl.$inject = ['$scope', '$location', 'memberService', 'notifierService', 'identityService'];
+function membersCtrl($scope, $location, memberService, notifierService, identityService) {
   $scope.selectedMember = undefined;
   $scope.selectedMemberHtml = '';
-
-  var selectedMemberName = ($location.hash()) ? $location.hash() : 'Adam Driscoll';
+  $scope.editMode = false;
+  $scope.notifierService = notifierService;
 
   memberService.getMembers().then(function(members) {
-    if (angular.isUndefined($scope.allMembers)) {
-      $scope.allMembers = members;
-      $scope.membersColumn1 = members.slice(0, (members.length / 2));
-      $scope.membersColumn2 = members.slice((members.length / 2), members.length);
-      for (var i = 0; i < members.length; i++) {
-        if (members[i].name === selectedMemberName) {
-          $scope.selectMember(members[i]);
-        }
+    $scope.allMembers = members;
+    $scope.membersColumn1 = members.slice(0, (members.length / 2));
+    $scope.membersColumn2 = members.slice((members.length / 2), members.length);
+    var selectedMemberName = $location.hash();
+    for (var i = 0; i < members.length; i++) {
+      if (members[i].name === selectedMemberName) {
+        $scope.selectMember(members[i]);
+      } else if (selectedMemberName === '' && members[i].name === 'Adam Driscoll') {
+        $scope.selectMember(members[i]);
       }
     }
   });
 
+  $scope.enableEditMode = function() {
+    $scope.editMode = true;
+  };
+
+  $scope.ableToEdit = function() {
+    if ($scope.selectedMember &&
+        identityService.isAuthenticated() &&
+       ($scope.selectedMember.username === identityService.currentUser.username ||
+        identityService.currentUser.isAdmin())) {
+      return true;
+    } else {
+      return false;
+    }
+  };
+
   $scope.selectMember = function(member) {
     $scope.selectedMember = member;
+    $location.hash($scope.selectedMember.name);
+  };
+
+  $scope.saveMember = function() {
+    memberService.saveMember($scope.selectedMember);
+    $scope.editMode = false;
   };
 }

@@ -1,0 +1,21 @@
+.row(ng-controller='memberListCtrl')
+  .col-lg-12
+    .well
+      table.table
+        thead
+          tr
+            th Username (Email)
+            th Name
+            th Admin
+            th Inventory
+            th Actions
+        tbody
+          tr(ng-repeat="member in members")
+            td {{member.username}}
+            td {{member.name}}
+            td {{member.isAdmin()}}
+            td {{member.isInventory()}}
+            td
+              button.btn(ng-click="editMember(member)") Edit
+              | &nbsp;
+              button.btn(ng-click="deleteMember(member)") Delete

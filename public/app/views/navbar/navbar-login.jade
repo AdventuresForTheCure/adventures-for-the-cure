@@ -23,6 +23,8 @@
           a(href='/members') Members
         li(ng-class='{ active: isActive("/results")}')
           a(href='/results') Results
+        li(ng-class='{ active: isActive("/campaigns")}')
+          a(href='/campaigns') Campaigns
         li(ng-class='{ active: isActive("/inventory")}')
           a(href='/inventory') Inventory
         li(ng-class='{ active: isActive("/contact")}')
@@ -31,15 +33,13 @@
         ul.nav.navbar-nav.navbar-right
           li.dropdown
             a.logged-in.dropdown-toggle(href='', data-toggle='dropdown')
-              b.logged-in {{identityService.currentUser.firstName}} {{identityService.currentUser.lastName}}
+              b.logged-in {{identityService.currentUser.name}}
                 .caret
             ul.dropdown-menu
-              li
-                a(href='/views/profile/profile') Profile
               li(ng-if='identityService.isAdmin()')
-                a(href='/user-create') Create User
+                a(href='/member-create') Create Member
               li(ng-if='identityService.isAdmin()')
-                a(href='/user-list') List Users
+                a(href='/member-list') List Members
               li
                 a(href='', ng-click='signout()') Sign Out
       .navbar-right(ng-if='!identityService.isAuthenticated()')

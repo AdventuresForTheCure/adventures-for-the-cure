@@ -66,10 +66,14 @@ gulp.task('watch-all', function() {
 });
 
 gulp.task('nodemon', function() {
-  plug.nodemon({script: 'server.js', ext: 'jade js'})
-    .on('restart', function() {
-      console.log('restarted');
-    });
+  plug.nodemon({
+    script: 'server.js',
+    ext: 'js',
+    ignore: ['./public/**', './dist/**']
+  })
+  .on('restart', function() {
+    console.log('restarted');
+  })
 });
 
 gulp.task('development', ['public-clean'], function(callback) {

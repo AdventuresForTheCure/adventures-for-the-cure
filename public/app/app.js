@@ -31,21 +31,25 @@ angular.module('app').config(function($routeProvider, $locationProvider) {
     })
     .when('/results', { templateUrl: '/partials/results/results'
     })
+    .when('/campaigns', { templateUrl: '/partials/campaigns/campaigns'
+    })
     .when('/inventory', { templateUrl: '/partials/inventory/inventory'
     })
     .when('/contact', { templateUrl: '/partials/contact/contact'
     })
+    .when('/join', { templateUrl: '/partials/join/join'
+    })
     .when('/login', { templateUrl: '/partials/login/login',
       controller: 'loginCtrl'
     })
-    .when('/user-edit/:id', { templateUrl: '/partials/userEdit/user-edit',
-      controller: 'userEditCtrl', resolve: routeRoleChecks.admin
+    .when('/member-edit/:id', { templateUrl: '/partials/memberEdit/member-edit',
+      resolve: routeRoleChecks.admin
     })
-    .when('/user-list', { templateUrl: '/partials/userList/user-list',
-      controller: 'userListCtrl', resolve: routeRoleChecks.admin
+    .when('/member-list', { templateUrl: '/partials/memberList/member-list',
+      resolve: routeRoleChecks.admin
     })
-    .when('/user-create', { templateUrl: '/partials/userCreate/user-create',
-      controller: 'userCreateCtrl', resolve: routeRoleChecks.admin
+    .when('/member-create', { templateUrl: '/partials/memberCreate/member-create',
+      resolve: routeRoleChecks.admin
     })
     .otherwise({
       templateUrl: '/partials/invalidPage/invalidPage'

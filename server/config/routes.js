@@ -14,10 +14,11 @@ module.exports = function(app, config) {
   app.get('/api/videos', cache.disableBrowserCache, videos.getVideos);
 
   app.get('/api/members', cache.disableBrowserCache, members.getMembers);
+  app.get('/api/membersAsAdmin',  auth.requiresLoggedInRole('admin'), cache.disableBrowserCache, members.getMembersAsAdmin);
+  app.post('/api/members', members.updateMember);
+  app.get('/api/members/:id', auth.requiresLoggedInRole('admin'), members.getMember);
 
-  app.get('/api/users', auth.requiresLoggedInRole('admin'),cache.disableBrowserCache, users.getUsers);
   app.post('/api/users', auth.requiresLoggedInRole('admin'), users.saveUser);
-  app.get('/api/users/:id', auth.requiresLoggedInRole('admin'), users.getUser);
 
   app.get('/api/inventoryItems', cache.disableBrowserCache, inventoryItems.getInventoryItems);
 
