@@ -1,24 +1,42 @@
-angular.module('app').factory('memberService', ['$q', '$http', 'Member', memberService]);
-function memberService($q, $http, Member) {
+angular.module('app').factory('memberService', ['$q', '$http', '$upload', 'Member', memberService]);
+function memberService($q, $http, $upload, Member) {
   return {
-    getMembers: function() {
-      var deferred = $q.defer();
-      $http.get('/api/members/').then(function(response) {
-        deferred.resolve(response.data);
+    deleteMember: function(user) {
+      var dfd = $q.defer();
+      $http.delete('/api/members/' + user._id).then(function(response) {
+        dfd.resolve();
+      }, function(response) {
+        dfd.reject(response.data.reason);
       });
-      return deferred.promise;
+      return dfd.promise;
+    },
+
+    getMembers: function() {
+      var dfd = $q.defer();
+      $http.get('/api/members/').then(function(response) {
+        var members = [];
+        for (var i = 0; i < response.data.length; i++) {
+          members[i] = new Member(response.data[i]);
+        }
+        dfd.resolve(members);
+      }, function(response) {
+        deferr.reject(response.data.reason);
+      });
+      return dfd.promise;
     },
 
     getMembersAsAdmin: function() {
-      var deferred = $q.defer();
+      var dfd = $q.defer();
       $http.get('/api/membersAsAdmin/').then(function(response) {
         var members = [];
         for (var i = 0; i < response.data.length; i++) {
           members[i] = new Member(response.data[i]);
         }
-        deferred.resolve(members);
+        dfd.resolve(members);
+      }, function(response) {
+        deferr.reject(response.data.reason);
       });
-      return deferred.promise;
+      return dfd.promise;
     },
 
     getMember: function(name) {
@@ -26,25 +44,31 @@ function memberService($q, $http, Member) {
       // we must use the $http.get method and not the Member resource.  The Member
       // resource will only give us json as a $resource result but $http.get will give us
       // our desired html in the response.
-      var deferred = $q.defer();
+      var dfd = $q.defer();
       $http.get('/api/members/' + name).then(function(response) {
         var member = new Member(response.data);
-        deferred.resolve(member);
-      });
-      return deferred.promise;
-    },
-
-    saveMember: function(member) {
-      return Member.save(member).$promise;
-    },
-
-    saveMemberDataAsNewUser: function(memberData) {
-      var member = new Member(memberData);
-      var dfd = $q.defer();
-      member.$save().then(function(member) {
         dfd.resolve(member);
       }, function(response) {
-        dfd.reject(response.data.reason);
+        deferr.reject(response.data.reason);
+      });
+      return dfd.promise;
+    },
+
+    saveMemberDataAsNewMember: function(memberData) {
+      var dfd = $q.defer();
+      $upload.upload({
+        url: '/api/members',
+        data: memberData,
+        file: memberData.img
+      }).progress(function(evt) {
+        console.log('percent: ' + parseInt(100.0 * evt.loaded / evt.total));
+      }).success(function(data, status, headers, config) {
+        // file is uploaded successfully
+        console.log(data);
+        dfd.resolve(data);
+      }).error(function(error, status, headers, config) {
+        console.log(error);
+        dfd.reject(error.reason);
       });
 
       return dfd.promise;

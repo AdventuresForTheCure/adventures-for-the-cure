@@ -34,7 +34,7 @@
         .form-group
           label.col-md-2.control-label(for="image")
           .col-md-10
-            a(ng-click='uploadImage();notifierService.error("feature is not implemented");' href='') Upload Image
+            input(name="img" type="file" ng-file-select="onFileSelect($files)" accept="image/*")
         .form-group
           .col-md-10.col-md-offset-2
             .pull-right

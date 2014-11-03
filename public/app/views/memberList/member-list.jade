@@ -6,6 +6,7 @@
           tr
             th Username (Email)
             th Name
+            th Image
             th Admin
             th Inventory
             th Actions
@@ -13,6 +14,9 @@
           tr(ng-repeat="member in members")
             td {{member.username}}
             td {{member.name}}
+            td
+              a(href="{{member.imgPath}}" target="_blank")
+                img(src="{{member.imgPath}}" width="100px" height="auto")
             td {{member.isAdmin()}}
             td {{member.isInventory()}}
             td

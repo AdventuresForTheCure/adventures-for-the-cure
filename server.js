@@ -4,6 +4,9 @@ var app = express();
 
 var config = require('./server/config/config');
 
+console.log('configuring cloudinary');
+require('./server/config/cloudinary')();
+
 console.log('configuring express');
 require('./server/config/express')(app, config);
 

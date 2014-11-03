@@ -19,9 +19,13 @@ var userSchema = mongoose.Schema({
     type: String,
     default: ''
   },
-  img: {
+  imgPath: {
     type: String,
     default: ''
+  },
+  imgId: {
+    type: String,
+    default: null
   },
   roles: [String]
 });

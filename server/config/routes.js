@@ -1,10 +1,11 @@
-var auth = require('./auth'),
-  cache = require('./cache'),
-  campaigns = require('../controllers/campaignsController'),
-  videos = require('../controllers/videosController'),
-  users = require('../controllers/usersController'),
-  members = require('../controllers/membersController'),
-  inventoryItems = require('../controllers/inventoryItemsController');
+var auth = require('./auth');
+var cache = require('./cache');
+var campaigns = require('../controllers/campaignsController');
+var videos = require('../controllers/videosController');
+var members = require('../controllers/membersController');
+var inventoryItems = require('../controllers/inventoryItemsController');
+var multipart = require('connect-multiparty');
+var multipartMiddleware = multipart();
 
 module.exports = function(app, config) {
   app.get('/api/campaigns/:name', cache.disableBrowserCache, campaigns.getCampaign);
@@ -15,10 +16,10 @@ module.exports = function(app, config) {
 
   app.get('/api/members', cache.disableBrowserCache, members.getMembers);
   app.get('/api/membersAsAdmin',  auth.requiresLoggedInRole('admin'), cache.disableBrowserCache, members.getMembersAsAdmin);
-  app.post('/api/members', members.updateMember);
+  app.post('/api/members/:id', members.updateMember);
+  app.post('/api/members', multipartMiddleware, members.saveMember);
   app.get('/api/members/:id', auth.requiresLoggedInRole('admin'), members.getMember);
-
-  app.post('/api/users', auth.requiresLoggedInRole('admin'), users.saveUser);
+  app.delete('/api/members/:id', auth.requiresLoggedInRole('admin'), members.deleteMember);
 
   app.get('/api/inventoryItems', cache.disableBrowserCache, inventoryItems.getInventoryItems);
 

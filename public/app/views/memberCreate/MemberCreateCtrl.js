@@ -7,6 +7,7 @@ function memberCreateCtrl($scope, $location, notifierService, memberService) {
   $scope.confirmPassword = '';
   $scope.bio = '';
   $scope.roles = [];
+  $scope.img = undefined;
   $scope.notifierService = notifierService;
 
   $scope.createMember = function() {
@@ -16,7 +17,8 @@ function memberCreateCtrl($scope, $location, notifierService, memberService) {
         name: $scope.name,
         username: $scope.username,
         roles: $scope.roles,
-        bio: $scope.bio
+        bio: $scope.bio,
+        img: $scope.img
       };
       if($scope.password && $scope.password.length > 0) {
         newMember.password = $scope.password;
@@ -29,5 +31,9 @@ function memberCreateCtrl($scope, $location, notifierService, memberService) {
         notifierService.error(reason);
       });
     }
+  };
+
+  $scope.onFileSelect = function($files) {
+    $scope.img = $files[0];
   };
 }

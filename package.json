@@ -27,7 +27,9 @@
     "jade": "~1.1.5",
     "nodemailer": "~0.6.5",
     "foreach": "~2.0.4",
-    "dir-reader": "git://github.com/pblair12/dir-reader.git"
+    "dir-reader": "git://github.com/pblair12/dir-reader.git",
+    "connect-multiparty": "~1.2.5",
+    "cloudinary": "~1.0.12"
   },
   "devDependencies": {
     "karma-mocha": "~0.1.3",
