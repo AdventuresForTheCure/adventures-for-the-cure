@@ -24,7 +24,7 @@ function memberCreateCtrl($scope, $location, notifierService, memberService) {
         newMember.password = $scope.password;
       }
 
-      memberService.saveMemberDataAsNewMember(newMember).then(function() {
+      memberService.saveMember(newMember).then(function() {
         notifierService.notify('Member ' + newMember.username + ' has been created');
         $location.path('/views/memberList/member-list');
       }, function(reason) {

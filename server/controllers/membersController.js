@@ -7,9 +7,19 @@ var config = require('../config/config');
 /**
  * Make a call to Cloudinary to store the image.
  * @param srcImgPath
+ * @param imageId (optional if replacing an existing image)
  * @param callback
  */
-function saveImg(srcImgPath, callback) {
+function saveImg(srcImg, imageId, callback) {
+  if (srcImg === undefined) {
+    callback(null, undefined);
+  }
+
+  if (typeof(imageId) === 'function') {
+    callback = imageId;
+    imageId = null;
+  }
+
   /**
    * Cloudinar returns the following object:
    *  {
@@ -23,13 +33,18 @@ function saveImg(srcImgPath, callback) {
    *   secure_url: 'https://res.cloudinary.com/demo/image/upload/v1371281596/sample.jpg'
    * }
    */
-  cloudinary.uploader.upload(srcImgPath, function(result) {
-    callback(null, result);
-  }, {
+  var options = {
     transformation: [
       {width: 350, crop: 'scale'}
     ]
-  });
+  };
+  if (imageId) {
+    options.public_id = imageId;
+  }
+
+  cloudinary.uploader.upload(srcImg.path, function(result) {
+    callback(null, result);
+  }, options);
 }
 
 exports.saveMember = function(req, res, next) {
@@ -37,11 +52,16 @@ exports.saveMember = function(req, res, next) {
 
   // save the image to the file system
   memberData.imgPath = config.rootPath + 'public/img/members/' + memberData.name + '.png'
-  saveImg(req.files.img.path, function(err, result) {
+  saveImg(req.files.img, memberData.name, function(err, result) {
     if(err) { errorHandler.sendError(req, res, err); }
     else {
-      memberData.imgPath = result.url;
-      memberData.imgId = result.public_id;
+      if (result === undefined) {
+        memberData.imgPath = '';
+        memberData.imgId = null;
+      } else {
+        memberData.imgPath = result.url;
+        memberData.imgId = result.public_id;
+      }
       memberData.salt = encrypt.createSalt();
       memberData.hashedPwd = encrypt.hashPwd(memberData.salt, memberData.password);
 
@@ -72,34 +92,108 @@ exports.saveMember = function(req, res, next) {
 };
 
 exports.updateMember = function(req, res) {
-  var memberUpdates = req.body;
-  var memberId = memberUpdates._id;
-  delete memberUpdates._id;
+  var memberId = req.body._id;
+  var memberData = toMemberData(req.body);
 
   // if not updating self or if this is an not admin member
-  if(req.user.username !== memberUpdates.username && !req.user.hasRole('admin')) {
+  if(req.user._id.toString() !== memberId && !req.user.hasRole('admin')) {
     res.status(403);
     return res.end();
   }
-  if(memberUpdates.password && memberUpdates.password.length > 0) {
-    memberUpdates.salt = encrypt.createSalt();
-    memberUpdates.hashedPwd = encrypt.hashPwd(memberUpdates.salt, memberUpdates.password);
+  if(memberData.password && memberData.password.length > 0) {
+    memberData.salt = encrypt.createSalt();
+    memberData.hashedPwd = encrypt.hashPwd(memberData.salt, memberData.password);
   }
-  User.findByIdAndUpdate(memberId, memberUpdates, undefined, function(err) {
-    if(err) { errorHandler.sendError(req, res, err); }
+  // save the image by overwriting the old image using the memberData.imageId parameter
+  saveImg(req.files.img, memberData.name, function(err, result) {
+    if (err) {
+      errorHandler.sendError(req, res, err);
+    }
     else {
-      if (req.user._id === memberId) {
-        // if updating self then set self to the newly updated member object
-        req.user = memberUpdates;
-      }
-      memberUpdates._id = memberId;
-      res.send(memberUpdates);
+      User.findByIdAndUpdate(memberId, memberData, function (err, member) {
+        if (err) {
+          errorHandler.sendError(req, res, err);
+        }
+        else {
+          if (req.user._id === memberId) {
+            // if updating self then set self to the newly updated member object
+            req.user = member;
+          }
+          res.send(member);
+        }
+      });
+    }
+  });
+}
+
+exports.updateMemberBio = function(req, res) {
+  var memberId = req.params.id;
+  var memberBio = req.body.bio;
+
+  // if not updating self or if this is an not admin member
+  if(req.user._id.toString() !== memberId && !req.user.hasRole('admin')) {
+    res.status(403);
+    return res.end();
+  }
+  User.findById(memberId, function(err, member) {
+    if (member === undefined) { errorHandler.sendError(req, res, 'Member not found with id: ' + memberId); }
+    else {
+      member.update({bio: memberBio}, function (err) {
+        if (err) {
+          errorHandler.sendError(req, res, err);
+        }
+        else {
+          if (req.user._id === memberId) {
+            // if updating self then set self to the newly updated member object
+            req.user = member;
+          }
+          res.send(member);
+          res.end();
+        }
+      });
+    }
+  });
+}
+
+exports.updateMemberImg = function(req, res) {
+  var memberId = req.params.id;
+
+  // if not updating self or if this is an not admin member
+  if(req.user._id.toString() !== memberId && !req.user.hasRole('admin')) {
+    res.status(403);
+    return res.end();
+  }
+  User.findById(memberId, function(err, member) {
+    if (member === undefined) { errorHandler.sendError(req, res, 'Member not found with id: ' + memberId); }
+    else {
+      var date = new Date();
+      var imgName = member.name + date.getTime();
+      saveImg(req.files.file, imgName, function (err, result) {
+        if (err) {
+          errorHandler.sendError(req, res, err);
+        }
+        else {
+          member.update({imgPath: result.url, imgId: result.public_id}, function (err) {
+            if (err) { errorHandler.sendError(req, res, err);}
+            else {
+              member.imgPath = result.url;
+              member.imgId = result.public_id;
+              if (req.user._id === memberId) {
+                // if updating self then set self to the newly updated member object
+                req.user = member;
+              }
+              res.send(member);
+              res.end();
+            }
+          });
+        }
+      });
     }
   });
 }
 
 exports.getMembers = function(req, res) {
-  User.find({}).select('name bio img username').exec(function (err, collection) {
+  User.find({}).select('name bio imgPath').exec(function (err, collection) {
     if (err) { errorHandler.sendError(req, res, err);}
     res.send(collection);
   });
@@ -153,3 +247,21 @@ exports.deleteMember = function(req, res) {
     });
   }
 };
+
+function toMemberData(member) {
+  var data = {
+    name: member.name,
+    username: member.username,
+    salt: member.salt,
+    hashedPwd: member.hashedPwd,
+    bio: member.bio,
+    imgPath: member.imgPath,
+    imgId: member.imgId,
+    roles: []
+  };
+
+  for (var i = 0; i < member.roles.length; i++) {
+    data.roles[i] = member.roles[i];
+  }
+  return data;
+}

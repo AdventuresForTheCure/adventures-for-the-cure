@@ -1,11 +1,11 @@
-angular.module('app').factory('authorizationService', ['$http', '$q', 'identityService', 'User', authorizationService]);
-function authorizationService($http, $q, identityService, User) {
+angular.module('app').factory('authorizationService', ['$http', '$q', 'identityService', 'Member', authorizationService]);
+function authorizationService($http, $q, identityService, Member) {
   return {
     authenticateUser: function(username, password) {
       var deferred = $q.defer();
       $http.post('/login', {username: username, password: password}).then(function(response) {
         if (response.data.success) {
-          var user = new User();
+          var user = new Member();
           angular.extend(user, response.data.user);
           identityService.currentUser = user;
           deferred.resolve(true);
@@ -42,7 +42,7 @@ function authorizationService($http, $q, identityService, User) {
     },
 
     createUser: function(newUserData) {
-      var newUser = new User(newUserData);
+      var newUser = new Member(newUserData);
       var deferred = $q.defer();
 
       newUser.$save().then(function() {

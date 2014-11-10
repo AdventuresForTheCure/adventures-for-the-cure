@@ -17,6 +17,15 @@
             .col-md-10
               input.form-control(name="password", type="password", placeholder="Password", ng-model="memberToEdit.password", autocomplete="off" )
           .form-group
+            label.col-md-2.control-label(for="image") New Image File
+            .col-md-10
+              input(name="img" type="file" ng-file-select="onFileSelect($files)" accept="image/*")
+          .form-group
+            label.col-md-2(for="currentImage") Current Image
+            .col-md-10
+              a(href="{{memberToEdit.imgPath}}" target="_blank")
+                img(src="{{memberToEdit.imgPath}}" width="100px" height="auto" alt="no image")
+          .form-group
             label.col-md-2.control-label(for="adminRole") Admin
             .col-md-10
               input(name="adminRole", type="checkbox", ng-model="memberToEdit.roles[0]", ng-true-value="admin", ng-false-value="")

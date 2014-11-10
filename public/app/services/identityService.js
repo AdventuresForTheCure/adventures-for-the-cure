@@ -1,8 +1,8 @@
-angular.module('app').factory('identityService', ['$window', 'User', identityService]);
-function identityService($window, User) {
+angular.module('app').factory('identityService', ['$window', 'Member', identityService]);
+function identityService($window, Member) {
   var currentUser;
   if ($window.bootstrappedUserObject) {
-    currentUser = new User();
+    currentUser = new Member();
     angular.extend(currentUser, $window.bootstrappedUserObject);
   }
   return {

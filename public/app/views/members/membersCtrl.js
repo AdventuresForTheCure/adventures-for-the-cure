@@ -3,7 +3,8 @@ membersCtrl.$inject = ['$scope', '$location', 'memberService', 'notifierService'
 function membersCtrl($scope, $location, memberService, notifierService, identityService) {
   $scope.selectedMember = undefined;
   $scope.selectedMemberHtml = '';
-  $scope.editMode = false;
+  $scope.editImgMode = false;
+  $scope.editBioMode = false;
   $scope.notifierService = notifierService;
 
   memberService.getMembers().then(function(members) {
@@ -19,10 +20,6 @@ function membersCtrl($scope, $location, memberService, notifierService, identity
       }
     }
   });
-
-  $scope.enableEditMode = function() {
-    $scope.editMode = true;
-  };
 
   $scope.ableToEdit = function() {
     if ($scope.selectedMember &&
@@ -40,8 +37,27 @@ function membersCtrl($scope, $location, memberService, notifierService, identity
     $location.hash($scope.selectedMember.name);
   };
 
-  $scope.saveMember = function() {
-    memberService.saveMember($scope.selectedMember);
-    $scope.editMode = false;
+  $scope.saveMemberBio = function() {
+    memberService.saveMemberBio($scope.selectedMember);
+    $scope.editBioMode = false;
   };
+
+  $scope.saveMemberImg = function() {
+    memberService.saveMemberImg($scope.selectedMember, $scope.img).then(function(member) {
+      $scope.selectedMember = member;
+      $scope.editImgMode = false;
+    });
+  };
+
+  $scope.onFileSelect = function($files) {
+    $scope.img = $files[0];
+  };
+
+  $scope.enableEditImgMode = function() {
+    $scope.editImgMode = true;
+  }
+
+  $scope.enableEditBioMode = function() {
+    $scope.editBioMode = true;
+  }
 }

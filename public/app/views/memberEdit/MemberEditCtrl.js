@@ -20,4 +20,8 @@ function memberEditCtrl($scope, $route, $location, notifierService, memberServic
       notifierService.error(reason);
     });
   };
+
+  $scope.onFileSelect = function($files) {
+    $scope.memberToEdit.img = $files[0];
+  };
 }
