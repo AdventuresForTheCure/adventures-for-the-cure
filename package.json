@@ -8,7 +8,7 @@
   },
   "scripts": {
     "start": "node app",
-    "postinstall": "node node_modules/.bin/gulp"
+    "postinstall": "gulp"
   },
   "engines": {
     "node": "0.10.x",
