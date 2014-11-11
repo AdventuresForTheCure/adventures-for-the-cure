@@ -35,7 +35,7 @@ gulp.task('public-bundlejs', function() {
 gulp.task('public-test', function() {
   return gulp.src(publictestjs, {read: false})
     .pipe(plug.mocha({reporter: 'spec'}));
-})
+});
 
 gulp.task('server-jshint', function() {
   return gulp.src(serverjs)
@@ -46,7 +46,7 @@ gulp.task('server-jshint', function() {
 gulp.task('server-test', function() {
   return gulp.src(servertestjs, {read: false})
     .pipe(plug.mocha({reporter: 'spec'}));
-})
+});
 
 gulp.task('test-all', function(callback) {
   runSequence(['public-test', 'server-test'], callback);
@@ -81,5 +81,5 @@ gulp.task('development', ['public-clean'], function(callback) {
 });
 
 gulp.task('default', ['public-clean'], function(callback) {
-  runSequence('build-all', 'test-all', callback);
+  runSequence('build-all', callback);
 });
