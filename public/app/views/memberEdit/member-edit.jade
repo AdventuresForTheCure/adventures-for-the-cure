@@ -23,8 +23,9 @@
           .form-group
             label.col-md-2(for="currentImage") Current Image
             .col-md-10
-              a(href="{{memberToEdit.imgPath}}" target="_blank")
-                img(src="{{memberToEdit.imgPath}}" width="100px" height="auto" alt="no image")
+              a(ng-if="memberToEdit.imgPath" href="{{memberToEdit.imgPath}}" target="_blank")
+                img(src="{{memberToEdit.imgPath}}" width="100px" height="auto" alt="No image!")
+              span(ng-if="!memberToEdit.imgPath") No image!
           .form-group
             label.col-md-2.control-label(for="adminRole") Admin
             .col-md-10

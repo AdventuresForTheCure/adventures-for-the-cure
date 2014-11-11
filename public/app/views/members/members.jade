@@ -21,17 +21,16 @@
   .col-lg-7
     .well
       h2(style='text-align:center') {{selectedMember.name}}
-      p(ng-if='editImgMode')
-        input(name="img" type="file" ng-file-select="onFileSelect($files)" accept="image/*")
-      p(ng-if='!editImgMode')
+      p
         img(src='{{selectedMember.imgPath}}' alt='{{selectedMember.name}} still needs to upload an image')
-      p(ng-if='ableToEdit()' style='text-align:right')
-        a(ng-if='editImgMode' ng-click='saveMemberImg()' href='') Save Img
-        a(ng-if='!editImgMode' ng-click='enableEditImgMode()' href='') Edit Img
-      p(ng-if='editBioMode')
+      p(ng-if='editMode')
+        label Select an image
+        input(name="img" type="file" ng-file-select="onFileSelect($files)" accept="image/*")
+        br
+      p(ng-if='editMode')
         textarea.form-control(name="bio", ng-model="selectedMember.bio", required, autocomplete="off" )
-      p(ng-if='!editBioMode')
+      p(ng-if='!editMode')
         | {{selectedMember.bio}}
       p(ng-if='ableToEdit()' style='text-align:right')
-        a(ng-if='editBioMode' ng-click='saveMemberBio()' href='') Save Bio
-        a(ng-if='!editBioMode' ng-click='enableEditBioMode()' href='') Edit Bio
+        a(ng-if='editMode' ng-click='saveMember()' href='') Save
+        a(ng-if='!editMode' ng-click='enableEditMode()' href='') Edit

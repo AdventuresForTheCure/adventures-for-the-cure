@@ -26,7 +26,7 @@ function memberCreateCtrl($scope, $location, notifierService, memberService) {
 
       memberService.saveMember(newMember).then(function() {
         notifierService.notify('Member ' + newMember.username + ' has been created');
-        $location.path('/views/memberList/member-list');
+        $location.path('/member-list');
       }, function(reason) {
         notifierService.error(reason);
       });

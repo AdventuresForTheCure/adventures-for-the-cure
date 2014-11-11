@@ -18,8 +18,6 @@ module.exports = function(app, config) {
   app.get('/api/membersAsAdmin',  auth.requiresLoggedInRole('admin'), cache.disableBrowserCache, members.getMembersAsAdmin);
   app.post('/api/members/:id', multipartMiddleware, members.updateMember);
   app.post('/api/members', multipartMiddleware, members.saveMember);
-  app.post('/api/members/bio/:id', members.updateMemberBio);
-  app.post('/api/members/img/:id', multipartMiddleware, members.updateMemberImg);
   app.get('/api/members/:id', auth.requiresLoggedInRole('admin'), members.getMember);
   app.delete('/api/members/:id', auth.requiresLoggedInRole('admin'), members.deleteMember);
 

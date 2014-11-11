@@ -54,38 +54,6 @@ function memberService($q, $http, $upload, Member) {
       return dfd.promise;
     },
 
-    saveMemberBio: function(member) {
-      var dfd = $q.defer();
-      var url = '/api/members/bio/' + member._id;
-      $http.post(url, {bio: member.bio}).then(function(response) {
-        var member = new Member(response.data);
-        dfd.resolve(member);
-      }, function(response) {
-        dfd.reject(response.data.reason);
-      });
-      return dfd.promise;
-    },
-
-    saveMemberImg: function(member, img) {
-      var dfd = $q.defer();
-      var url = '/api/members/img/' + member._id;
-      $upload.upload({
-        url: url,
-        data: member,
-        file: img
-      }).progress(function(evt) {
-        console.log('percent: ' + parseInt(100.0 * evt.loaded / evt.total));
-      }).success(function(data, status, headers, config) {
-        // file is uploaded successfully
-        console.log(data);
-        dfd.resolve(data);
-      }).error(function(error, status, headers, config) {
-        console.log(error);
-        dfd.reject(error.reason);
-      });
-      return dfd.promise;
-    },
-
     saveMember: function(member) {
       var dfd = $q.defer();
 
