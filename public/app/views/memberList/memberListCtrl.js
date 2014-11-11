@@ -3,9 +3,13 @@ memberListCtrl.$inject = ['$scope', '$location', '$modal', 'memberService', 'ide
 function memberListCtrl($scope, $location, $modal, memberService, identityService) {
   $scope.identity = identityService;
 
-  memberService.getMembersAsAdmin().then(function(members) {
-    $scope.members = members;
-  });
+  getMembers();
+
+  function getMembers() {
+    memberService.getMembersAsAdmin().then(function (members) {
+      $scope.members = members;
+    });
+  }
 
   $scope.editMember = function(member) {
     $location.path('/member-edit/' + member._id);
@@ -22,7 +26,7 @@ function memberListCtrl($scope, $location, $modal, memberService, identityServic
       }
     });
     modalInstance.result.then(function() {
-      $scope.members = memberService.getMembers();
+      getMembers();
     });
   };
 }

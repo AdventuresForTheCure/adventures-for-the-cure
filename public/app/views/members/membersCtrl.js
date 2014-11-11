@@ -3,8 +3,7 @@ membersCtrl.$inject = ['$scope', '$location', 'memberService', 'notifierService'
 function membersCtrl($scope, $location, memberService, notifierService, identityService) {
   $scope.selectedMember = undefined;
   $scope.selectedMemberHtml = '';
-  $scope.editImgMode = false;
-  $scope.editBioMode = false;
+  $scope.editMode = false;
   $scope.notifierService = notifierService;
 
   memberService.getMembers().then(function(members) {
@@ -37,27 +36,18 @@ function membersCtrl($scope, $location, memberService, notifierService, identity
     $location.hash($scope.selectedMember.name);
   };
 
-  $scope.saveMemberBio = function() {
-    memberService.saveMemberBio($scope.selectedMember);
-    $scope.editBioMode = false;
-  };
-
-  $scope.saveMemberImg = function() {
-    memberService.saveMemberImg($scope.selectedMember, $scope.img).then(function(member) {
+  $scope.saveMember = function() {
+    memberService.saveMember($scope.selectedMember).then(function(member) {
       $scope.selectedMember = member;
-      $scope.editImgMode = false;
+      $scope.editMode = false;
     });
   };
 
   $scope.onFileSelect = function($files) {
-    $scope.img = $files[0];
+    $scope.selectedMember.img = $files[0];
   };
 
-  $scope.enableEditImgMode = function() {
-    $scope.editImgMode = true;
-  }
-
-  $scope.enableEditBioMode = function() {
-    $scope.editBioMode = true;
-  }
+  $scope.enableEditMode = function() {
+    $scope.editMode = true;
+  };
 }
