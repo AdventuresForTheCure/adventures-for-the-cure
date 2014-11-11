@@ -31,7 +31,6 @@
     "dir-reader": "git://github.com/pblair12/dir-reader.git",
     "connect-multiparty": "~1.2.5",
     "cloudinary": "~1.0.12",
-    // need to list gulp under dependencies instead of devDependencies for Heroku
     "gulp": "~3.8.8",
     "gulp-jshint": "~1.8.5",
     "gulp-rename": "~1.2.0",
