@@ -84,7 +84,7 @@ exports.updateMember = function(req, res) {
 };
 
 exports.getMembers = function(req, res) {
-  User.find({}).select('name bio imgPath').exec(function (err, collection) {
+  User.find({}).select('name bio imgPath username').exec(function (err, collection) {
     if (err) { errorHandler.sendError(req, res, err);}
     res.send(collection);
   });
