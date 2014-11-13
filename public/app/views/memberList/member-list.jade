@@ -9,6 +9,7 @@
             th Image
             th Admin
             th Inventory
+            th Board
             th Actions
         tbody
           tr(ng-repeat="member in members")
@@ -20,6 +21,7 @@
               span(ng-if="!member.imgPath") No image!
             td {{member.isAdmin()}}
             td {{member.isInventory()}}
+            td {{member.isBoard()}}
             td
               button.btn(ng-click="editMember(member)") Edit
               | &nbsp;

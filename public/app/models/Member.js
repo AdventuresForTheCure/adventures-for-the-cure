@@ -9,5 +9,9 @@ function Member($resource) {
   member.prototype.isInventory = function() {
     return this.roles && this.roles.indexOf('inventory') > -1;
   };
+
+  member.prototype.isBoard = function() {
+    return this.roles && this.roles.indexOf('board') > -1;
+  };
   return member;
 }

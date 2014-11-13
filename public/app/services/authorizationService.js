@@ -33,8 +33,10 @@ function authorizationService($http, $q, identityService, Member) {
       }
     },
 
-    authorizeAuthenticatedUserForRoute: function() {
-      if (identityService.isAuthenticated()) {
+    authorizeAuthenticatedUserForRoute: function($route) {
+      if (identityService.isAuthenticated() &&
+        ($route.current.params.id === identityService.currentUser._id ||
+          identityService.isAuthorized('admin'))) {
         return true;
       } else {
         return $q.reject('not authorized');

@@ -8,8 +8,8 @@ angular.module('app').config(function($routeProvider, $locationProvider) {
     board: { auth: function(authorizationService) {
       return authorizationService.authorizeAuthorizedUserForRoute('board');
     }},
-    user: { auth: function(authorizationService) {
-      return authorizationService.authorizeAuthenticatedUserForRoute();
+    member: { auth: function($route, authorizationService) {
+      return authorizationService.authorizeAuthenticatedUserForRoute($route);
     }}
   };
 
@@ -43,7 +43,7 @@ angular.module('app').config(function($routeProvider, $locationProvider) {
       controller: 'loginCtrl'
     })
     .when('/member-edit/:id', { templateUrl: '/partials/memberEdit/member-edit',
-      resolve: routeRoleChecks.admin
+      resolve: routeRoleChecks.member
     })
     .when('/member-list', { templateUrl: '/partials/memberList/member-list',
       resolve: routeRoleChecks.admin
@@ -63,8 +63,7 @@ angular.module('app').config(function($routeProvider, $locationProvider) {
 angular.module('app').run(function($rootScope, $location, notifierService) {
   $rootScope.$on('$routeChangeError', function(evt, current, previous, rejection) {
     if (rejection === 'not authorized') {
-      $location.path('/views/login/login');
-      notifierService.error('You do not have access to that page, please login first');
+      notifierService.error('You are not authorized to view this page.');
     }
   });
 });

@@ -16,7 +16,7 @@ module.exports = function(app, config) {
 
   app.get('/api/members', cache.disableBrowserCache, members.getMembers);
   app.get('/api/membersAsAdmin',  auth.requiresLoggedInRole('admin'), cache.disableBrowserCache, members.getMembersAsAdmin);
-  app.get('/api/members/:id', auth.requiresLoggedInRole('admin'), members.getMember);
+  app.get('/api/members/:id', members.getMember);
   app.post('/api/members/:id', multipartMiddleware, members.updateMember);
   app.post('/api/members', multipartMiddleware, members.saveMember);
   app.delete('/api/members/:id', auth.requiresLoggedInRole('admin'), members.deleteMember);

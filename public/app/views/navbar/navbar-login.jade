@@ -40,6 +40,10 @@
                 a(href='/member-create') Create Member
               li(ng-if='identityService.isAdmin()')
                 a(href='/member-list') List Members
+              li.divider(ng-if='identityService.isAdmin()' role='presentation')
+              li
+                a(href='/member-edit/{{identityService.currentUser._id}}') Edit Profile
+              li.divider(role='presentation')
               li
                 a(href='', ng-click='signout()') Sign Out
       .navbar-right(ng-if='!identityService.isAuthenticated()')

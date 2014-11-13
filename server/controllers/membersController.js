@@ -5,7 +5,7 @@ var cloudinary = require('cloudinary');
 var config = require('../config/config');
 
 exports.saveMember = function(req, res, next) {
-  var memberData = toMemberData(req.body);
+  var memberData = toMemberData(req.user, req.body);
 
   // only current admins can create new members
   if (!req.user || !req.user.hasRole('admin')) {
@@ -46,7 +46,7 @@ exports.saveMember = function(req, res, next) {
 
 exports.updateMember = function(req, res) {
   var memberId = req.body._id;
-  var memberData = toMemberData(req.body);
+  var memberData = toMemberData(req.user, req.body);
 
   // if not updating self or if this is an not admin member
   if(req.user._id.toString() !== memberId && !req.user.hasRole('admin')) {
@@ -139,7 +139,7 @@ exports.deleteMember = function(req, res) {
   }
 };
 
-function toMemberData(member) {
+function toMemberData(currentUser, member) {
   var data = {};
   if (member.name) {
     data.name = member.name;
@@ -159,7 +159,7 @@ function toMemberData(member) {
   if (member.imgId) {
     data.imgId = member.imgId;
   }
-  if (member.roles) {
+  if (currentUser.hasRole('admin') && member.roles) {
     member.roles = JSON.parse(member.roles);
     data.roles = [];
     for (var i = 0; i < member.roles.length; i++) {
