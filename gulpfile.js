@@ -9,10 +9,10 @@ var publicjs = './public/app/**/*.js';
 var serverjs = './server/**/*.js';
 var publictestjs = './test/public/*.js';
 var servertestjs = './test/server/*.js';
-var publicdist = './dist';
+var publicdist = './public/dist';
 
 gulp.task('public-clean', function() {
-  return gulp.src('dist')
+  return gulp.src(publicdist)
     .pipe(plug.clean({force: true}));
 });
 
@@ -69,10 +69,11 @@ gulp.task('nodemon', function() {
   plug.nodemon({
     script: 'server.js',
     ext: 'js',
-    ignore: ['./public/**', './dist/**']
+    ignore: ['public/dist/*.js', 'public/app/**/*', 'public/app/app.js', 'test/**/*'],
+    nodeArgs: ['--debug']
   })
-  .on('restart', function() {
-    console.log('restarted');
+  .on('restart', function(files) {
+    console.log('restarted due to change in ' + files);
   })
 });
 

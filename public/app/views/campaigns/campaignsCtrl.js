@@ -13,23 +13,23 @@ function campaignsCtrl($scope, $sce, $location, campaignService) {
       for (var i = 0; i < campaigns.length; i++) {
         if (campaigns[i].name === selectedCampaignName) {
           var campaign = campaigns[i];
-          getCampaign(campaign);
+          campaignService.getCampaign(campaign.name).then(function(campaignHtml) {
+            // use $sce.trustAsHtml to tell angular that the html received is 'safe' to display
+            $scope.selectedCampaign = campaign;
+            $scope.selectedCampaignHtml = $sce.trustAsHtml(campaignHtml);
+          });
         }
       }
     }
   });
 
   $scope.selectCampaign = function(campaign) {
-    getCampaign(campaign);
-    $location.hash($scope.selectedCampaign.name);
-  };
-
-  getCampaign = function(campaign) {
     campaignService.getCampaign(campaign.name).then(function(campaignHtml) {
       // use $sce.trustAsHtml to tell angular that the html received is 'safe' to display
       $scope.selectedCampaign = campaign;
       $scope.selectedCampaignHtml = $sce.trustAsHtml(campaignHtml);
+      $location.hash($scope.selectedCampaign.name);
     });
-  }
+  };
 }
 

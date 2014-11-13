@@ -4,7 +4,6 @@ var config = require('../config/config');
 var errorHandler = require('../utilities/errorHandler');
 
 exports.getCampaigns = function(req, res) {
-  console.log('in getCampaigns');
   var campaigns = [];
   var dir = config.campaignsPath;
   dirReader.getDirItems(dir, function(err, files) {

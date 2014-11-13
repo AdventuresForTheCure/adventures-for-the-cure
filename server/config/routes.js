@@ -16,21 +16,12 @@ module.exports = function(app, config) {
 
   app.get('/api/members', cache.disableBrowserCache, members.getMembers);
   app.get('/api/membersAsAdmin',  auth.requiresLoggedInRole('admin'), cache.disableBrowserCache, members.getMembersAsAdmin);
+  app.get('/api/members/:id', auth.requiresLoggedInRole('admin'), members.getMember);
   app.post('/api/members/:id', multipartMiddleware, members.updateMember);
   app.post('/api/members', multipartMiddleware, members.saveMember);
-  app.get('/api/members/:id', auth.requiresLoggedInRole('admin'), members.getMember);
   app.delete('/api/members/:id', auth.requiresLoggedInRole('admin'), members.deleteMember);
 
   app.get('/api/inventoryItems', cache.disableBrowserCache, inventoryItems.getInventoryItems);
-
-  app.get('/dist/*.js', function(req, res) {
-    res.sendFile(config.rootPath + '/dist/' + req.params[0] + '.js');
-  });
-
-  // static html files for the campaigns are in this directory
-  app.get('/partials/campaigns/campaigns/*', function(req, res) {
-    res.sendFile(config.rootPath + 'public/app/views/campaigns/campaigns/' + req.params[0]);
-  });
 
   // render jade files
   app.get('/partials/*', function(req, res) {
