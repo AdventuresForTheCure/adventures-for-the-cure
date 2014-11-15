@@ -69,10 +69,11 @@ gulp.task('nodemon', function() {
   plug.nodemon({
     script: 'server.js',
     ext: 'js',
-    ignore: ['public/dist/*.js', 'public/app/**/*', 'public/app/app.js', 'test/**/*'],
+    ignore: ['public/dist/*.js', 'public/app/**/*', 'public/app/app.js', './test/**/*'],
     nodeArgs: ['--debug']
   })
   .on('restart', function(files) {
+    console.log("!!!!!!!!!!!!!!!!!!!!!!!!!");
     console.log('restarted due to change in ' + files);
   })
 });

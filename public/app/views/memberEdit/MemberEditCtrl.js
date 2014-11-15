@@ -3,6 +3,7 @@ memberEditCtrl.$inject = ['$scope', '$route', '$location', 'notifierService', 'm
 function memberEditCtrl($scope, $route, $location, notifierService, memberService, identityService) {
   $scope.identityService = identityService;
   $scope.memberToEdit = undefined;
+  $scope.showImgTmp = false;
 
   memberService.getMember($route.current.params.id).then(function(member) {
     $scope.memberToEdit = member;
@@ -22,6 +23,11 @@ function memberEditCtrl($scope, $route, $location, notifierService, memberServic
   };
 
   $scope.onFileSelect = function($files) {
-    $scope.memberToEdit.img = $files[0];
+    $scope.memberToEdit.imgTmp = $files[0];
+    memberService.saveMemberTmpImg($scope.memberToEdit).then(function(member) {
+      $scope.memberToEdit = member;
+      $scope.memberToEdit.img = $files[0];
+      $scope.showImgTmp = true;
+    })
   };
 }

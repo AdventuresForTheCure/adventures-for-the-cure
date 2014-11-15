@@ -4,6 +4,7 @@ function membersCtrl($scope, $location, memberService, notifierService, identity
   $scope.selectedMember = undefined;
   $scope.selectedMemberHtml = '';
   $scope.editMode = false;
+  $scope.showImgTmp = false;
   $scope.notifierService = notifierService;
 
   memberService.getMembers().then(function(members) {
@@ -37,17 +38,29 @@ function membersCtrl($scope, $location, memberService, notifierService, identity
   };
 
   $scope.saveMember = function() {
+    var member = $scope.selectedMember;
     memberService.saveMember($scope.selectedMember).then(function(member) {
-      $scope.selectedMember = member;
+      $scope.selectMember(member);
       $scope.editMode = false;
+      $scope.showImgTmp = false;
     });
   };
 
   $scope.onFileSelect = function($files) {
-    $scope.selectedMember.img = $files[0];
+    $scope.selectedMember.imgTmp = $files[0];
+    memberService.saveMemberTmpImg($scope.selectedMember).then(function(member) {
+      $scope.selectMember(member);
+      $scope.selectedMember.img = $files[0];
+      $scope.showImgTmp = true;
+    })
   };
 
   $scope.enableEditMode = function() {
     $scope.editMode = true;
+  };
+
+  $scope.cancel = function() {
+    $scope.editMode = false;
+    $scope.showImgTmp = false;
   };
 }
