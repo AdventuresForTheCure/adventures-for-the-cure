@@ -1,5 +1,5 @@
-angular.module('app').factory('Inventory', ['$resource', Inventory]);
-function Inventory($resource) {
-  var inventory = $resource('/api/inventoryItems', {}, {});
-  return inventory;
+angular.module('app').factory('InventoryItem', ['$resource', InventoryItem]);
+function InventoryItem($resource) {
+  var inventoryItem = $resource('/api/inventoryItems', {}, {});
+  return inventoryItem;
 }

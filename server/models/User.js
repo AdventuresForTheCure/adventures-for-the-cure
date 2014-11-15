@@ -23,9 +23,9 @@ var userSchema = mongoose.Schema({
     type: String,
     default: ''
   },
-  imgId: {
+  imgPathTmp: {
     type: String,
-    default: null
+    default: ''
   },
   roles: [String]
 });
@@ -39,6 +39,35 @@ userSchema.methods = {
   }
 };
 var User = mongoose.model('User', userSchema);
+User.toMemberData = function(currentUser, member) {
+  var data = {};
+  if (member.name) {
+    data.name = member.name;
+  }
+  if (member.username) {
+    data.username = member.username;
+  }
+  if (member.password) {
+    data.password = member.password;
+  }
+  if (member.bio) {
+    data.bio = member.bio;
+  }
+  if (member.imgPath) {
+    data.imgPath = member.imgPath;
+  }
+  if (member.imgPathTmp) {
+    data.imgPathTmp = member.imgPathTmp;
+  }
+  if (currentUser.hasRole('admin') && member.roles) {
+    member.roles = JSON.parse(member.roles);
+    data.roles = [];
+    for (var i = 0; i < member.roles.length; i++) {
+      data.roles[i] = member.roles[i];
+    }
+  }
+  return data;
+}
 
 function createDefaultUsers() {
   User.find({}).exec(function(err, collection) {

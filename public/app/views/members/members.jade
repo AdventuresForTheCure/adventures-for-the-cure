@@ -21,11 +21,13 @@
   .col-lg-7
     .well
       h2(style='text-align:center') {{selectedMember.name}}
-      p
-        img(src='{{selectedMember.imgPath}}' alt='{{selectedMember.name}} still needs to upload an image')
-      p(ng-if='editMode')
-        label Select an image
-        input(name="img" type="file" ng-file-select="onFileSelect($files)" accept="image/*")
+      p(style='text-align:center')
+        img(ng-if='editMode && !showImgTmp' src='{{selectedMember.imgPath}}' alt='Once you select an image press the "save" button to upload it')
+        img(ng-if='editMode && showImgTmp' src='{{selectedMember.imgPathTmp}}' alt='Once you select an image press the "save" button to upload it')
+        img(ng-if='!editMode' src='{{selectedMember.imgPath}}' alt='{{selectedMember.name}} does not have an image')
+      p(ng-if='editMode' style='text-align:center')
+        label Select a new image to upload (will be auto scaled to a width of 350px)
+          input(name="img" type="file" ng-file-select="onFileSelect($files)" accept="image/*")
         br
       p(ng-if='editMode')
         textarea.form-control(name="bio", ng-model="selectedMember.bio", required, autocomplete="off" )
@@ -33,4 +35,6 @@
         | {{selectedMember.bio}}
       p(ng-if='ableToEdit()' style='text-align:right')
         a(ng-if='editMode' ng-click='saveMember()' href='') Save
+        &nbsp;
+        a(ng-if='editMode' ng-click='cancel()' href='') Cancel
         a(ng-if='!editMode' ng-click='enableEditMode()' href='') Edit

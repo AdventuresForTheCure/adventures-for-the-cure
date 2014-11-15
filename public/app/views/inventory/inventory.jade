@@ -18,8 +18,10 @@
         hr
         h4 {{category}}
         div(ng-repeat='inventoryItem in inventoryItems[category]')
-          p
-            | {{inventoryItem.name}} {{inventoryItem.price}}
-            | <span ng-if='inventoryItem.salePrice'>(Sale Price: {{inventoryItem.salePrice}})</span>
-            | <span ng-if='inventoryItem.quantity <= 0'>- SOLD OUT!</span>
-            | <span ng-if='inventoryItem.quantity > 0'>- {{inventoryItem.quantity}} remaining</span>
+          p {{inventoryItem.name}} {{inventoryItem.price}}
+            span(ng-if='inventoryItem.salePrice') (Sale Price: {{inventoryItem.salePrice}})
+            span(ng-if='inventoryItem.quantity <= 0') - SOLD OUT!
+            span(ng-if='inventoryItem.quantity > 0') - {{inventoryItem.quantity}} remaining
+            span(ng-if='ableToEdit()')
+              button.btn delete
+              button.btn save

@@ -15,13 +15,14 @@ var inventoryItemSchema = mongoose.Schema({
   size: {
     type:String},
   price: {
-    type:String,
+    type:Number,
     required:'{PATH} is required!'},
   imageUrl: {
     type:String
   },
   salePrice: {
-    type:String}
+    type:Number
+  }
 });
 
 var InventoryItem = mongoose.model('InventoryItem', inventoryItemSchema);
@@ -39,31 +40,31 @@ function createDefaultInventoryItems() {
     year: '',
     size: '',
     quantity: -1,
-    price: '$10.00',
-    salePrice: ''});
+    price: 10.00,
+    salePrice: -1});
   InventoryItem.create({
     name:'22oz Water Bottles',
     category: 'General',
     year: '', size: '',
     quantity: -1,
-    price: '$7.00',
-    salePrice: ''});
+    price: 7.00,
+    salePrice: -1});
   InventoryItem.create({
     name:'26oz Water Bottles',
     category: 'General',
     year: '',
     size: '',
     quantity: -1,
-    price: '$8.00',
-    salePrice: ''});
+    price: 8.00,
+    salePrice: -1});
   InventoryItem.create({
     name:'Womens Tri Top',
     category: 'Hincapie Merchandise',
     year: '2011',
     size: 'Medium',
     quantity: 1,
-    price: '$65.00',
-    salePrice: '$20.00'});
+    price: 65.00,
+    salePrice: 20.00});
 }
 
 exports.createDefaultInventoryItems = createDefaultInventoryItems;

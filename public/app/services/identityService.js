@@ -18,6 +18,9 @@ function identityService($window, Member) {
     },
     isBoard: function() {
       return !!this.currentUser && this.currentUser.roles.indexOf('board') > -1;
+    },
+    isInventory: function() {
+      return !!this.currentUser && this.currentUser.roles.indexOf('inventory') > -1;
     }
   };
 }
