@@ -1,5 +1,5 @@
 var mongoose = require('mongoose');
-var inventoryItemModel = require('../models/InventoryItem');
+var inventoryItem = require('../models/InventoryItem');
 var user = require('../models/User');
 
 module.exports = function(config) {
@@ -21,5 +21,5 @@ module.exports = function(config) {
 
   // create default mongoose entries
   user.createDefaultUsers();
-  //inventoryItemModel.createDefaultInventoryItems();
+  inventoryItem.createDefaultInventoryItems();
 };

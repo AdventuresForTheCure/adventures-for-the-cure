@@ -17,11 +17,33 @@
       div(ng-repeat='(category, categoryItems) in inventoryItems')
         hr
         h4 {{category}}
-        div(ng-repeat='inventoryItem in inventoryItems[category]')
-          p {{inventoryItem.name}} {{inventoryItem.price}}
-            span(ng-if='inventoryItem.salePrice') (Sale Price: {{inventoryItem.salePrice}})
-            span(ng-if='inventoryItem.quantity <= 0') - SOLD OUT!
-            span(ng-if='inventoryItem.quantity > 0') - {{inventoryItem.quantity}} remaining
-            span(ng-if='ableToEdit()')
-              button.btn delete
-              button.btn save
+        .row(ng-repeat='inventoryItem in inventoryItems[category]')
+          // name
+          .col-md-3(ng-if='!ableToEdit()')
+            span{{inventoryItem.name}}
+          .col-md-2(ng-if='ableToEdit()') Name:
+            input(type='text' ng-model='inventoryItem.name')
+
+          // price
+          .col-md-2(ng-if='!ableToEdit()')
+            span Price: {{inventoryItem.price | currency : symbol : 2 }}
+          .col-md-2(ng-if='ableToEdit()') Price:
+            input(type='number' ng-model='inventoryItem.price')
+
+          // sale price
+          .col-md-2(ng-if='!ableToEdit()')
+            span(ng-if='inventoryItem.salePrice') ON SALE: {{inventoryItem.salePrice | currency : symbol : 2 }}
+          .col-md-2(ng-if='ableToEdit()') Sale Price:
+            input(type='number' ng-model='inventoryItem.salePrice')
+
+          // quantity
+          .col-md-2(ng-if='!ableToEdit()')
+            span(ng-if='inventoryItem.quantity <= 0') SOLD OUT!
+            span(ng-if='inventoryItem.quantity > 0') {{inventoryItem.quantity}} remaining
+          .col-md-2(ng-if='ableToEdit()') Quantity
+            input(type='number' ng-model='inventoryItem.quantity')
+
+          .col-md-1(ng-if='ableToEdit()')
+            button.btn(ng-click='delete(inventoryItem)') delete
+          .col-md-1(ng-if='ableToEdit()')
+            button.btn(ng-click='save(inventoryItem)') save

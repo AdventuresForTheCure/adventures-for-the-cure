@@ -17,8 +17,8 @@ exports.saveInventoryItem = function(req, res, next) {
 };
 
 exports.updateInventoryItem = function(req, res) {
-  var inventoryItemId = req.body._id;
-  var inventoryItemData = toInventoryItemData(req.user, req.body);
+  var inventoryItemId = req.params.id;
+  var inventoryItemData = InventoryItem.toInventoryItemData(req.body);
 
   // if not updating self or if this is an not admin member
   if(!req.user.hasRole('inventory')) {

@@ -20,5 +20,21 @@ function inventoryCtrl($scope, inventoryService, notifierService, identityServic
       return false;
     }
   };
+
+  $scope.save = function(inventoryItem) {
+    inventoryService.save(inventoryItem).then(function(item) {
+      notifierService.notify('Inventory item was update');
+    }, function(reason) {
+      notifierService.error(reason);
+    });
+  }
+
+  $scope.delete = function(inventoryItem) {
+    inventoryService.delete(inventoryItem).then(function(item) {
+      notifierService.notify('Inventory item was deleted');
+    }, function(reason) {
+      notifierService.error(reason);
+    });
+  }
 }
 

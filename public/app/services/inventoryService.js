@@ -17,7 +17,7 @@ function inventoryService($q, $http, InventoryItem) {
       return dfd.promise;
     },
 
-    saveInventoryItem: function(inventoryItem) {
+    save: function(inventoryItem) {
       var dfd = $q.defer();
 
       // if the inventoryItem has an id then it is an 'update'

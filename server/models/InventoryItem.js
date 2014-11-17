@@ -15,56 +15,80 @@ var inventoryItemSchema = mongoose.Schema({
   size: {
     type:String},
   price: {
-    type:Number,
+    type: Number,
     required:'{PATH} is required!'},
   imageUrl: {
     type:String
   },
   salePrice: {
-    type:Number
+    type: Number
   }
 });
 
 var InventoryItem = mongoose.model('InventoryItem', inventoryItemSchema);
+InventoryItem.toInventoryItemData = function(inventoryItem) {
+  var data = {};
+  if (inventoryItem.name) {
+    data.name = inventoryItem.name;
+  }
+  if (inventoryItem.quantity) {
+    data.quantity = inventoryItem.quantity;
+  }
+  if (inventoryItem.year) {
+    data.year = inventoryItem.year;
+  }
+  if (inventoryItem.category) {
+    data.category = inventoryItem.category;
+  }
+  if (inventoryItem.size) {
+    data.size = inventoryItem.size;
+  }
+  if (inventoryItem.price) {
+    data.price = inventoryItem.price;
+  }
+  if (inventoryItem.imageUrl) {
+    data.imageUrl = inventoryItem.imageUrl;
+  }
+  if (inventoryItem.salePrice) {
+    data.salePrice = inventoryItem.salePrice;
+  }
+  return data;
+}
 
 function createDefaultInventoryItems() {
-  console.log('removing all inventory items from the database');
-  InventoryItem.remove({}, function() {
-    console.log('removed all inventory items');
+  InventoryItem.find({}).exec(function(err, collection) {
+    if (collection.length < 2) {
+      console.log('creating default inventory items');
+      InventoryItem.create({
+        name: 'Adventures For the Cure: The Doc',
+        category: 'General',
+        year: '',
+        size: '',
+        quantity: 0,
+        price: 10.00});
+      InventoryItem.create({
+        name: '22oz Water Bottles',
+        category: 'General',
+        year: '', size: '',
+        quantity: 0,
+        price: 7.00});
+      InventoryItem.create({
+        name: '26oz Water Bottles',
+        category: 'General',
+        year: '',
+        size: '',
+        quantity: 0,
+        price: 8.00});
+      InventoryItem.create({
+        name: 'Womens Tri Top',
+        category: 'Hincapie Merchandise',
+        year: '2011',
+        size: 'Medium',
+        quantity: 1,
+        price: 65.00,
+        salePrice: 20.00});
+    }
   });
-
-  console.log('creating default inventory items');
-  InventoryItem.create({
-    name:'Adventures For the Cure: The Doc',
-    category: 'General',
-    year: '',
-    size: '',
-    quantity: -1,
-    price: 10.00,
-    salePrice: -1});
-  InventoryItem.create({
-    name:'22oz Water Bottles',
-    category: 'General',
-    year: '', size: '',
-    quantity: -1,
-    price: 7.00,
-    salePrice: -1});
-  InventoryItem.create({
-    name:'26oz Water Bottles',
-    category: 'General',
-    year: '',
-    size: '',
-    quantity: -1,
-    price: 8.00,
-    salePrice: -1});
-  InventoryItem.create({
-    name:'Womens Tri Top',
-    category: 'Hincapie Merchandise',
-    year: '2011',
-    size: 'Medium',
-    quantity: 1,
-    price: 65.00,
-    salePrice: 20.00});
 }
 
 exports.createDefaultInventoryItems = createDefaultInventoryItems;
