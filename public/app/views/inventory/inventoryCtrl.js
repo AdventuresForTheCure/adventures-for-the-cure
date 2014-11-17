@@ -14,7 +14,7 @@ function inventoryCtrl($scope, inventoryService, notifierService, identityServic
   });
 
   $scope.ableToEdit = function() {
-    if (identityService.currentUser.isInventory()) {
+    if (identityService.currentUser && identityService.currentUser.isInventory()) {
       return true;
     } else {
       return false;
