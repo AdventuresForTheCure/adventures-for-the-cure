@@ -32,7 +32,7 @@
               span(ng-if='inventoryItem.salePrice') ON SALE: {{inventoryItem.salePrice | currency : symbol : 2 }}
             td(ng-if='ableToEdit()')
               span Sale Price:
-              input(type='number' ng-model='inventoryItem.salePrice' ng-change='save(inventoryItem)' style='width:75px' class='inventory-item-input')
+              input(type='number' ng-model='inventoryItem.salePrice' ng-change='update(inventoryItem)' style='width:75px' class='inventory-item-input')
 
             // quantity
             td(ng-if='!ableToEdit()')
@@ -40,7 +40,7 @@
               span(ng-if='inventoryItem.quantity > 0') {{inventoryItem.quantity}} Remaining
             td(ng-if='ableToEdit()')
               span Quantity
-              input(type='number' ng-model='inventoryItem.quantity' ng-change='save(inventoryItem)' class='inventory-item-input')
+              input(type='number' ng-model='inventoryItem.quantity' ng-change='update(inventoryItem)' class='inventory-item-input')
 
             td(ng-if='ableToEdit()')
               button.btn.btn-default(ng-click='delete(inventoryItem)' class='inventory-item-delete') Delete

@@ -3,15 +3,20 @@ inventoryCtrl.$inject = ['$scope', 'inventoryService', 'notifierService', 'ident
 function inventoryCtrl($scope, inventoryService, notifierService, identityService) {
   $scope.inventoryItems = {};
 
-  inventoryService.getInventoryItems().then(function(inventoryItems) {
-    for (var i = 0; i < inventoryItems.length; i++) {
-      var inventoryItem = inventoryItems[i];
-      if (angular.isUndefined($scope.inventoryItems[inventoryItem.category])) {
-        $scope.inventoryItems[inventoryItem.category] = [];
+  $scope.getInventoryItems = function() {
+    inventoryService.getInventoryItems().then(function(inventoryItems) {
+      $scope.inventoryItems = {}
+      for (var i = 0; i < inventoryItems.length; i++) {
+        var inventoryItem = inventoryItems[i];
+        if (angular.isUndefined($scope.inventoryItems[inventoryItem.category])) {
+          $scope.inventoryItems[inventoryItem.category] = [];
+        }
+        $scope.inventoryItems[inventoryItem.category].push(inventoryItem);
       }
-      $scope.inventoryItems[inventoryItem.category].push(inventoryItem);
-    }
-  });
+    }, function(reason) {
+      notifierService.error(reason);
+    });
+  }
 
   $scope.ableToEdit = function() {
     if (identityService.currentUser && identityService.currentUser.isInventory()) {
@@ -21,7 +26,7 @@ function inventoryCtrl($scope, inventoryService, notifierService, identityServic
     }
   };
 
-  $scope.save = function(inventoryItem) {
+  $scope.update = function(inventoryItem) {
     inventoryService.save(inventoryItem).then(function(item) {
       notifierService.notify('Inventory item was update');
     }, function(reason) {
@@ -31,10 +36,13 @@ function inventoryCtrl($scope, inventoryService, notifierService, identityServic
 
   $scope.delete = function(inventoryItem) {
     inventoryService.delete(inventoryItem).then(function(item) {
+      $scope.getInventoryItems();
       notifierService.notify('Inventory item was deleted');
     }, function(reason) {
       notifierService.error(reason);
     });
   }
+
+  $scope.getInventoryItems();
 }
 
