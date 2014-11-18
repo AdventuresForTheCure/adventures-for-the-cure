@@ -29,7 +29,7 @@
 
             // sale price
             td(ng-if='!ableToEdit()')
-              span(ng-if='inventoryItem.salePrice') ON SALE: {{inventoryItem.salePrice | currency : symbol : 2 }}
+              span(ng-if='inventoryItem.salePrice > 0') ON SALE: {{inventoryItem.salePrice | currency : symbol : 2 }}
             td(ng-if='ableToEdit()')
               span Sale Price:
               input(type='number' ng-model='inventoryItem.salePrice' ng-change='update(inventoryItem)' style='width:75px' class='inventory-item-input')
