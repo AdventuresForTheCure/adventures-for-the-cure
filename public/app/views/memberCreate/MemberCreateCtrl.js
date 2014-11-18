@@ -12,7 +12,7 @@ function memberCreateCtrl($scope, $location, notifierService, memberService) {
 
   $scope.createMember = function() {
     // if the form is valid then submit to the server
-    if ($scope.memberCreateForm.$valid) {
+    if ($scope.createMemberForm.$valid) {
       var newMember = {
         name: $scope.name,
         username: $scope.username,

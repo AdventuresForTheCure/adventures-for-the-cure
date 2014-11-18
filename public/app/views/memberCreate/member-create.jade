@@ -6,7 +6,7 @@
        | 2015 membership form.
     .well
       h4 Create Member
-      form.form-horizontal(name="memberCreateForm" role='form')
+      form.form-horizontal(name="createMemberForm" role='form')
         .form-group
           label.col-md-2.control-label(for="name") Name
           .col-md-10
@@ -34,10 +34,10 @@
         .form-group
           label.col-md-2.control-label(for="image")
           .col-md-10
-            input(name="img" type="file" ng-file-select="onFileSelect($files)" accept="image/*")
+            input(name="img" type="file" ng-file-select="onFileSelect($files)" accept="image/*", required)
         .form-group
           .col-md-10.col-md-offset-2
             .pull-right
-              button.btn.btn-primary(ng-click="createMember()", ng-disabled="createMemberForm.$invalid") Create
+              button.btn.btn-primary(ng-click="createMember()", ng-disabled="createMemberForm.$invalid || !img") Create
               | &nbsp;
               a.btn.btn-default(href="/") Cancel
