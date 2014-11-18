@@ -15,16 +15,18 @@ module.exports = function(app, config) {
   app.get('/api/videos', cache.disableBrowserCache, videos.getVideos);
 
   app.get('/api/members', cache.disableBrowserCache, members.getMembers);
-  app.get('/api/membersAsAdmin',  auth.requiresLoggedInRole('admin'), cache.disableBrowserCache, members.getMembersAsAdmin);
-  app.get('/api/members/:id', members.getMember);
+  app.get('/api/membersAsAdmin', cache.disableBrowserCache, auth.requiresLoggedInRole('admin'), cache.disableBrowserCache, members.getMembersAsAdmin);
+  app.get('/api/members/:id', cache.disableBrowserCache, members.getMember);
   app.post('/api/members/:id', multipartMiddleware, members.updateMember);
   app.post('/api/members/tmpImg/:id', multipartMiddleware, members.updateMemberTmpImg);
   app.post('/api/members', multipartMiddleware, members.saveMember);
   app.delete('/api/members/:id', auth.requiresLoggedInRole('admin'), members.deleteMember);
 
   app.get('/api/inventoryItems', cache.disableBrowserCache, inventoryItems.getInventoryItems);
-  app.post('/api/inventoryItems', inventoryItems.saveInventoryItem);
-  app.post('/api/inventoryItems/:id', inventoryItems.updateInventoryItem);
+  app.post('/api/inventoryItems', auth.requiresLoggedInRole('inventory'), inventoryItems.saveInventoryItem);
+  app.post('/api/inventoryItems/:id', auth.requiresLoggedInRole('inventory'), inventoryItems.updateInventoryItem);
+  app.delete('/api/inventoryItems/:id', auth.requiresLoggedInRole('inventory'), inventoryItems.deleteInventoryItem);
+
 
   // render jade files
   app.get('/partials/*', function(req, res) {

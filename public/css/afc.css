@@ -10,6 +10,17 @@
 	background-image: url("/test/img/polka-dots.jpg");
 }
 
+.inventory-item-input {
+    width: 75px;
+    margin-left: 5px;
+    margin-bottom: 5px;
+}
+
+.inventory-item-delete {
+    height: 25px;
+    margin-bottom: 2px;
+}
+
 body {
 	background-color: #777777;
     padding-top: 90px;

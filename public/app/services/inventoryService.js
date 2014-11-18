@@ -37,6 +37,18 @@ function inventoryService($q, $http, InventoryItem) {
         });
 
       return dfd.promise;
+    },
+
+    delete: function(inventoryItem) {
+      var dfd = $q.defer();
+      $http.delete('/api/inventoryItems/' + inventoryItem._id)
+        .success(function(data, status, headers, config) {
+          dfd.resolve();
+        })
+        .error(function(error, status, headers, config) {
+          dfd.reject(error.reason);
+        });
+      return dfd.promise;
     }
   };
 }

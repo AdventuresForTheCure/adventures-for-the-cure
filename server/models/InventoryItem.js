@@ -6,17 +6,17 @@ var inventoryItemSchema = mongoose.Schema({
     required: '{PATH} is required!'},
   quantity: {
     type: Number,
-    default: -1},
-  year: {
-    type: String},
+    required: '{PATH} is required!'},
   category: {
     type:String,
     required:'{PATH} is required!'},
-  size: {
-    type:String},
   price: {
     type: Number,
     required:'{PATH} is required!'},
+  size: {
+    type:String},
+  year: {
+    type: String},
   imageUrl: {
     type:String
   },
@@ -28,23 +28,15 @@ var inventoryItemSchema = mongoose.Schema({
 var InventoryItem = mongoose.model('InventoryItem', inventoryItemSchema);
 InventoryItem.toInventoryItemData = function(inventoryItem) {
   var data = {};
-  if (inventoryItem.name) {
-    data.name = inventoryItem.name;
-  }
-  if (inventoryItem.quantity) {
-    data.quantity = inventoryItem.quantity;
-  }
-  if (inventoryItem.year) {
-    data.year = inventoryItem.year;
-  }
-  if (inventoryItem.category) {
-    data.category = inventoryItem.category;
-  }
+  data.name = inventoryItem.name;
+  data.quantity = inventoryItem.quantity;
+  data.category = inventoryItem.category;
+  data.price = inventoryItem.price;
   if (inventoryItem.size) {
     data.size = inventoryItem.size;
   }
-  if (inventoryItem.price) {
-    data.price = inventoryItem.price;
+  if (inventoryItem.year) {
+    data.year = inventoryItem.year;
   }
   if (inventoryItem.imageUrl) {
     data.imageUrl = inventoryItem.imageUrl;
