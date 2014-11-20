@@ -9,8 +9,8 @@ function membersCtrl($scope, $location, memberService, notifierService, identity
 
   memberService.getMembers().then(function(members) {
     $scope.allMembers = members;
-    $scope.membersColumn1 = members.slice(0, (members.length / 2));
-    $scope.membersColumn2 = members.slice((members.length / 2), members.length);
+    $scope.membersColumn1 = members.slice(0, (members.length / 2) + 1);
+    $scope.membersColumn2 = members.slice((members.length / 2) + 1, members.length);
     var selectedMemberName = $location.hash();
     for (var i = 0; i < members.length; i++) {
       if (members[i].name === selectedMemberName) {
