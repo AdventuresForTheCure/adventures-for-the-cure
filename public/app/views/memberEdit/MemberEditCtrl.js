@@ -16,7 +16,6 @@ function memberEditCtrl($scope, $route, $location, notifierService, memberServic
         angular.extend(identityService.currentUser, $scope.memberToEdit);
       }
       notifierService.notify('Member has been updated');
-      $location.path('/member-list');
     }, function(reason) {
       notifierService.error(reason);
     });

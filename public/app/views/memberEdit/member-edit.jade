@@ -16,6 +16,10 @@
             label.col-md-3.control-label(for="password") Password
             .col-md-9
               input.form-control(name="password", type="password", placeholder="Password", ng-model="memberToEdit.password", autocomplete="off" )
+          .form-group
+            label.col-md-3.control-label(for="bio") Bio
+            .col-md-9
+              textarea.form-control(name="bio", ng-model="memberToEdit.bio", required, autocomplete="off" )
           .form-group(ng-if='identityService.isAdmin()')
             label.col-md-3.control-label(for="adminRole") Admin
             .col-md-9
