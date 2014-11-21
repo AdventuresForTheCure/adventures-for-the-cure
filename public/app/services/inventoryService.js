@@ -1,15 +1,11 @@
-angular.module('app').factory('inventoryService', ['$q', '$http', 'InventoryItem', inventoryService]);
+angular.module('app').factory('inventoryService', ['$q', '$http', inventoryService]);
 function inventoryService($q, $http, InventoryItem) {
   return {
     getInventoryItems: function() {
       var dfd = $q.defer();
       $http.get('/api/inventoryItems/')
         .success(function(data, status, headers, config) {
-          var inventoryItems = [];
-          for (var i = 0; i < data.length; i++) {
-            inventoryItems[i] = new InventoryItem(data[i]);
-          }
-          dfd.resolve(inventoryItems);
+          dfd.resolve(data);
         })
         .error(function(error, status, headers, config) {
           dfd.reject(error.reason);

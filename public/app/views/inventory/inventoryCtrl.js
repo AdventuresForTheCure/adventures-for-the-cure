@@ -5,7 +5,7 @@ function inventoryCtrl($scope, inventoryService, notifierService, identityServic
 
   $scope.getInventoryItems = function() {
     inventoryService.getInventoryItems().then(function(inventoryItems) {
-      $scope.inventoryItems = {}
+      $scope.inventoryItems = {};
       for (var i = 0; i < inventoryItems.length; i++) {
         var inventoryItem = inventoryItems[i];
         if (angular.isUndefined($scope.inventoryItems[inventoryItem.category])) {
@@ -16,7 +16,7 @@ function inventoryCtrl($scope, inventoryService, notifierService, identityServic
     }, function(reason) {
       notifierService.error(reason);
     });
-  }
+  };
 
   $scope.ableToEdit = function() {
     if (identityService.currentUser && identityService.currentUser.isInventory()) {
@@ -32,7 +32,7 @@ function inventoryCtrl($scope, inventoryService, notifierService, identityServic
     }, function(reason) {
       notifierService.error(reason);
     });
-  }
+  };
 
   $scope.delete = function(inventoryItem) {
     inventoryService.delete(inventoryItem).then(function(item) {
@@ -41,7 +41,7 @@ function inventoryCtrl($scope, inventoryService, notifierService, identityServic
     }, function(reason) {
       notifierService.error(reason);
     });
-  }
+  };
 
   $scope.getInventoryItems();
 }

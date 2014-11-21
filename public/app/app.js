@@ -8,6 +8,9 @@ angular.module('app').config(function($routeProvider, $locationProvider) {
     board: { auth: function(authorizationService) {
       return authorizationService.authorizeAuthorizedUserForRoute('board');
     }},
+    inventory: { auth: function(authorizationService) {
+      return authorizationService.authorizeAuthorizedUserForRoute('inventory');
+    }},
     member: { auth: function($route, authorizationService) {
       return authorizationService.authorizeAuthenticatedUserForRoute($route);
     }}

@@ -27,6 +27,6 @@ function memberEditCtrl($scope, $route, $location, notifierService, memberServic
       $scope.memberToEdit = member;
       $scope.memberToEdit.img = $files[0];
       $scope.showImgTmp = true;
-    })
+    });
   };
 }

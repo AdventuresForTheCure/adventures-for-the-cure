@@ -6,7 +6,7 @@ function memberListCtrl($scope, $location, $modal, memberService, identityServic
   getMembers();
 
   function getMembers() {
-    memberService.getMembersAsAdmin().then(function (members) {
+    memberService.getMembers().then(function (members) {
       $scope.members = members;
     });
   }

@@ -22,18 +22,15 @@
             // name
             td
               span{{inventoryItem.name}}
-
             // price
             td
               span Price: {{inventoryItem.price | currency : symbol : 2 }}
-
             // sale price
             td(ng-if='!ableToEdit()')
               span(ng-if='inventoryItem.salePrice > 0') ON SALE: {{inventoryItem.salePrice | currency : symbol : 2 }}
             td(ng-if='ableToEdit()')
-              span Sale Price:
+              span 'On Sale' Price:
               input(type='number' ng-model='inventoryItem.salePrice' ng-change='update(inventoryItem)' style='width:75px' class='inventory-item-input')
-
             // quantity
             td(ng-if='!ableToEdit()')
               span(ng-if='inventoryItem.quantity <= 0') SOLD OUT!
@@ -41,6 +38,6 @@
             td(ng-if='ableToEdit()')
               span Quantity
               input(type='number' ng-model='inventoryItem.quantity' ng-change='update(inventoryItem)' class='inventory-item-input')
-
             td(ng-if='ableToEdit()')
-              button.btn.btn-default(ng-click='delete(inventoryItem)' class='inventory-item-delete') Delete
+              button.btn.btn-default.btn-sm(ng-click='delete(inventoryItem)' title="Delete")
+                span(class="glyphicon glyphicon-trash" aria-hidden="true")

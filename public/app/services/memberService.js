@@ -1,9 +1,20 @@
 angular.module('app').factory('memberService', ['$q', '$http', '$upload', 'Member', memberService]);
 function memberService($q, $http, $upload, Member) {
+  var members;
+
+  function transformResponse(data) {
+    data = JSON.parse(data);
+    var members = [];
+    for (var i = 0; i < data.length; i++) {
+      members[i] = new Member(data[i]);
+    }
+    return members;
+  }
+
   return {
-    deleteMember: function(user) {
+    deleteMember: function(member) {
       var dfd = $q.defer();
-      $http.delete('/api/members/' + user._id)
+      $http.delete('/api/members/' + member._id)
         .success(function(data, status, headers, config) {
           dfd.resolve();
         })
@@ -15,31 +26,15 @@ function memberService($q, $http, $upload, Member) {
 
     getMembers: function() {
       var dfd = $q.defer();
-      $http.get('/api/members/')
-        .success(function(data, status, headers, config) {
-          var members = [];
-          for (var i = 0; i < data.length; i++) {
-            members[i] = new Member(data[i]);
-          }
+      var config = {
+        transformResponse: transformResponse
+      };
+      $http.get('/api/members/', config)
+        .success(function (data, status, headers, config) {
+          members = data;
           dfd.resolve(members);
         })
-        .error(function(error, status, headers, config) {
-          dfd.reject(error.reason);
-        });
-      return dfd.promise;
-    },
-
-    getMembersAsAdmin: function() {
-      var dfd = $q.defer();
-      $http.get('/api/membersAsAdmin/')
-        .success(function(data, status, headers, config) {
-          var members = [];
-          for (var i = 0; i < data.length; i++) {
-            members[i] = new Member(data[i]);
-          }
-          dfd.resolve(members);
-        })
-        .error(function(error, status, headers, config) {
+        .error(function (error, status, headers, config) {
           dfd.reject(error.reason);
         });
       return dfd.promise;
@@ -53,8 +48,7 @@ function memberService($q, $http, $upload, Member) {
       var dfd = $q.defer();
       $http.get('/api/members/' + name)
         .success(function(data, status, headers, config) {
-          var member = new Member(data);
-          dfd.resolve(member);
+          dfd.resolve(data);
         })
         .error(function(error, status, headers, config) {
           dfd.reject(error.reason);

@@ -11,16 +11,16 @@ function identityService($window, Member) {
       return !!this.currentUser;
     },
     isAuthorized: function(role) {
-      return !!this.currentUser && this.currentUser.roles.indexOf(role) > -1;
+      return !!this.currentUser && this.currentUser.isRole(role);
     },
     isAdmin: function() {
-      return !!this.currentUser && this.currentUser.roles.indexOf('admin') > -1;
+      return !!this.currentUser && this.currentUser.isRole('admin');
     },
     isBoard: function() {
-      return !!this.currentUser && this.currentUser.roles.indexOf('board') > -1;
+      return !!this.currentUser && this.currentUser.isRole('board');
     },
     isInventory: function() {
-      return !!this.currentUser && this.currentUser.roles.indexOf('inventory') > -1;
+      return !!this.currentUser && this.currentUser.isRole('inventory');
     }
   };
 }

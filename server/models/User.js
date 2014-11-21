@@ -27,6 +27,10 @@ var userSchema = mongoose.Schema({
     type: String,
     default: ''
   },
+  isActive: {
+    type: Boolean,
+    default: false
+  },
   roles: [String]
 });
 
@@ -35,11 +39,11 @@ userSchema.methods = {
     return encrypt.hashPwd(this.salt, passwordToMatch) === this.hashedPwd;
   },
   hasRole: function(role) {
-    return this.roles.indexOf(role) > -1;
+    return this.roles && this.roles.indexOf(role) > -1;
   }
 };
 var User = mongoose.model('User', userSchema);
-User.toMemberData = function(currentUser, member) {
+User.toMemberData = function(member) {
   var data = {};
   if (member.name) {
     data.name = member.name;
@@ -59,11 +63,11 @@ User.toMemberData = function(currentUser, member) {
   if (member.imgPathTmp) {
     data.imgPathTmp = member.imgPathTmp;
   }
-  if (currentUser.hasRole('admin') && member.roles) {
-    member.roles = JSON.parse(member.roles);
+  if (member.roles) {
+    var roles = JSON.parse(member.roles);
     data.roles = [];
-    for (var i = 0; i < member.roles.length; i++) {
-      data.roles[i] = member.roles[i];
+    for (var i = 0; i < roles.length; i++) {
+      data.roles[i] = roles[i];
     }
   }
   return data;

@@ -1,4 +1,5 @@
-angular.module('app').factory('authorizationService', ['$http', '$q', 'identityService', 'Member', authorizationService]);
+angular.module('app').factory('authorizationService',
+  ['$http', '$q', 'identityService', 'Member', authorizationService]);
 function authorizationService($http, $q, identityService, Member) {
   return {
     authenticateUser: function(username, password) {

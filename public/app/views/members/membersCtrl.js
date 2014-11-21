@@ -1,7 +1,7 @@
 angular.module('app').controller('membersCtrl', membersCtrl);
-membersCtrl.$inject = ['$scope', '$location', 'memberService', 'notifierService', 'identityService'];
-function membersCtrl($scope, $location, memberService, notifierService, identityService) {
-  $scope.selectedMember = undefined;
+membersCtrl.$inject = ['$scope', '$location', '$window', 'memberService', 'notifierService', 'identityService'];
+function membersCtrl($scope, $location, $window, memberService, notifierService, identityService) {
+  $scope.selectedMember = {};
   $scope.selectedMemberHtml = '';
   $scope.editMode = false;
   $scope.showImgTmp = false;
@@ -34,7 +34,11 @@ function membersCtrl($scope, $location, memberService, notifierService, identity
 
   $scope.selectMember = function(member) {
     $scope.selectedMember = member;
-    $location.hash($scope.selectedMember.name);
+//    $location.hash($scope.selectedMember.name);
+    var currHash = $window.location.hash.substring(1, $window.location.hash.length);
+    if (currHash !== $scope.selectedMember.name) {
+      $window.location.hash = $scope.selectedMember.name;
+    }
   };
 
   $scope.saveMember = function() {
@@ -52,7 +56,7 @@ function membersCtrl($scope, $location, memberService, notifierService, identity
       $scope.selectMember(member);
       $scope.selectedMember.img = $files[0];
       $scope.showImgTmp = true;
-    })
+    });
   };
 
   $scope.enableEditMode = function() {

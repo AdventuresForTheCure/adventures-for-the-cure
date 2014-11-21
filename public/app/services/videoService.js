@@ -1,19 +1,27 @@
-angular.module('app').factory('videoService', ['$q', '$http', 'Video', videoService]);
-function videoService($q, $http, Video) {
+angular.module('app').factory('videoService', ['$q', '$http', videoService]);
+function videoService($q, $http) {
   return {
     getVideos: function() {
-      return Video.query().$promise;
+      var dfd = $q.defer();
+      $http.get('/api/videos')
+        .success(function(data, status, headers, config) {
+          dfd.resolve(data);
+        })
+        .error(function(error, status, headers, config) {
+          dfd.reject(error.reason);
+        });
+      return dfd.promise;
     },
     getVideo: function(name) {
-      // because we need to get a html file as the content for a given video
-      // we must use the $http.get method and not the Video resource.  The Video
-      // resource will only give us json as a $resource result but $http.get will give us
-      // our desired html in the response.
-      var deferred = $q.defer();
-      $http.get('/api/videos/' + name).then(function(response) {
-        deferred.resolve(response.data);
-      });
-      return deferred.promise;
+      var dfd = $q.defer();
+      $http.get('/api/videos/' + name)
+        .success(function(data, status, headers, config) {
+          dfd.resolve(data);
+        })
+        .error(function(error, status, headers, config) {
+          dfd.reject(error.reason);
+        });
+      return dfd.promise;
     }
   };
 }
