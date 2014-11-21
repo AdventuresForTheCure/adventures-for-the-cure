@@ -8,7 +8,7 @@
   },
   "scripts": {
     "start": "node app",
-    "postinstall": "bower install; gulp default"
+    "postinstall": "gulp default"
   },
   "engines": {
     "node": "0.10.x",
