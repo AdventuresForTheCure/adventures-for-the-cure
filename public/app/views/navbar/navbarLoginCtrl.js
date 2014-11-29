@@ -4,7 +4,7 @@ function navbarLoginCtrl($scope, $location, identityService, notifierService, au
   $scope.identityService = identityService;
 
   $scope.signout = function() {
-    authorizationService.logoutUser().then(function() {
+    authorizationService.logoutMember().then(function() {
       $scope.username = '';
       $scope.password = '';
       notifierService.notify('You have successfully signed out!');

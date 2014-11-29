@@ -1,26 +1,26 @@
 angular.module('app').factory('identityService', ['$window', 'Member', identityService]);
 function identityService($window, Member) {
-  var currentUser;
-  if ($window.bootstrappedUserObject) {
-    currentUser = new Member();
-    angular.extend(currentUser, $window.bootstrappedUserObject);
+  var currentMember;
+  if ($window.bootstrappedMemberObject) {
+    currentMember = new Member();
+    angular.extend(currentMember, $window.bootstrappedMemberObject);
   }
   return {
-    currentUser: currentUser,
+    currentMember: currentMember,
     isAuthenticated: function() {
-      return !!this.currentUser;
+      return !!this.currentMember;
     },
     isAuthorized: function(role) {
-      return !!this.currentUser && this.currentUser.isRole(role);
+      return !!this.currentMember && this.currentMember.isRole(role);
     },
     isAdmin: function() {
-      return !!this.currentUser && this.currentUser.isRole('admin');
+      return !!this.currentMember && this.currentMember.isRole('admin');
     },
     isBoard: function() {
-      return !!this.currentUser && this.currentUser.isRole('board');
+      return !!this.currentMember && this.currentMember.isRole('board');
     },
     isInventory: function() {
-      return !!this.currentUser && this.currentUser.isRole('inventory');
+      return !!this.currentMember && this.currentMember.isRole('inventory');
     }
   };
 }

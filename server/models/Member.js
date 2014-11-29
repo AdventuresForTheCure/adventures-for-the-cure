@@ -1,7 +1,7 @@
 var mongoose = require('mongoose');
 var encrypt = require('../utilities/encryption');
 
-var userSchema = mongoose.Schema({
+var memberSchema = mongoose.Schema({
   name: {
     type:String,
     required:'{PATH} is required!'},
@@ -34,7 +34,7 @@ var userSchema = mongoose.Schema({
   roles: [String]
 });
 
-userSchema.methods = {
+memberSchema.methods = {
   authenticate: function(passwordToMatch) {
     return encrypt.hashPwd(this.salt, passwordToMatch) === this.hashedPwd;
   },
@@ -42,8 +42,8 @@ userSchema.methods = {
     return this.roles && this.roles.indexOf(role) > -1;
   }
 };
-var User = mongoose.model('User', userSchema);
-User.toMemberData = function(member) {
+var Member = mongoose.model('Member', memberSchema);
+Member.toMemberData = function(member) {
   var data = {};
   if (member.name) {
     data.name = member.name;
@@ -73,25 +73,25 @@ User.toMemberData = function(member) {
   return data;
 }
 
-function createDefaultUsers() {
-  User.find({}).exec(function(err, collection) {
+function createDefaultMembers() {
+  Member.find({}).exec(function(err, collection) {
     if(collection.length < 2) {
-      console.log('creating default users');
+      console.log('creating default members');
       var salt, hash;
       salt = encrypt.createSalt();
       hash = encrypt.hashPwd(salt, 'p');
-      User.create({name:'Patrick Blair',username:'pblair12@gmail.com', salt: salt, hashedPwd: hash,
+      Member.create({name:'Patrick Blair',username:'pblair12@gmail.com', salt: salt, hashedPwd: hash,
         bio: 'AFC Founder', img: '/img/Patrick Blair.jpg',
         roles: ['admin', 'inventory']});
       salt = encrypt.createSalt();
       hash = encrypt.hashPwd(salt, 'm');
-      User.create({name:'Mike Caputi',username:'mcaput1@gmail.com', salt: salt, hashedPwd: hash,
+      Member.create({name:'Mike Caputi',username:'mcaput1@gmail.com', salt: salt, hashedPwd: hash,
         bio: 'AFC Tresurer', img: '/img/Mike Caputi.jpg',
         roles: ['admin', 'inventory']});
     } else {
-      console.log('not creating default users because %s users already exist', collection.length);
+      console.log('not creating default members because %s members already exist', collection.length);
     }
   });
 }
 
-exports.createDefaultUsers = createDefaultUsers;
+exports.createDefaultMembers = createDefaultMembers;

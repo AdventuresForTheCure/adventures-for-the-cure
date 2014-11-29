@@ -1,12 +1,12 @@
 var passport = require('passport');
 
 exports.login = function(req, res, next) {
-  var auth = passport.authenticate('local', function(err, user) {
+  var auth = passport.authenticate('local', function(err, member) {
     if(err) {return next(err);}
-    if(!user) { res.send({success:false});}
-    req.logIn(user, function(err) {
+    if(!member) { res.send({success:false});}
+    req.logIn(member, function(err) {
       if(err) {return next(err);}
-      res.send({success:true, user: user});
+      res.send({success:true, member: member});
     });
   });
   auth(req, res, next);

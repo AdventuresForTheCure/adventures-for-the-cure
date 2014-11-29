@@ -4,6 +4,7 @@ var campaigns = require('../controllers/campaignsController');
 var videos = require('../controllers/videosController');
 var members = require('../controllers/membersController');
 var inventoryItems = require('../controllers/inventoryItemsController');
+var volunteerEvents = require('../controllers/volunteerEventsController');
 var multipart = require('connect-multiparty');
 var multipartMiddleware = multipart();
 
@@ -26,6 +27,10 @@ module.exports = function(app, config) {
   app.post('/api/inventoryItems/:id', auth.requiresLoggedInRole('inventory'), inventoryItems.updateInventoryItem);
   app.delete('/api/inventoryItems/:id', auth.requiresLoggedInRole('inventory'), inventoryItems.deleteInventoryItem);
 
+  app.get('/api/volunteerEvents', cache.disableBrowserCache, volunteerEvents.getVolunteerEvents);
+  app.post('/api/volunteerEvents', auth.requiresLoggedInRole('board'), volunteerEvents.saveVolunteerEvent);
+  app.post('/api/volunteerEvents/:id', auth.requiresLoggedInRole('board'), volunteerEvents.updateVolunteerEvent);
+  app.delete('/api/volunteerEvents/:id', auth.requiresLoggedInRole('board'), volunteerEvents.deleteVolunteerEvent);
 
   // render jade files
   app.get('/partials/*', function(req, res) {
@@ -39,7 +44,7 @@ module.exports = function(app, config) {
   // ensure that the client side application does ALL of the routing
   app.get('*', function(req, res) {
     res.render('index', {
-      bootstrappedUser: req.user
+      bootstrappedMember: req.user
     });
   });
 };

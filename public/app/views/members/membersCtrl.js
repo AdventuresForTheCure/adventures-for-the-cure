@@ -24,8 +24,8 @@ function membersCtrl($scope, $location, $window, memberService, notifierService,
   $scope.ableToEdit = function() {
     if ($scope.selectedMember &&
         identityService.isAuthenticated() &&
-       ($scope.selectedMember.username === identityService.currentUser.username ||
-        identityService.currentUser.isAdmin())) {
+       ($scope.selectedMember.username === identityService.currentMember.username ||
+        identityService.currentMember.isAdmin())) {
       return true;
     } else {
       return false;
@@ -34,9 +34,8 @@ function membersCtrl($scope, $location, $window, memberService, notifierService,
 
   $scope.selectMember = function(member) {
     $scope.selectedMember = member;
-//    $location.hash($scope.selectedMember.name);
     var currHash = $window.location.hash.substring(1, $window.location.hash.length);
-    if (currHash !== $scope.selectedMember.name) {
+    if (currHash !== encodeURIComponent($scope.selectedMember.name)) {
       $window.location.hash = $scope.selectedMember.name;
     }
   };

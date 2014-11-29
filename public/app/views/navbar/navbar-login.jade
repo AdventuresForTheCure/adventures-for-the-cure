@@ -33,7 +33,7 @@
         ul.nav.navbar-nav.navbar-right
           li.dropdown
             a.logged-in.dropdown-toggle(href='', data-toggle='dropdown')
-              b.logged-in {{identityService.currentUser.name}}
+              b.logged-in {{identityService.currentMember.name}}
                 .caret
             ul.dropdown-menu
               li(ng-if='identityService.isAdmin()')
@@ -42,7 +42,7 @@
                 a(href='/member-list') List Members
               li.divider(ng-if='identityService.isAdmin()' role='presentation')
               li
-                a(href='/member-edit/{{identityService.currentUser._id}}') Edit Profile
+                a(href='/member-edit/{{identityService.currentMember._id}}') Edit Profile
               li.divider(role='presentation')
               li
                 a(href='', ng-click='signout()') Sign Out

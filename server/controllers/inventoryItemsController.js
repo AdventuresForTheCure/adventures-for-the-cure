@@ -4,7 +4,6 @@ var errorHandler = require('../utilities/errorHandler');
 exports.saveInventoryItem = function(req, res, next) {
   var inventoryItemData = toInventoryItemData(req.user, req.body);
 
-  // only users with 'inventory' role can create new items
   if (!req.user || !req.user.hasRole('inventory')) {
     errorHandler.sendError(req, res, err, 403);
   }
@@ -20,7 +19,6 @@ exports.updateInventoryItem = function(req, res) {
   var inventoryItemId = req.params.id;
   var inventoryItemData = InventoryItem.toInventoryItemData(req.body);
 
-  // if not updating self or if this is an not admin member
   if(!req.user.hasRole('inventory')) {
     res.status(403);
     return res.end();
@@ -42,7 +40,6 @@ exports.getInventoryItems = function (req, res) {
 exports.deleteInventoryItem = function(req, res) {
   var inventoryItemId = req.params.id;
 
-  // only admins can delete users
   if(!req.user.hasRole('inventory')) {
     res.status(403);
     return res.end();

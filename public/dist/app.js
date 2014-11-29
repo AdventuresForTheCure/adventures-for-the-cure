@@ -3,16 +3,16 @@ angular.module('app', ['ngResource', 'ngRoute', 'ui.bootstrap', 'angularFileUplo
 angular.module('app').config(["$routeProvider", "$locationProvider", function($routeProvider, $locationProvider) {
   var routeRoleChecks = {
     admin: { auth: function(authorizationService) {
-      return authorizationService.authorizeAuthorizedUserForRoute('admin');
+      return authorizationService.authorizeAuthorizedMemberForRoute('admin');
     }},
     board: { auth: function(authorizationService) {
-      return authorizationService.authorizeAuthorizedUserForRoute('board');
+      return authorizationService.authorizeAuthorizedMemberForRoute('board');
     }},
     inventory: { auth: function(authorizationService) {
-      return authorizationService.authorizeAuthorizedUserForRoute('inventory');
+      return authorizationService.authorizeAuthorizedMemberForRoute('inventory');
     }},
     member: { auth: function($route, authorizationService) {
-      return authorizationService.authorizeAuthenticatedUserForRoute($route);
+      return authorizationService.authorizeAuthenticatedMemberForRoute($route);
     }}
   };
 
@@ -112,13 +112,13 @@ angular.module('app').factory('authorizationService',
   ['$http', '$q', 'identityService', 'Member', authorizationService]);
 function authorizationService($http, $q, identityService, Member) {
   return {
-    authenticateUser: function(username, password) {
+    authenticateMember: function(username, password) {
       var deferred = $q.defer();
       $http.post('/login', {username: username, password: password}).then(function(response) {
         if (response.data.success) {
           var user = new Member();
           angular.extend(user, response.data.user);
-          identityService.currentUser = user;
+          identityService.currentMember = user;
           deferred.resolve(true);
         } else {
           deferred.resolve(false);
@@ -127,16 +127,16 @@ function authorizationService($http, $q, identityService, Member) {
       return deferred.promise;
     },
 
-    logoutUser: function() {
+    logoutMember: function() {
       var deferred = $q.defer();
       $http.post('/logout', {logout:true}).then(function() {
-        identityService.currentUser = undefined;
+        identityService.currentMember = undefined;
         deferred.resolve();
       });
       return deferred.promise;
     },
 
-    authorizeAuthorizedUserForRoute: function(role) {
+    authorizeAuthorizedMemberForRoute: function(role) {
       if (identityService.isAuthorized(role)) {
         return true;
       } else {
@@ -144,9 +144,9 @@ function authorizationService($http, $q, identityService, Member) {
       }
     },
 
-    authorizeAuthenticatedUserForRoute: function($route) {
+    authorizeAuthenticatedMemberForRoute: function($route) {
       if (identityService.isAuthenticated() &&
-        ($route.current.params.id === identityService.currentUser._id ||
+        ($route.current.params.id === identityService.currentMember._id ||
           identityService.isAuthorized('admin'))) {
         return true;
       } else {
@@ -154,12 +154,12 @@ function authorizationService($http, $q, identityService, Member) {
       }
     },
 
-    createUser: function(newUserData) {
-      var newUser = new Member(newUserData);
+    createMember: function(newMemberData) {
+      var newMember = new Member(newMemberData);
       var deferred = $q.defer();
 
-      newUser.$save().then(function() {
-        identityService.currentUser = newUser;
+      newMember.$save().then(function() {
+        identityService.currentMember = newMember;
         deferred.resolve();
       }, function(response) {
         deferred.reject(response.data.reason);
@@ -197,27 +197,27 @@ function campaignService($q, $http, Campaign) {
 }
 angular.module('app').factory('identityService', ['$window', 'Member', identityService]);
 function identityService($window, Member) {
-  var currentUser;
-  if ($window.bootstrappedUserObject) {
-    currentUser = new Member();
-    angular.extend(currentUser, $window.bootstrappedUserObject);
+  var currentMember;
+  if ($window.bootstrappedMemberObject) {
+    currentMember = new Member();
+    angular.extend(currentMember, $window.bootstrappedMemberObject);
   }
   return {
-    currentUser: currentUser,
+    currentMember: currentMember,
     isAuthenticated: function() {
-      return !!this.currentUser;
+      return !!this.currentMember;
     },
     isAuthorized: function(role) {
-      return !!this.currentUser && this.currentUser.isRole(role);
+      return !!this.currentMember && this.currentMember.isRole(role);
     },
     isAdmin: function() {
-      return !!this.currentUser && this.currentUser.isRole('admin');
+      return !!this.currentMember && this.currentMember.isRole('admin');
     },
     isBoard: function() {
-      return !!this.currentUser && this.currentUser.isRole('board');
+      return !!this.currentMember && this.currentMember.isRole('board');
     },
     isInventory: function() {
-      return !!this.currentUser && this.currentUser.isRole('inventory');
+      return !!this.currentMember && this.currentMember.isRole('inventory');
     }
   };
 }
@@ -439,19 +439,150 @@ function videoService($q, $http) {
     }
   };
 }
+angular.module('app').factory('volunteerEventService', ['$q', '$http', '$upload', volunteerEventService]);
+function volunteerEventService($q, $http, $upload) {
+  var volunteerEvents;
+
+  function transformResponse(data) {
+    data = JSON.parse(data);
+    return data;
+  }
+
+  return {
+    deleteVolunteerEvent: function(volunteerEvent) {
+      var dfd = $q.defer();
+      $http.delete('/api/volunteerEvents/' + volunteerEvent._id)
+        .success(function(data, status, headers, config) {
+          dfd.resolve();
+        })
+        .error(function(error, status, headers, config) {
+          dfd.reject(error.reason);
+        });
+      return dfd.promise;
+    },
+
+    getVolunteerEvents: function() {
+      var dfd = $q.defer();
+      var config = {
+        transformResponse: transformResponse
+      };
+      $http.get('/api/volunteerEvents/', config)
+        .success(function (data, status, headers, config) {
+          volunteerEvents = data;
+          dfd.resolve(volunteerEvents);
+        })
+        .error(function (error, status, headers, config) {
+          dfd.reject(error.reason);
+        });
+      return dfd.promise;
+    },
+
+    getVolunteerEvent: function(name) {
+      var dfd = $q.defer();
+      $http.get('/api/volunteerEvents/' + name)
+        .success(function(data, status, headers, config) {
+          dfd.resolve(data);
+        })
+        .error(function(error, status, headers, config) {
+          dfd.reject(error.reason);
+        });
+      return dfd.promise;
+    },
+
+    saveVolunteerEvent: function(volunteerEvent) {
+      var dfd = $q.defer();
+
+      // if the volunteerEvent has an id then it is an 'update'
+      // otherwise it is a 'create new'
+      var url = '/api/volunteerEvents/';
+      if (volunteerEvent._id) {
+        url = '/api/volunteerEvents/' + volunteerEvent._id;
+      }
+
+      $upload.upload({
+        url: url,
+        data: volunteerEvent,
+        file: volunteerEvent.img
+      }).progress(function(evt) {
+        console.log('percent: ' + parseInt(100.0 * evt.loaded / evt.total));
+      }).success(function(data, status, headers, config) {
+        // file is uploaded successfully
+        console.log(data);
+        dfd.resolve(data);
+      }).error(function(error, status, headers, config) {
+        console.log(error);
+        dfd.reject(error.reason);
+      });
+
+      return dfd.promise;
+    },
+
+    saveVolunteerEventTmpImg: function(volunteerEvent) {
+      var dfd = $q.defer();
+      var url = '/api/volunteerEvents/tmpImg/' + volunteerEvent._id;
+
+      $upload.upload({
+        url: url,
+        file: volunteerEvent.imgTmp
+      }).progress(function(evt) {
+        console.log('percent: ' + parseInt(100.0 * evt.loaded / evt.total));
+      }).success(function(data, status, headers, config) {
+        // file is uploaded successfully
+        console.log(data);
+        dfd.resolve(data);
+      }).error(function(error, status, headers, config) {
+        console.log(error);
+        dfd.reject(error.reason);
+      });
+
+      return dfd.promise;
+    }
+  };
+}
+angular.module('app').controller('volunteerEventCreateCtrl', volunteerEventCreateCtrl);
+volunteerEventCreateCtrl.$inject = ['$scope', '$location', 'notifierService', 'volunteerEventService'];
+function volunteerEventCreateCtrl($scope, $location, notifierService, volunteerEventService) {
+  $scope.name = '';
+  $scope.date = '';
+  $scope.isAfcEvent = true;
+  $scope.img = undefined;
+  $scope.notifierService = notifierService;
+
+  $scope.createVolunteerEvent = function() {
+    // if the form is valid then submit to the server
+    if ($scope.createVolunteerEventForm.$valid) {
+      var newVolunteerEvent = {
+        name: $scope.name,
+        date: $scope.date,
+        img: $scope.img
+      };
+
+      volunteerEventService.saveMember(newMember).then(function() {
+        notifierService.notify('Volunteer Event "' + newMember.username + '" has been created');
+        $location.path('/volunteer-event-list');
+      }, function(reason) {
+        notifierService.error(reason);
+      });
+    }
+  };
+
+  $scope.onFileSelect = function($files) {
+    $scope.img = $files[0];
+  };
+}
 angular.module('app').controller('adminCtrl', adminCtrl);
 adminCtrl.$inject = ['$scope', '$location', 'notifierService', 'authorizationService'];
 function adminCtrl($scope, $location, notifierService, authorizationService) {
-  $scope.createUser = function () {
-    var newUserData = {
+  $scope.createMember = function () {
+    var newMemberData = {
       username: $scope.username,
       password: $scope.password,
       firstName: $scope.firstName,
       lastName: $scope.lastName
     };
 
-    authorizationService.createUser(newUserData).then(function () {
-      notifierService.notify('User account created!');
+    authorizationService.createMember(newMemberData).then(function () {
+      notifierService.notify('Member account created!');
       $location.path('/');
     }, function (reason) {
       notifierService.error(reason);
@@ -518,7 +649,7 @@ function inventoryCtrl($scope, inventoryService, notifierService, identityServic
   };
 
   $scope.ableToEdit = function() {
-    if (identityService.currentUser && identityService.currentUser.isInventory()) {
+    if (identityService.currentMember && identityService.currentMember.isInventory()) {
       return true;
     } else {
       return false;
@@ -546,20 +677,6 @@ function inventoryCtrl($scope, inventoryService, notifierService, identityServic
 }
 
 
-angular.module('app').controller('loginCtrl', loginCtrl);
-loginCtrl.$inject = ['$scope', '$location', 'notifierService', 'authorizationService'];
-function loginCtrl($scope, $location, notifierService, authorizationService) {
-  $scope.login = function() {
-    authorizationService.authenticateUser($scope.loginUsername, $scope.loginPassword).then(function(success) {
-      if (success) {
-        notifierService.notify('You have successfully signed in!');
-        $location.path('/');
-      } else {
-        notifierService.error('Username/Password combination incorrect');
-      }
-    });
-  };
-}
 angular.module('app').controller('memberCreateCtrl', memberCreateCtrl);
 memberCreateCtrl.$inject = ['$scope', '$location', 'notifierService', 'memberService'];
 function memberCreateCtrl($scope, $location, notifierService, memberService) {
@@ -599,6 +716,20 @@ function memberCreateCtrl($scope, $location, notifierService, memberService) {
     $scope.img = $files[0];
   };
 }
+angular.module('app').controller('loginCtrl', loginCtrl);
+loginCtrl.$inject = ['$scope', '$location', 'notifierService', 'authorizationService'];
+function loginCtrl($scope, $location, notifierService, authorizationService) {
+  $scope.login = function() {
+    authorizationService.authenticateMember($scope.loginUsername, $scope.loginPassword).then(function(success) {
+      if (success) {
+        notifierService.notify('You have successfully signed in!');
+        $location.path('/');
+      } else {
+        notifierService.error('Username/Password combination incorrect');
+      }
+    });
+  };
+}
 angular.module('app').controller('memberEditCtrl', memberEditCtrl);
 memberEditCtrl.$inject = ['$scope', '$route', '$location', 'notifierService', 'memberService', 'identityService'];
 function memberEditCtrl($scope, $route, $location, notifierService, memberService, identityService) {
@@ -613,8 +744,8 @@ function memberEditCtrl($scope, $route, $location, notifierService, memberServic
   $scope.saveMember = function() {
     memberService.saveMember($scope.memberToEdit).then(function(member) {
       $scope.memberToEdit = member;
-      if (identityService.currentUser._id === $scope.memberToEdit._id) {
-        angular.extend(identityService.currentUser, $scope.memberToEdit);
+      if (identityService.currentMember._id === $scope.memberToEdit._id) {
+        angular.extend(identityService.currentMember, $scope.memberToEdit);
       }
       notifierService.notify('Member has been updated');
     }, function(reason) {
@@ -631,6 +762,76 @@ function memberEditCtrl($scope, $route, $location, notifierService, memberServic
     });
   };
 }
+angular.module('app').controller('membersCtrl', membersCtrl);
+membersCtrl.$inject = ['$scope', '$location', '$window', 'memberService', 'notifierService', 'identityService'];
+function membersCtrl($scope, $location, $window, memberService, notifierService, identityService) {
+  $scope.selectedMember = {};
+  $scope.selectedMemberHtml = '';
+  $scope.editMode = false;
+  $scope.showImgTmp = false;
+  $scope.notifierService = notifierService;
+
+  memberService.getMembers().then(function(members) {
+    $scope.allMembers = members;
+    $scope.membersColumn1 = members.slice(0, (members.length / 2) + 1);
+    $scope.membersColumn2 = members.slice((members.length / 2) + 1, members.length);
+    var selectedMemberName = $location.hash();
+    for (var i = 0; i < members.length; i++) {
+      if (members[i].name === selectedMemberName) {
+        $scope.selectMember(members[i]);
+      } else if (selectedMemberName === '' && members[i].name === 'Adam Driscoll') {
+        $scope.selectMember(members[i]);
+      }
+    }
+  });
+
+  $scope.ableToEdit = function() {
+    if ($scope.selectedMember &&
+        identityService.isAuthenticated() &&
+       ($scope.selectedMember.username === identityService.currentMember.username ||
+        identityService.currentMember.isAdmin())) {
+      return true;
+    } else {
+      return false;
+    }
+  };
+
+  $scope.selectMember = function(member) {
+    $scope.selectedMember = member;
+    var currHash = $window.location.hash.substring(1, $window.location.hash.length);
+    if (currHash !== encodeURIComponent($scope.selectedMember.name)) {
+      $window.location.hash = $scope.selectedMember.name;
+    }
+  };
+
+  $scope.saveMember = function() {
+    var member = $scope.selectedMember;
+    memberService.saveMember($scope.selectedMember).then(function(member) {
+      $scope.selectMember(member);
+      $scope.editMode = false;
+      $scope.showImgTmp = false;
+    });
+  };
+
+  $scope.onFileSelect = function($files) {
+    $scope.selectedMember.imgTmp = $files[0];
+    memberService.saveMemberTmpImg($scope.selectedMember).then(function(member) {
+      $scope.selectMember(member);
+      $scope.selectedMember.img = $files[0];
+      $scope.showImgTmp = true;
+    });
+  };
+
+  $scope.enableEditMode = function() {
+    $scope.editMode = true;
+  };
+
+  $scope.cancel = function() {
+    $scope.editMode = false;
+    $scope.showImgTmp = false;
+  };
+}
+
 angular.module('app').controller('memberListCtrl', memberListCtrl);
 memberListCtrl.$inject = ['$scope', '$location', '$modal', 'memberService', 'identityService'];
 function memberListCtrl($scope, $location, $modal, memberService, identityService) {
@@ -681,84 +882,13 @@ function confirmDeleteMemberCtrl($scope, $modalInstance, memberService, notifier
 }
 confirmDeleteMemberCtrl.$inject = ["$scope", "$modalInstance", "memberService", "notifierService", "member"];
 
-angular.module('app').controller('membersCtrl', membersCtrl);
-membersCtrl.$inject = ['$scope', '$location', '$window', 'memberService', 'notifierService', 'identityService'];
-function membersCtrl($scope, $location, $window, memberService, notifierService, identityService) {
-  $scope.selectedMember = {};
-  $scope.selectedMemberHtml = '';
-  $scope.editMode = false;
-  $scope.showImgTmp = false;
-  $scope.notifierService = notifierService;
-
-  memberService.getMembers().then(function(members) {
-    $scope.allMembers = members;
-    $scope.membersColumn1 = members.slice(0, (members.length / 2) + 1);
-    $scope.membersColumn2 = members.slice((members.length / 2) + 1, members.length);
-    var selectedMemberName = $location.hash();
-    for (var i = 0; i < members.length; i++) {
-      if (members[i].name === selectedMemberName) {
-        $scope.selectMember(members[i]);
-      } else if (selectedMemberName === '' && members[i].name === 'Adam Driscoll') {
-        $scope.selectMember(members[i]);
-      }
-    }
-  });
-
-  $scope.ableToEdit = function() {
-    if ($scope.selectedMember &&
-        identityService.isAuthenticated() &&
-       ($scope.selectedMember.username === identityService.currentUser.username ||
-        identityService.currentUser.isAdmin())) {
-      return true;
-    } else {
-      return false;
-    }
-  };
-
-  $scope.selectMember = function(member) {
-    $scope.selectedMember = member;
-//    $location.hash($scope.selectedMember.name);
-    var currHash = $window.location.hash.substring(1, $window.location.hash.length);
-    if (currHash !== $scope.selectedMember.name) {
-      $window.location.hash = $scope.selectedMember.name;
-    }
-  };
-
-  $scope.saveMember = function() {
-    var member = $scope.selectedMember;
-    memberService.saveMember($scope.selectedMember).then(function(member) {
-      $scope.selectMember(member);
-      $scope.editMode = false;
-      $scope.showImgTmp = false;
-    });
-  };
-
-  $scope.onFileSelect = function($files) {
-    $scope.selectedMember.imgTmp = $files[0];
-    memberService.saveMemberTmpImg($scope.selectedMember).then(function(member) {
-      $scope.selectMember(member);
-      $scope.selectedMember.img = $files[0];
-      $scope.showImgTmp = true;
-    });
-  };
-
-  $scope.enableEditMode = function() {
-    $scope.editMode = true;
-  };
-
-  $scope.cancel = function() {
-    $scope.editMode = false;
-    $scope.showImgTmp = false;
-  };
-}
-
 angular.module('app').controller('navbarLoginCtrl', navbarLoginCtrl);
 navbarLoginCtrl.$inject = ['$scope', '$location', 'identityService', 'notifierService', 'authorizationService'];
 function navbarLoginCtrl($scope, $location, identityService, notifierService, authorizationService) {
   $scope.identityService = identityService;
 
   $scope.signout = function() {
-    authorizationService.logoutUser().then(function() {
+    authorizationService.logoutMember().then(function() {
       $scope.username = '';
       $scope.password = '';
       notifierService.notify('You have successfully signed out!');

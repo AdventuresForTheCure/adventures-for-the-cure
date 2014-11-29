@@ -12,8 +12,8 @@ function memberEditCtrl($scope, $route, $location, notifierService, memberServic
   $scope.saveMember = function() {
     memberService.saveMember($scope.memberToEdit).then(function(member) {
       $scope.memberToEdit = member;
-      if (identityService.currentUser._id === $scope.memberToEdit._id) {
-        angular.extend(identityService.currentUser, $scope.memberToEdit);
+      if (identityService.currentMember._id === $scope.memberToEdit._id) {
+        angular.extend(identityService.currentMember, $scope.memberToEdit);
       }
       notifierService.notify('Member has been updated');
     }, function(reason) {

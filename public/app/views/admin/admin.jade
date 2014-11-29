@@ -2,7 +2,7 @@
   .well
     form.form-horizontal(name="createForm")
       fieldset
-        legend Create New User
+        legend Create New Member
         .form-group
           label.col-md-3.control-label(for="username") Username (Email)
           .col-md-9
@@ -22,6 +22,6 @@
         .form-group
           .col-md-9.col-md-offset-2
             .pull-right
-              button.btn.btn-primary(ng-click="createUser()", ng-disabled="createForm.$invalid") Submit
+              button.btn.btn-primary(ng-click="createMember()", ng-disabled="createForm.$invalid") Submit
               | &nbsp;
               a.btn.btn-default(href="/") Cancel

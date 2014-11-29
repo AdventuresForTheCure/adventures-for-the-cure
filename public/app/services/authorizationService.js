@@ -2,13 +2,13 @@ angular.module('app').factory('authorizationService',
   ['$http', '$q', 'identityService', 'Member', authorizationService]);
 function authorizationService($http, $q, identityService, Member) {
   return {
-    authenticateUser: function(username, password) {
+    authenticateMember: function(username, password) {
       var deferred = $q.defer();
       $http.post('/login', {username: username, password: password}).then(function(response) {
         if (response.data.success) {
           var user = new Member();
           angular.extend(user, response.data.user);
-          identityService.currentUser = user;
+          identityService.currentMember = user;
           deferred.resolve(true);
         } else {
           deferred.resolve(false);
@@ -17,16 +17,16 @@ function authorizationService($http, $q, identityService, Member) {
       return deferred.promise;
     },
 
-    logoutUser: function() {
+    logoutMember: function() {
       var deferred = $q.defer();
       $http.post('/logout', {logout:true}).then(function() {
-        identityService.currentUser = undefined;
+        identityService.currentMember = undefined;
         deferred.resolve();
       });
       return deferred.promise;
     },
 
-    authorizeAuthorizedUserForRoute: function(role) {
+    authorizeAuthorizedMemberForRoute: function(role) {
       if (identityService.isAuthorized(role)) {
         return true;
       } else {
@@ -34,9 +34,9 @@ function authorizationService($http, $q, identityService, Member) {
       }
     },
 
-    authorizeAuthenticatedUserForRoute: function($route) {
+    authorizeAuthenticatedMemberForRoute: function($route) {
       if (identityService.isAuthenticated() &&
-        ($route.current.params.id === identityService.currentUser._id ||
+        ($route.current.params.id === identityService.currentMember._id ||
           identityService.isAuthorized('admin'))) {
         return true;
       } else {
@@ -44,12 +44,12 @@ function authorizationService($http, $q, identityService, Member) {
       }
     },
 
-    createUser: function(newUserData) {
-      var newUser = new Member(newUserData);
+    createMember: function(newMemberData) {
+      var newMember = new Member(newMemberData);
       var deferred = $q.defer();
 
-      newUser.$save().then(function() {
-        identityService.currentUser = newUser;
+      newMember.$save().then(function() {
+        identityService.currentMember = newMember;
         deferred.resolve();
       }, function(response) {
         deferred.reject(response.data.reason);

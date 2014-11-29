@@ -3,16 +3,16 @@ angular.module('app', ['ngResource', 'ngRoute', 'ui.bootstrap', 'angularFileUplo
 angular.module('app').config(function($routeProvider, $locationProvider) {
   var routeRoleChecks = {
     admin: { auth: function(authorizationService) {
-      return authorizationService.authorizeAuthorizedUserForRoute('admin');
+      return authorizationService.authorizeAuthorizedMemberForRoute('admin');
     }},
     board: { auth: function(authorizationService) {
-      return authorizationService.authorizeAuthorizedUserForRoute('board');
+      return authorizationService.authorizeAuthorizedMemberForRoute('board');
     }},
     inventory: { auth: function(authorizationService) {
-      return authorizationService.authorizeAuthorizedUserForRoute('inventory');
+      return authorizationService.authorizeAuthorizedMemberForRoute('inventory');
     }},
     member: { auth: function($route, authorizationService) {
-      return authorizationService.authorizeAuthenticatedUserForRoute($route);
+      return authorizationService.authorizeAuthenticatedMemberForRoute($route);
     }}
   };
 
