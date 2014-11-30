@@ -1,17 +1,31 @@
 var VolunteerEvent = require('mongoose').model('VolunteerEvent');
 var errorHandler = require('../utilities/errorHandler');
+var cloudinaryWrapper = require('../utilities/cloudinaryWrapper');
 
 exports.saveVolunteerEvent = function(req, res) {
-  var volunteerEventData = toVolunteerEventData(req.user, req.body);
+  var volunteerEventData = VolunteerEvent.toVolunteerEventData(req.body);
 
   if (!req.user || !req.user.hasRole('board')) {
     errorHandler.sendError(req, res, err, 403);
   }
 
-  // create the item
-  VolunteerEvent.create(volunteerEventData, function (err, volunteerEvent) {
-    if (err) { errorHandler.sendError(req, res, err); }
-    res.send(volunteerEvent);
+  cloudinaryWrapper.saveImg(req.files.img, volunteerEventData.name, function(err, result) {
+    if(err) { errorHandler.sendError(req, res, err); }
+    else {
+      if (!result) {
+        volunteerEventData.imgPath = '';
+      } else {
+        volunteerEventData.imgPath = result.url;
+      }
+
+      // create the item
+      VolunteerEvent.create(volunteerEventData, function (err, volunteerEvent) {
+        if (err) {
+          errorHandler.sendError(req, res, err);
+        }
+        res.send(volunteerEvent);
+      });
+    }
   });
 };
 

@@ -28,8 +28,8 @@ module.exports = function(app, config) {
   app.delete('/api/inventoryItems/:id', auth.requiresLoggedInRole('inventory'), inventoryItems.deleteInventoryItem);
 
   app.get('/api/volunteerEvents', cache.disableBrowserCache, volunteerEvents.getVolunteerEvents);
-  app.post('/api/volunteerEvents', auth.requiresLoggedInRole('board'), volunteerEvents.saveVolunteerEvent);
-  app.post('/api/volunteerEvents/:id', auth.requiresLoggedInRole('board'), volunteerEvents.updateVolunteerEvent);
+  app.post('/api/volunteerEvents', auth.requiresLoggedInRole('board'), multipartMiddleware, volunteerEvents.saveVolunteerEvent);
+  app.post('/api/volunteerEvents/:id', auth.requiresLoggedInRole('board'), multipartMiddleware, volunteerEvents.updateVolunteerEvent);
   app.delete('/api/volunteerEvents/:id', auth.requiresLoggedInRole('board'), volunteerEvents.deleteVolunteerEvent);
 
   // render jade files

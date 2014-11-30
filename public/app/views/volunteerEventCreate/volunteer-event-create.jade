@@ -1,7 +1,7 @@
 .row
-  .col-lg-12(ng-controller='volunteerCreateCtrl')
+  .col-lg-12(ng-controller='volunteerEventCreateCtrl')
     .well
-      p This is for 'board' members only.
+      p This page is for creating volunteer events and is accessible by 'board' members only.
     .well
       h4 Create Volunteer Event
       form.form-horizontal(name="createVolunteerEventForm" role='form')
@@ -12,13 +12,13 @@
         .form-group
           label.col-md-2.control-label(for="date") Date
           .col-md-10
-            input.form-control(name="date", type="date", ng-model="date", required, autocomplete="off" )
+            input.form-control.date(name="date", type="date", ng-model="date", required, autocomplete="off" )
         .form-group
-          label.col-md-2.control-label(for="afcEvent") AFC Event
+          label.col-md-2.control-label(for="isAfcEvent") AFC Event
           .col-md-10
-            input.form-control(name="afcEvent", type="checkbox", ng-model="isAfcEvent", autocomplete="off" )
+            input(name="isAfcEvent", type="checkbox", ng-model="isAfcEvent")
         .form-group
-          label.col-md-2.control-label(for="image")
+          label.col-md-2.control-label(for="image") Image / Logo
           .col-md-10
             input(name="img" type="file" ng-file-select="onFileSelect($files)" accept="image/*", required)
         .form-group

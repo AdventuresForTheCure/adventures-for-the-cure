@@ -5,6 +5,7 @@ function volunteerEventCreateCtrl($scope, $location, notifierService, volunteerE
   $scope.date = '';
   $scope.isAfcEvent = true;
   $scope.img = undefined;
+
   $scope.notifierService = notifierService;
 
   $scope.createVolunteerEvent = function() {
@@ -13,11 +14,12 @@ function volunteerEventCreateCtrl($scope, $location, notifierService, volunteerE
       var newVolunteerEvent = {
         name: $scope.name,
         date: $scope.date,
+        isAfcEvent: $scope.isAfcEvent,
         img: $scope.img
       };
 
-      volunteerEventService.saveMember(newMember).then(function() {
-        notifierService.notify('Volunteer Event "' + newMember.username + '" has been created');
+      volunteerEventService.saveVolunteerEvent(newVolunteerEvent).then(function() {
+        notifierService.notify('VolunteerEvent ' + newVolunteerEvent.username + ' has been created');
         $location.path('/volunteer-event-list');
       }, function(reason) {
         notifierService.error(reason);

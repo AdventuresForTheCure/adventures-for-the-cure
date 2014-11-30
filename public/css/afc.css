@@ -4,8 +4,11 @@
 .pagination-centered {
 	text-align:center;
 }
-.memberProfile {
+
+.date {
+    width: 180px;
 }
+
 .polka-dots {
 	background-image: url("/test/img/polka-dots.jpg");
 }

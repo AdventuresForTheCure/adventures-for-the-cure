@@ -1,7 +1,7 @@
 var Member = require('mongoose').model('Member');
 var errorHandler = require('../utilities/errorHandler');
 var encrypt = require('../utilities/encryption');
-var cloudinary = require('cloudinary');
+var cloudinaryWrapper = require('../utilities/cloudinaryWrapper');
 var config = require('../config/config');
 
 exports.saveMember = function(req, res, next) {
@@ -12,7 +12,7 @@ exports.saveMember = function(req, res, next) {
     errorHandler.sendError(req, res, err, 403);
   }
 
-  saveImg(req.files.img, memberData.name, function(err, result) {
+  cloudinaryWrapper.saveImg(req.files.img, memberData.name, function(err, result) {
     if(err) { errorHandler.sendError(req, res, err); }
     else {
       if (!result) {
@@ -64,7 +64,7 @@ exports.updateMember = function(req, res) {
       if (req.files.img) {
         //var imgName = member.name + (new Date()).getTime();
         var imgName = member.name;
-        saveImg(req.files.img, imgName, function (err, result) {
+        cloudinaryWrapper.saveImg(req.files.img, imgName, function (err, result) {
           if (err) { errorHandler.sendError(req, res, err); }
           else {
             memberData.imgPath = result.url;
@@ -98,7 +98,7 @@ exports.updateMemberTmpImg = function(req, res) {
       if (req.files.file) {
         //var imgName = member.name + (new Date()).getTime();
         var imgName = "tmp " + member.name;
-        saveImg(req.files.file, imgName, function (err, result) {
+        cloudinaryWrapper.saveImg(req.files.file, imgName, function (err, result) {
           if (err) { errorHandler.sendError(req, res, err); }
           else {
             memberData.imgPathTmp = result.url;
@@ -174,47 +174,4 @@ function updateMember(req, res, memberId, memberData) {
       res.send(member);
     }
   });
-}
-
-/**
- * Make a call to Cloudinary to store the image.
- * @param srcImgPath
- * @param imageId (optional if replacing an existing image)
- * @param callback
- */
-function saveImg(srcImg, imageId, callback) {
-  if (!srcImg) {
-    callback(null, undefined);
-  }
-
-  if (typeof(imageId) === 'function') {
-    callback = imageId;
-    imageId = null;
-  }
-
-  /**
-   * Cloudinar returns the following object:
-   *  {
-   *   public_id: 'sample',
-   *   version: 1312461204,
-   *   width: 864,
-   *   height: 576,
-   *   format: 'jpg',
-   *   bytes: 120253,
-   *   url: 'http://res.cloudinary.com/demo/image/upload/v1371281596/sample.jpg',
-   *   secure_url: 'https://res.cloudinary.com/demo/image/upload/v1371281596/sample.jpg'
-   * }
-   */
-  var options = {
-    transformation: [
-      {width: 350, crop: 'scale'}
-    ]
-  };
-  if (imageId) {
-    options.public_id = imageId;
-  }
-
-  cloudinary.uploader.upload(srcImg.path, function(result) {
-    callback(null, result);
-  }, options);
-}
+};

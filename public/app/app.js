@@ -54,6 +54,9 @@ angular.module('app').config(function($routeProvider, $locationProvider) {
     .when('/member-create', { templateUrl: '/partials/memberCreate/member-create',
       resolve: routeRoleChecks.admin
     })
+    .when('/volunteer-event-create', { templateUrl: '/partials/volunteerEventCreate/volunteer-event-create',
+      resolve: routeRoleChecks.board
+    })
     .otherwise({
       templateUrl: '/partials/invalidPage/invalidPage'
     });

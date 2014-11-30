@@ -35,6 +35,7 @@ VolunteerEvent.toVolunteerEventData = function(volunteerEvent) {
   if (volunteerEvent.imgPathTmp) {
     data.imgPathTmp = volunteerEvent.imgPathTmp;
   }
+  return data;
 }
 
 function createDefaultVolunteerEvents() {
