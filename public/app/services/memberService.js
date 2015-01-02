@@ -27,7 +27,8 @@ function memberService($q, $http, $upload, Member) {
     getMembers: function() {
       var dfd = $q.defer();
       var config = {
-        transformResponse: transformResponse
+        transformResponse: transformResponse,
+        cache: true
       };
       $http.get('/api/members/', config)
         .success(function (data, status, headers, config) {

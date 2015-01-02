@@ -30,7 +30,14 @@ angular.module('app').config(function($routeProvider, $locationProvider) {
     })
     .when('/rides', { templateUrl: '/partials/rides/rides'
     })
-    .when('/members', { templateUrl: '/partials/members/members'
+    .when('/members', { templateUrl: '/partials/members/members',
+      resolve: {
+        members: function (memberService) {
+          memberService.getMembers().then(function (members) {
+            return members;
+          });
+        }
+      }
     })
     .when('/results', { templateUrl: '/partials/results/results'
     })
@@ -55,6 +62,12 @@ angular.module('app').config(function($routeProvider, $locationProvider) {
       resolve: routeRoleChecks.admin
     })
     .when('/volunteer-event-create', { templateUrl: '/partials/volunteerEventCreate/volunteer-event-create',
+      resolve: routeRoleChecks.board
+    })
+    .when('/volunteer-event-edit/:id', { templateUrl: '/partials/volunteerEventEdit/volunteer-event-edit',
+      resolve: routeRoleChecks.board
+    })
+    .when('/volunteer-event-list', { templateUrl: '/partials/volunteerEventList/volunteer-event-list',
       resolve: routeRoleChecks.board
     })
     .otherwise({

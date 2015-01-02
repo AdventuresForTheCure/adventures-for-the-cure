@@ -1,0 +1,21 @@
+{
+  "name": "date-utils",
+  "version": "1.2.16",
+  "main": "lib/date-utils.min.js",
+  "ignore": [
+    "package.json",
+    ".gitignore",
+    "test"
+  ],
+  "homepage": "https://github.com/JerrySievert/node-date-utils",
+  "_release": "1.2.16",
+  "_resolution": {
+    "type": "version",
+    "tag": "1.2.16",
+    "commit": "bb15c7ade69400fc5181c5c5363095c4b5ab6526"
+  },
+  "_source": "git://github.com/JerrySievert/node-date-utils.git",
+  "_target": "~1.2.16",
+  "_originalSource": "date-utils",
+  "_direct": true
+}

@@ -50,6 +50,19 @@ exports.getVolunteerEvents = function (req, res) {
     res.send(collection);
   });
 };
+exports.getVolunteerEvent = function(req, res) {
+  var volunteerEventId = req.params.id;
+  if (!volunteerEventId) { errorHandler.sendError(req, res, 'volunteerEventId is a required request parameter'); }
+  else {
+    VolunteerEvent.findOne({_id: volunteerEventId}).exec(function (err, volunteerEvent) {
+      if (err) {
+        errorHandler.sendError(req, res, err);
+      }
+      res.send(volunteerEvent);
+    });
+  }
+};
+
 
 exports.deleteVolunteerEvent = function(req, res) {
   var volunteerEventId = req.params.id;

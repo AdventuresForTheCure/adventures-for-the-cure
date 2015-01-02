@@ -19,6 +19,10 @@ var memberSchema = mongoose.Schema({
     type: String,
     default: ''
   },
+  dateJoined: {
+    type: Date,
+    default: Date.now()
+  },
   imgPath: {
     type: String,
     default: ''

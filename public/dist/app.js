@@ -1,6 +1,6 @@
 angular.module('app', ['ngResource', 'ngRoute', 'ui.bootstrap', 'angularFileUpload']);
 
-angular.module('app').config(["$routeProvider", "$locationProvider", function($routeProvider, $locationProvider) {
+angular.module('app').config(function($routeProvider, $locationProvider) {
   var routeRoleChecks = {
     admin: { auth: function(authorizationService) {
       return authorizationService.authorizeAuthorizedMemberForRoute('admin');
@@ -30,7 +30,14 @@ angular.module('app').config(["$routeProvider", "$locationProvider", function($r
     })
     .when('/rides', { templateUrl: '/partials/rides/rides'
     })
-    .when('/members', { templateUrl: '/partials/members/members'
+    .when('/members', { templateUrl: '/partials/members/members',
+      resolve: {
+        members: function (memberService) {
+          memberService.getMembers().then(function (members) {
+            return members;
+          });
+        }
+      }
     })
     .when('/results', { templateUrl: '/partials/results/results'
     })
@@ -57,22 +64,28 @@ angular.module('app').config(["$routeProvider", "$locationProvider", function($r
     .when('/volunteer-event-create', { templateUrl: '/partials/volunteerEventCreate/volunteer-event-create',
       resolve: routeRoleChecks.board
     })
+    .when('/volunteer-event-edit/:id', { templateUrl: '/partials/volunteerEventEdit/volunteer-event-edit',
+      resolve: routeRoleChecks.board
+    })
+    .when('/volunteer-event-list', { templateUrl: '/partials/volunteerEventList/volunteer-event-list',
+      resolve: routeRoleChecks.board
+    })
     .otherwise({
       templateUrl: '/partials/invalidPage/invalidPage'
     });
-}]);
+});
 
 /**
  * If any route is attempted that the user is not authorized for then send
  * the user back to the home page
  */
-angular.module('app').run(["$rootScope", "$location", "notifierService", function($rootScope, $location, notifierService) {
+angular.module('app').run(function($rootScope, $location, notifierService) {
   $rootScope.$on('$routeChangeError', function(evt, current, previous, rejection) {
     if (rejection === 'not authorized') {
       notifierService.error('You are not authorized to view this page.');
     }
   });
-}]);
+});
 angular.module('app').factory('Member', ['$resource', Member]);
 function Member($resource) {
   var member = $resource('/api/members', {}, {});
@@ -303,7 +316,8 @@ function memberService($q, $http, $upload, Member) {
     getMembers: function() {
       var dfd = $q.defer();
       var config = {
-        transformResponse: transformResponse
+        transformResponse: transformResponse,
+        cache: true
       };
       $http.get('/api/members/', config)
         .success(function (data, status, headers, config) {
@@ -443,11 +457,21 @@ function videoService($q, $http) {
   };
 }
 angular.module('app').factory('volunteerEventService', ['$q', '$http', '$upload', volunteerEventService]);
+
+function formatDate(data) {
+  if (data && data.date) {
+    data.date = new Date(Date.parse(data.date));
+  }
+}
+
 function volunteerEventService($q, $http, $upload) {
   var volunteerEvents;
 
   function transformResponse(data) {
     data = JSON.parse(data);
+    for (var i = 0; i < data.length; i++) {
+      formatDate(data);
+    }
     return data;
   }
 
@@ -471,8 +495,7 @@ function volunteerEventService($q, $http, $upload) {
       };
       $http.get('/api/volunteerEvents/', config)
         .success(function (data, status, headers, config) {
-          volunteerEvents = data;
-          dfd.resolve(volunteerEvents);
+          dfd.resolve(data);
         })
         .error(function (error, status, headers, config) {
           dfd.reject(error.reason);
@@ -482,8 +505,12 @@ function volunteerEventService($q, $http, $upload) {
 
     getVolunteerEvent: function(name) {
       var dfd = $q.defer();
-      $http.get('/api/volunteerEvents/' + name)
+      var config = {
+        transformResponse: transformResponse
+      };
+      $http.get('/api/volunteerEvents/' + name, config)
         .success(function(data, status, headers, config) {
+          formatDate(data);
           dfd.resolve(data);
         })
         .error(function(error, status, headers, config) {
@@ -507,13 +534,11 @@ function volunteerEventService($q, $http, $upload) {
         data: volunteerEvent,
         file: volunteerEvent.img
       }).progress(function(evt) {
-        console.log('percent: ' + parseInt(100.0 * evt.loaded / evt.total));
       }).success(function(data, status, headers, config) {
         // file is uploaded successfully
-        console.log(data);
+        formatDate(data);
         dfd.resolve(data);
       }).error(function(error, status, headers, config) {
-        console.log(error);
         dfd.reject(error.reason);
       });
 
@@ -528,37 +553,16 @@ function volunteerEventService($q, $http, $upload) {
         url: url,
         file: volunteerEvent.imgTmp
       }).progress(function(evt) {
-        console.log('percent: ' + parseInt(100.0 * evt.loaded / evt.total));
       }).success(function(data, status, headers, config) {
         // file is uploaded successfully
-        console.log(data);
+        formatDate(data);
         dfd.resolve(data);
       }).error(function(error, status, headers, config) {
-        console.log(error);
         dfd.reject(error.reason);
       });
 
       return dfd.promise;
     }
-  };
-}
-angular.module('app').controller('adminCtrl', adminCtrl);
-adminCtrl.$inject = ['$scope', '$location', 'notifierService', 'authorizationService'];
-function adminCtrl($scope, $location, notifierService, authorizationService) {
-  $scope.createMember = function () {
-    var newMemberData = {
-      username: $scope.username,
-      password: $scope.password,
-      firstName: $scope.firstName,
-      lastName: $scope.lastName
-    };
-
-    authorizationService.createMember(newMemberData).then(function () {
-      notifierService.notify('Member account created!');
-      $location.path('/');
-    }, function (reason) {
-      notifierService.error(reason);
-    });
   };
 }
 angular.module('app').controller('campaignsCtrl', campaignsCtrl);
@@ -600,6 +604,25 @@ function campaignsCtrl($scope, $sce, $location, campaignService) {
 }
 
 
+angular.module('app').controller('adminCtrl', adminCtrl);
+adminCtrl.$inject = ['$scope', '$location', 'notifierService', 'authorizationService'];
+function adminCtrl($scope, $location, notifierService, authorizationService) {
+  $scope.createMember = function () {
+    var newMemberData = {
+      username: $scope.username,
+      password: $scope.password,
+      firstName: $scope.firstName,
+      lastName: $scope.lastName
+    };
+
+    authorizationService.createMember(newMemberData).then(function () {
+      notifierService.notify('Member account created!');
+      $location.path('/');
+    }, function (reason) {
+      notifierService.error(reason);
+    });
+  };
+}
 angular.module('app').controller('inventoryCtrl', inventoryCtrl);
 inventoryCtrl.$inject = ['$scope', 'inventoryService', 'notifierService', 'identityService'];
 function inventoryCtrl($scope, inventoryService, notifierService, identityService) {
@@ -782,7 +805,6 @@ function confirmDeleteMemberCtrl($scope, $modalInstance, memberService, notifier
     $modalInstance.dismiss();
   };
 }
-confirmDeleteMemberCtrl.$inject = ["$scope", "$modalInstance", "memberService", "notifierService", "member"];
 
 angular.module('app').controller('membersCtrl', membersCtrl);
 membersCtrl.$inject = ['$scope', '$location', '$window', 'memberService', 'notifierService', 'identityService'];
@@ -927,5 +949,82 @@ function volunteerEventCreateCtrl($scope, $location, notifierService, volunteerE
 
   $scope.onFileSelect = function($files) {
     $scope.img = $files[0];
+  };
+}
+angular.module('app').controller('volunteerEventEditCtrl', volunteerEventEditCtrl);
+volunteerEventEditCtrl.$inject = ['$scope', '$route', 'notifierService', 'volunteerEventService', 'identityService'];
+function volunteerEventEditCtrl($scope, $route, notifierService, volunteerEventService, identityService) {
+  $scope.identityService = identityService;
+  $scope.volunteerEventToEdit = undefined;
+  $scope.showImgTmp = false;
+
+  volunteerEventService.getVolunteerEvent($route.current.params.id).then(function(volunteerEvent) {
+    $scope.volunteerEventToEdit = volunteerEvent;
+  });
+
+  $scope.saveVolunteerEvent = function() {
+    volunteerEventService.saveVolunteerEvent($scope.volunteerEventToEdit).then(function(volunteerEvent) {
+      $scope.volunteerEventToEdit = volunteerEvent;
+      notifierService.notify('Volunteer event has been updated');
+    }, function(reason) {
+      notifierService.error(reason);
+    });
+  };
+
+  $scope.onFileSelect = function($files) {
+    $scope.volunteerEventToEdit.imgTmp = $files[0];
+    volunteerEventService.saveVolunteerEventTmpImg($scope.volunteerEventToEdit).then(function(volunteerEvent) {
+      $scope.volunteerEventToEdit = volunteerEvent;
+      $scope.volunteerEventToEdit.img = $files[0];
+      $scope.showImgTmp = true;
+    });
+  };
+}
+angular.module('app').controller('volunteerEventListCtrl', volunteerEventListCtrl);
+volunteerEventListCtrl.$inject = ['$scope', '$location', '$modal', 'volunteerEventService', 'identityService'];
+function volunteerEventListCtrl($scope, $location, $modal, volunteerEventService, identityService) {
+  $scope.identity = identityService;
+
+  getVolunteerEvents();
+
+  function getVolunteerEvents() {
+    volunteerEventService.getVolunteerEvents().then(function (volunteerEvents) {
+      $scope.volunteerEvents = volunteerEvents;
+    });
+  }
+
+  $scope.editVolunteerEvent = function(volunteerEvent) {
+    $location.path('/volunteer-event-edit/' + volunteerEvent._id);
+  };
+
+  $scope.deleteVolunteerEvent = function(volunteerEvent) {
+    var modalInstance = $modal.open({
+      templateUrl: '/partials/volunteerEventList/confirm-delete-volunteer-event-modal',
+      controller: confirmDeleteVolunteerEventCtrl,
+      resolve: {
+        volunteerEvent: function () {
+          return volunteerEvent;
+        }
+      }
+    });
+    modalInstance.result.then(function() {
+      getVolunteerEvents();
+    });
+  };
+}
+
+function confirmDeleteVolunteerEventCtrl($scope, $modalInstance, volunteerEventService, notifierService, volunteerEvent) {
+  $scope.volunteerEvent = volunteerEvent;
+  $scope.confirm = function () {
+    volunteerEventService.deleteVolunteerEvent(volunteerEvent).then(function() {
+      notifierService.notify('Volunteer event ' + volunteerEvent.username + ' has been deleted');
+    }, function(reason) {
+      notifierService.error(reason);
+    });
+    $modalInstance.close();
+  };
+
+  $scope.cancel = function () {
+    $modalInstance.dismiss();
   };
 }

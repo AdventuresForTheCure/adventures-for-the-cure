@@ -1,9 +1,19 @@
 angular.module('app').factory('volunteerEventService', ['$q', '$http', '$upload', volunteerEventService]);
+
+function formatDate(data) {
+  if (data && data.date) {
+    data.date = new Date(Date.parse(data.date));
+  }
+}
+
 function volunteerEventService($q, $http, $upload) {
   var volunteerEvents;
 
   function transformResponse(data) {
     data = JSON.parse(data);
+    for (var i = 0; i < data.length; i++) {
+      formatDate(data);
+    }
     return data;
   }
 
@@ -27,8 +37,7 @@ function volunteerEventService($q, $http, $upload) {
       };
       $http.get('/api/volunteerEvents/', config)
         .success(function (data, status, headers, config) {
-          volunteerEvents = data;
-          dfd.resolve(volunteerEvents);
+          dfd.resolve(data);
         })
         .error(function (error, status, headers, config) {
           dfd.reject(error.reason);
@@ -38,8 +47,12 @@ function volunteerEventService($q, $http, $upload) {
 
     getVolunteerEvent: function(name) {
       var dfd = $q.defer();
-      $http.get('/api/volunteerEvents/' + name)
+      var config = {
+        transformResponse: transformResponse
+      };
+      $http.get('/api/volunteerEvents/' + name, config)
         .success(function(data, status, headers, config) {
+          formatDate(data);
           dfd.resolve(data);
         })
         .error(function(error, status, headers, config) {
@@ -63,13 +76,11 @@ function volunteerEventService($q, $http, $upload) {
         data: volunteerEvent,
         file: volunteerEvent.img
       }).progress(function(evt) {
-        console.log('percent: ' + parseInt(100.0 * evt.loaded / evt.total));
       }).success(function(data, status, headers, config) {
         // file is uploaded successfully
-        console.log(data);
+        formatDate(data);
         dfd.resolve(data);
       }).error(function(error, status, headers, config) {
-        console.log(error);
         dfd.reject(error.reason);
       });
 
@@ -84,13 +95,11 @@ function volunteerEventService($q, $http, $upload) {
         url: url,
         file: volunteerEvent.imgTmp
       }).progress(function(evt) {
-        console.log('percent: ' + parseInt(100.0 * evt.loaded / evt.total));
       }).success(function(data, status, headers, config) {
         // file is uploaded successfully
-        console.log(data);
+        formatDate(data);
         dfd.resolve(data);
       }).error(function(error, status, headers, config) {
-        console.log(error);
         dfd.reject(error.reason);
       });
 

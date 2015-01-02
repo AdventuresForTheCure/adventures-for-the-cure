@@ -1,0 +1,35 @@
+.row(ng-controller='volunteerEventEditCtrl')
+  .col-lg-12
+    .well
+      form.form-horizontal(name="volunteerEventEditForm")
+        fieldset
+          legend Edit Profile: {{volunteerEventToEdit.name}}
+          .form-group
+            label.col-md-3.control-label(for="name") Name
+            .col-md-9
+              input.form-control(name="name", type="text", placeholder="Name", ng-model="volunteerEventToEdit.name", required, autocomplete="off" )
+          .form-group
+            label.col-md-3.control-label(for="date") Date
+            .col-md-9
+              input.form-control.date(name="date", type="date", ng-model="volunteerEventToEdit.date", autocomplete="off" )
+          .form-group()
+            label.col-md-3.control-label(for="isAfcEvent") AFC Event
+            .col-md-9
+              input(name="isAfcEvent", type="checkbox", ng-model="volunteerEventToEdit.isAfcEvent")
+          .form-group
+            label.col-md-3.control-label(for="currentImage") Image / Logo
+            .col-md-9
+              a(ng-if="!showImgTmp" href="{{volunteerEventToEdit.imgPath}}" target="_blank")
+                img(src="{{volunteerEventToEdit.imgPath}}" width="100px" height="auto" alt="No image!")
+              a(ng-if="showImgTmp" href="{{volunteerEventToEdit.imgPathTmp}}" target="_blank")
+                img(src="{{volunteerEventToEdit.imgPathTmp}}" width="100px" height="auto" alt="No image!")
+          .form-group
+            label.col-md-3.control-label(for="imageUpload") New Image File
+            .col-md-9
+              input(name="imageUpload" type="file" ng-file-select="onFileSelect($files)" accept="image/*")
+          .form-group
+            .col-md-9.col-md-offset-2
+              .pull-right
+                button.btn.btn-primary(ng-click="saveVolunteerEvent()", ng-disabled="volunteerEventEditForm.$invalid") Submit
+                | &nbsp;
+                a.btn.btn-default(href="/volunteerEvent-list") Cancel

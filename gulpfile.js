@@ -13,7 +13,7 @@ var publicdist = './public/dist';
 
 gulp.task('public-clean', function() {
   return gulp.src(publicdist, {read: false})
-    .pipe(plug.clean({force: true}));
+    .pipe(plug.clean());
 });
 
 gulp.task('public-jshint', function() {
@@ -24,12 +24,12 @@ gulp.task('public-jshint', function() {
 
 gulp.task('public-bundlejs', function() {
   return gulp.src(publicjs)
-    .pipe(plug.ngAnnotate())
+//    .pipe(plug.ngAnnotate())
     .pipe(plug.concat('app.js'))
-    .pipe(gulp.dest(publicdist))
-    .pipe(plug.rename({suffix: '.min'}))
-    .pipe(plug.uglify())
     .pipe(gulp.dest(publicdist));
+//    .pipe(plug.rename({suffix: '.min'}))
+//    .pipe(plug.uglify())
+//    .pipe(gulp.dest(publicdist));
 });
 
 gulp.task('public-test', function() {
@@ -37,8 +37,8 @@ gulp.task('public-test', function() {
     .pipe(plug.mocha({reporter: 'spec'}));
 });
 
-gulp.task('public-all', function(callback) {
-  runSequence('public-clean', ['public-jshint', 'public-bundlejs'], callback);
+gulp.task('public-all', ['public-clean'], function(callback) {
+  runSequence('public-jshint', 'public-bundlejs', callback);
 });
 
 gulp.task('server-jshint', function() {
