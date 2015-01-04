@@ -6,9 +6,9 @@ function authorizationService($http, $q, identityService, Member) {
       var deferred = $q.defer();
       $http.post('/login', {username: username, password: password}).then(function(response) {
         if (response.data.success) {
-          var user = new Member();
-          angular.extend(user, response.data.user);
-          identityService.currentMember = user;
+          var member = new Member();
+          angular.extend(member, response.data.member);
+          identityService.currentMember = member;
           deferred.resolve(true);
         } else {
           deferred.resolve(false);
