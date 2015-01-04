@@ -672,20 +672,6 @@ function inventoryCtrl($scope, inventoryService, notifierService, identityServic
 }
 
 
-angular.module('app').controller('loginCtrl', loginCtrl);
-loginCtrl.$inject = ['$scope', '$location', 'notifierService', 'authorizationService'];
-function loginCtrl($scope, $location, notifierService, authorizationService) {
-  $scope.login = function() {
-    authorizationService.authenticateMember($scope.loginUsername, $scope.loginPassword).then(function(success) {
-      if (success) {
-        notifierService.notify('You have successfully signed in!');
-        $location.path('/');
-      } else {
-        notifierService.error('Username/Password combination incorrect');
-      }
-    });
-  };
-}
 angular.module('app').controller('memberCreateCtrl', memberCreateCtrl);
 memberCreateCtrl.$inject = ['$scope', '$location', 'notifierService', 'memberService'];
 function memberCreateCtrl($scope, $location, notifierService, memberService) {
@@ -723,6 +709,20 @@ function memberCreateCtrl($scope, $location, notifierService, memberService) {
 
   $scope.onFileSelect = function($files) {
     $scope.img = $files[0];
+  };
+}
+angular.module('app').controller('loginCtrl', loginCtrl);
+loginCtrl.$inject = ['$scope', '$location', 'notifierService', 'authorizationService'];
+function loginCtrl($scope, $location, notifierService, authorizationService) {
+  $scope.login = function() {
+    authorizationService.authenticateMember($scope.loginUsername, $scope.loginPassword).then(function(success) {
+      if (success) {
+        notifierService.notify('You have successfully signed in!');
+        $location.path('/');
+      } else {
+        notifierService.error('Username/Password combination incorrect');
+      }
+    });
   };
 }
 angular.module('app').controller('memberEditCtrl', memberEditCtrl);

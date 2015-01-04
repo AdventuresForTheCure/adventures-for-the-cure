@@ -12,32 +12,48 @@ exports.saveMember = function(req, res, next) {
     errorHandler.sendError(req, res, err, 403);
   }
 
-  cloudinaryWrapper.saveImg(req.files.img, memberData.name, function(err, result) {
-    if(err) { errorHandler.sendError(req, res, err); }
-    else {
-      if (!result) {
-        memberData.imgPath = '';
-      } else {
-        memberData.imgPath = result.url;
+  // if there is an image then save it first
+  if (req.files.img) {
+    cloudinaryWrapper.saveImg(req.files.img, memberData.name, function (err, result) {
+      if (err) {
+        errorHandler.sendError(req, res, err);
       }
-      memberData.salt = encrypt.createSalt();
-      memberData.hashedPwd = encrypt.hashPwd(memberData.salt, memberData.password);
-
-      // create the member
-      Member.create(memberData, function (err, member) {
-        if (err) { errorHandler.sendError(req, res, err); }
-        else {
-          // if this request to create a member was not made by a current member then log the new member in
-          if (!req.user) {
-            req.user = member;
-            next();
-          }
-          // otherwise keep the current member logged in and return success
-          else {
-            res.send(member);
-          }
+      else {
+        if (!result) {
+          memberData.imgPath = '';
+        } else {
+          memberData.imgPath = result.url;
         }
-      });
+        // save member data
+        saveMemberData(req, res, memberData);
+      }
+    });
+  }
+  // save member data
+  else {
+    saveMemberData(req, res, memberData);
+  }
+};
+
+function saveMemberData(req, res, memberData) {
+  memberData.salt = encrypt.createSalt();
+  memberData.hashedPwd = encrypt.hashPwd(memberData.salt, memberData.password);
+
+  // create the member
+  Member.create(memberData, function (err, member) {
+    if (err) {
+      errorHandler.sendError(req, res, err);
+    }
+    else {
+      // if this request to create a member was not made by a current member then log the new member in
+      if (!req.user) {
+        req.user = member;
+        next();
+      }
+      // otherwise keep the current member logged in and return success
+      else {
+        res.send(member);
+      }
     }
   });
 };

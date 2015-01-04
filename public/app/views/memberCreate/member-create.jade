@@ -22,7 +22,7 @@
         .form-group
           label.col-md-2.control-label(for="bio") Bio
           .col-md-10
-            textarea.form-control(name="bio", ng-model="bio", required, autocomplete="off" )
+            textarea.form-control(name="bio", ng-model="bio", autocomplete="off" )
         .form-group
           label.col-md-2.control-label(for="adminRole") Admin
           .col-md-10
@@ -38,10 +38,10 @@
         .form-group
           label.col-md-2.control-label(for="image")
           .col-md-10
-            input(name="img" type="file" ng-file-select="onFileSelect($files)" accept="image/*", required)
+            input(name="img" type="file" ng-file-select="onFileSelect($files)" accept="image/*")
         .form-group
           .col-md-10.col-md-offset-2
             .pull-right
-              button.btn.btn-primary(ng-click="createMember()", ng-disabled="createMemberForm.$invalid || !img") Create
+              button.btn.btn-primary(ng-click="createMember()", ng-disabled="createMemberForm.$invalid") Create
               | &nbsp;
               a.btn.btn-default(href="/") Cancel
