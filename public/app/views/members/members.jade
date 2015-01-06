@@ -31,7 +31,7 @@
         br
       p(ng-if='editMode')
         textarea.form-control(name="bio", ng-model="selectedMember.bio", required, autocomplete="off" )
-      p(ng-if='!editMode')
+      p.member-bio(ng-if='!editMode')
         | {{selectedMember.bio}}
       p(ng-if='ableToEdit()' style='text-align:right')
         a(ng-if='editMode' ng-click='saveMember()' href='') Save

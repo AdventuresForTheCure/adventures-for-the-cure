@@ -416,12 +416,12 @@ function ToastrWrapper() {
   toastr.options = {
     'closeButton': true,
     'debug': false,
-    'positionClass': 'toast-bottom-full-width',
+    'positionClass': 'toast-top-full-width',
     'onclick': null,
-    'showDuration': '300',
+    'showDuration': '3000',
     'hideDuration': '1000',
-    'timeOut': '5000',
-    'extendedTimeOut': '1000',
+    'timeOut': '10000',
+    'extendedTimeOut': '2000',
     'showEasing': 'swing',
     'hideEasing': 'linear',
     'showMethod': 'fadeIn',
@@ -672,6 +672,20 @@ function inventoryCtrl($scope, inventoryService, notifierService, identityServic
 }
 
 
+angular.module('app').controller('loginCtrl', loginCtrl);
+loginCtrl.$inject = ['$scope', '$location', 'notifierService', 'authorizationService'];
+function loginCtrl($scope, $location, notifierService, authorizationService) {
+  $scope.login = function() {
+    authorizationService.authenticateMember($scope.loginUsername, $scope.loginPassword).then(function(success) {
+      if (success) {
+        notifierService.notify('You have successfully signed in!');
+        $location.path('/');
+      } else {
+        notifierService.error('Username/Password combination incorrect');
+      }
+    });
+  };
+}
 angular.module('app').controller('memberCreateCtrl', memberCreateCtrl);
 memberCreateCtrl.$inject = ['$scope', '$location', 'notifierService', 'memberService'];
 function memberCreateCtrl($scope, $location, notifierService, memberService) {
@@ -711,20 +725,6 @@ function memberCreateCtrl($scope, $location, notifierService, memberService) {
     $scope.img = $files[0];
   };
 }
-angular.module('app').controller('loginCtrl', loginCtrl);
-loginCtrl.$inject = ['$scope', '$location', 'notifierService', 'authorizationService'];
-function loginCtrl($scope, $location, notifierService, authorizationService) {
-  $scope.login = function() {
-    authorizationService.authenticateMember($scope.loginUsername, $scope.loginPassword).then(function(success) {
-      if (success) {
-        notifierService.notify('You have successfully signed in!');
-        $location.path('/');
-      } else {
-        notifierService.error('Username/Password combination incorrect');
-      }
-    });
-  };
-}
 angular.module('app').controller('memberEditCtrl', memberEditCtrl);
 memberEditCtrl.$inject = ['$scope', '$route', '$location', 'notifierService', 'memberService', 'identityService'];
 function memberEditCtrl($scope, $route, $location, notifierService, memberService, identityService) {
@@ -762,8 +762,6 @@ memberListCtrl.$inject = ['$scope', '$location', '$modal', 'memberService', 'ide
 function memberListCtrl($scope, $location, $modal, memberService, identityService) {
   $scope.identity = identityService;
 
-  getMembers();
-
   function getMembers() {
     memberService.getMembers().then(function (members) {
       $scope.members = members;
@@ -788,6 +786,8 @@ function memberListCtrl($scope, $location, $modal, memberService, identityServic
       getMembers();
     });
   };
+
+  getMembers();
 }
 
 function confirmDeleteMemberCtrl($scope, $modalInstance, memberService, notifierService, member) {
@@ -805,7 +805,6 @@ function confirmDeleteMemberCtrl($scope, $modalInstance, memberService, notifier
     $modalInstance.dismiss();
   };
 }
-
 angular.module('app').controller('membersCtrl', membersCtrl);
 membersCtrl.$inject = ['$scope', '$location', '$window', 'memberService', 'notifierService', 'identityService'];
 function membersCtrl($scope, $location, $window, memberService, notifierService, identityService) {
@@ -819,12 +818,14 @@ function membersCtrl($scope, $location, $window, memberService, notifierService,
     $scope.allMembers = members;
     $scope.membersColumn1 = members.slice(0, (members.length / 2) + 1);
     $scope.membersColumn2 = members.slice((members.length / 2) + 1, members.length);
-    var selectedMemberName = $location.hash();
+    var urlMemberName = $location.hash();
     for (var i = 0; i < members.length; i++) {
-      if (members[i].name === selectedMemberName) {
+      if (members[i].name === urlMemberName) {
         $scope.selectMember(members[i]);
-      } else if (selectedMemberName === '' && members[i].name === 'Adam Driscoll') {
-        $scope.selectMember(members[i]);
+      } else if (urlMemberName === '' && identityService.isAuthenticated() && identityService.currentMember.name === members[i].name) {
+          $scope.selectMember(members[i]);
+      } else if (urlMemberName === '' && !identityService.isAuthenticated() && members[i].name === 'Adam Driscoll') {
+          $scope.selectMember(members[i]);
       }
     }
   });

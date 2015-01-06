@@ -114,3 +114,14 @@ a {
 	color:#990000;
 	font-style: italic;
 }
+
+.member-bio {
+    white-space: pre;
+}
+
+.toast-top-full-width {
+    left: 50px;
+    right: 50px;
+    top: 300px;
+    width: 90%;
+}

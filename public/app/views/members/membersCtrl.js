@@ -11,12 +11,14 @@ function membersCtrl($scope, $location, $window, memberService, notifierService,
     $scope.allMembers = members;
     $scope.membersColumn1 = members.slice(0, (members.length / 2) + 1);
     $scope.membersColumn2 = members.slice((members.length / 2) + 1, members.length);
-    var selectedMemberName = $location.hash();
+    var urlMemberName = $location.hash();
     for (var i = 0; i < members.length; i++) {
-      if (members[i].name === selectedMemberName) {
+      if (members[i].name === urlMemberName) {
         $scope.selectMember(members[i]);
-      } else if (selectedMemberName === '' && members[i].name === 'Adam Driscoll') {
-        $scope.selectMember(members[i]);
+      } else if (urlMemberName === '' && identityService.isAuthenticated() && identityService.currentMember.name === members[i].name) {
+          $scope.selectMember(members[i]);
+      } else if (urlMemberName === '' && !identityService.isAuthenticated() && members[i].name === 'Adam Driscoll') {
+          $scope.selectMember(members[i]);
       }
     }
   });

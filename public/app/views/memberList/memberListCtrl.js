@@ -3,8 +3,6 @@ memberListCtrl.$inject = ['$scope', '$location', '$modal', 'memberService', 'ide
 function memberListCtrl($scope, $location, $modal, memberService, identityService) {
   $scope.identity = identityService;
 
-  getMembers();
-
   function getMembers() {
     memberService.getMembers().then(function (members) {
       $scope.members = members;
@@ -29,6 +27,8 @@ function memberListCtrl($scope, $location, $modal, memberService, identityServic
       getMembers();
     });
   };
+
+  getMembers();
 }
 
 function confirmDeleteMemberCtrl($scope, $modalInstance, memberService, notifierService, member) {
