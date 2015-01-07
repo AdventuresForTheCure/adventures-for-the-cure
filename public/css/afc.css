@@ -117,6 +117,7 @@ a {
 
 .member-bio {
     white-space: pre;
+    word-wrap: break-word;
 }
 
 .toast-top-full-width {
