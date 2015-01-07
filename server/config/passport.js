@@ -6,7 +6,8 @@ var Member = mongoose.model('Member');
 module.exports = function() {
   passport.use(new LocalStrategy(
     function(username, password, done) {
-      Member.findOne({username:username}).exec(function(err, member) {
+      var regex = new RegExp(['^',username,'$'].join(''),'i');
+      Member.findOne({username: regex}).exec(function(err, member) {
         if(member && member.authenticate(password)) {
           return done(null, member);
         } else {
