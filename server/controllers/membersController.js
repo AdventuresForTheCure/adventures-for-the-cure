@@ -3,6 +3,7 @@ var errorHandler = require('../utilities/errorHandler');
 var encrypt = require('../utilities/encryption');
 var cloudinaryWrapper = require('../utilities/cloudinaryWrapper');
 var config = require('../config/config');
+var emailer = require('../utilities/emailer');
 
 exports.saveMember = function(req, res, next) {
   var memberData = Member.toMemberData(req.body);
@@ -184,8 +185,11 @@ function updateMember(req, res, memberId, memberData) {
     if (err) { errorHandler.sendError(req, res, err); }
     else {
       if (req.user._id.toString() === memberId) {
+        emailer.sendAuditMessageEMail(req.user.prettyName() + ' updated their profile');
         // if updating self then set self to the newly updated member object
         req.user = member;
+      } else {
+        emailer.sendAuditMessageEMail(member.prettyName() + ' was updated by ' + req.user.prettyName());
       }
       res.send(member);
     }

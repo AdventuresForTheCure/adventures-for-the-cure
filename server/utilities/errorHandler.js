@@ -1,3 +1,6 @@
+var emailer = require('../utilities/emailer');
+var htmlUtils = require('../utilities/htmlUtils');
+
 /**
  * Return an error response to a server request
  *
@@ -14,8 +17,19 @@ exports.sendError = function(req, res, err, status) {
     err = new Error(err);
   }
 
+  var errMsg = err.toString();
+  // get the error as a string and add the user who generated the error
+  if (req.user) {
+    errMsg = 'Error: ' + req.user.prettyName() + ': ' + errMsg;
+  } else {
+    errMsg = 'Error: ' + errMsg;
+  }
+
   // log the error
-  console.error(err);
+  console.error(errMsg);
+
+  // email the error to the admins
+  emailer.sendErrorMessageEMail(errMsg);
 
   // set the status to 400 if it was not explicitly set already
   status = (status) ? status : 400;
@@ -24,5 +38,5 @@ exports.sendError = function(req, res, err, status) {
   res.status(status);
 
   // return the error
-  res.send({reason: err.toString()});
+  res.send({reason: htmlUtils.encode(errMsg)});
 };

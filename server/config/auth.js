@@ -1,4 +1,5 @@
 var passport = require('passport');
+var emailer = require('../utilities/emailer');
 
 exports.login = function(req, res, next) {
   var auth = passport.authenticate('local', function(err, member) {
@@ -6,7 +7,10 @@ exports.login = function(req, res, next) {
     if(!member) { res.send({success:false});}
     req.logIn(member, function(err) {
       if(err) {return next(err);}
-      res.send({success:true, member: member});
+      else {
+        emailer.sendAuditMessageEMail(member.prettyName() + ' logged in');
+        res.send({success: true, member: member});
+      }
     });
   });
   auth(req, res, next);

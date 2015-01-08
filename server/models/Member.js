@@ -44,6 +44,9 @@ memberSchema.methods = {
   },
   hasRole: function(role) {
     return this.roles && this.roles.indexOf(role) > -1;
+  },
+  prettyName: function() {
+    return this.name + '<' + this.username + '>';
   }
 };
 var Member = mongoose.model('Member', memberSchema);

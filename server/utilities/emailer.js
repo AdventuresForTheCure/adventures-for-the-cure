@@ -1,14 +1,15 @@
 var nodemailer = require('nodemailer');
+var htmlUtils = require('../utilities/htmlUtils');
 var Member = require('mongoose').model('Member');
 
 var emailSubjectPrefix = '[afc-website]';
 
 exports.sendAuditMessageEMail = function(message) {
-  sendAdminOnlyEmail('Audit Msg', message);
+  sendAdminOnlyEmail('Audit Msg', htmlUtils.encode(message));
 };
 
 exports.sendErrorMessageEMail = function(message) {
-  sendAdminOnlyEmail('Error Msg', message);
+  sendAdminOnlyEmail('Error Msg', htmlUtils.encode(message));
 };
 
 // create reusable transport method (opens pool of SMTP connections)
@@ -23,7 +24,7 @@ smtpTransport = nodemailer.createTransport('SMTP',{
 sendEmail = function(tos, subject, message) {
   // setup e-mail data with unicode symbols
   var mailOptions = {
-    from: 'mosaic.groups@gmail.com', // sender address
+    from: 'afc.website@gmail.com', // sender address
     to: tos, // list of receivers
     subject: emailSubjectPrefix + ' ' + subject, // Subject line
     html: message
