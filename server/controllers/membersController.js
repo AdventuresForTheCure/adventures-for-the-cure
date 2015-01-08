@@ -132,7 +132,7 @@ exports.updateMemberTmpImg = function(req, res) {
 };
 
 exports.getMembers = function(req, res) {
-  Member.find({}).exec(function (err, collection) {
+  Member.find({}).sort({name: 1}).exec(function (err, collection) {
     if (err) { errorHandler.sendError(req, res, err);}
     res.send(collection);
   });
