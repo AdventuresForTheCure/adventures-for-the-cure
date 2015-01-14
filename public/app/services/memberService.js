@@ -1,7 +1,5 @@
 angular.module('app').factory('memberService', ['$q', '$http', '$upload', 'Member', memberService]);
 function memberService($q, $http, $upload, Member) {
-  var members;
-
   function transformResponse(data) {
     data = JSON.parse(data);
     var members = [];
@@ -27,13 +25,11 @@ function memberService($q, $http, $upload, Member) {
     getMembers: function() {
       var dfd = $q.defer();
       var config = {
-        transformResponse: transformResponse,
-        cache: true
+        transformResponse: transformResponse
       };
       $http.get('/api/members/', config)
         .success(function (data, status, headers, config) {
-          members = data;
-          dfd.resolve(members);
+          dfd.resolve(data);
         })
         .error(function (error, status, headers, config) {
           dfd.reject(error.reason);

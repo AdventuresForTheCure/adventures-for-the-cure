@@ -1,9 +1,10 @@
 angular.module('app').controller('memberEditCtrl', memberEditCtrl);
-memberEditCtrl.$inject = ['$scope', '$route', '$location', 'notifierService', 'memberService', 'identityService'];
-function memberEditCtrl($scope, $route, $location, notifierService, memberService, identityService) {
+memberEditCtrl.$inject = ['$scope', '$route', 'notifierService', 'memberService', 'identityService'];
+function memberEditCtrl($scope, $route, notifierService, memberService, identityService) {
   $scope.identityService = identityService;
   $scope.memberToEdit = undefined;
   $scope.showImgTmp = false;
+  $scope.loadingTmpImg = false;
 
   memberService.getMember($route.current.params.id).then(function(member) {
     $scope.memberToEdit = member;
@@ -23,10 +24,24 @@ function memberEditCtrl($scope, $route, $location, notifierService, memberServic
 
   $scope.onFileSelect = function($files) {
     $scope.memberToEdit.imgTmp = $files[0];
+    $scope.loadingTmpImg = true;
     memberService.saveMemberTmpImg($scope.memberToEdit).then(function(member) {
-      $scope.memberToEdit = member;
-      $scope.memberToEdit.img = $files[0];
       $scope.showImgTmp = true;
+      $scope.loadingTmpImg = false;
+      $scope.memberToEdit.imgPathTmp = member.imgPathTmp;
+      $scope.memberToEdit.img = $files[0];
+    }, function(reason) {
+      $scope.showImgTmp = false;
+      $scope.loadingTmpImg = false;
+      notifierService.error(reason);
     });
+  };
+
+  $scope.isInvalid = function() {
+    var invalid = false;
+    if ($scope.memberEditForm.$invalid || $scope.loadingTmpImg) {
+      invalid = true;
+    }
+    return invalid;
   };
 }

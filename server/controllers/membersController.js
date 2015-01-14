@@ -60,7 +60,7 @@ function saveMemberData(req, res, memberData) {
 };
 
 exports.updateMember = function(req, res) {
-  var memberId = req.params.id;;
+  var memberId = req.params.id;
   var memberData = Member.toMemberData(req.body);
 
   // if not updating self or if this is an not admin member

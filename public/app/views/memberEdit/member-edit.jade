@@ -5,21 +5,21 @@
         fieldset
           legend Edit Profile: {{memberToEdit.name}}
           .form-group
-            label.col-md-3.control-label(for="username") Username (Email)
+            label.col-md-3.control-label(for="username") Username (Email) *
             .col-md-9
               input.form-control(name="username", type="email", placeholder="Email", ng-model="memberToEdit.username", required, autocomplete="off" )
           .form-group
-            label.col-md-3.control-label(for="name") Name
+            label.col-md-3.control-label(for="name") Name *
             .col-md-9
               input.form-control(name="name", type="text", placeholder="Name", ng-model="memberToEdit.name", required, autocomplete="off" )
           .form-group
-            label.col-md-3.control-label(for="password") Password
+            label.col-md-3.control-label(for="password") Password *
             .col-md-9
-              input.form-control(name="password", type="password", placeholder="Password", ng-model="memberToEdit.password", autocomplete="off" )
+              input.form-control(name="password", type="password", placeholder="Password", ng-model="memberToEdit.password", required, autocomplete="off" )
           .form-group
             label.col-md-3.control-label(for="bio") Bio
             .col-md-9
-              textarea.form-control(name="bio", ng-model="memberToEdit.bio", required, autocomplete="off" )
+              textarea.form-control(name="bio", ng-model="memberToEdit.bio", autocomplete="off" )
           .form-group(ng-if='identityService.isAdmin()')
             label.col-md-3.control-label(for="adminRole") Admin
             .col-md-9
@@ -33,9 +33,9 @@
             .col-md-9
               input(name="boardMemberRole", type="checkbox", ng-model="memberToEdit.roles[2]", ng-true-value="board", ng-false-value="")
           .form-group
-            label.col-md-3.control-label(for="currentImage") Current Image
+            label.col-md-3.control-label(ng-if="showImgTmp || memberToEdit.imgPath" for="currentImage") Current Image
             .col-md-9
-              a(ng-if="!showImgTmp" href="{{memberToEdit.imgPath}}" target="_blank")
+              span(ng-if="!showImgTmp && memberToEdit.imgPath" href="{{memberToEdit.imgPath}}" target="_blank")
                 img(src="{{memberToEdit.imgPath}}" width="100px" height="auto" alt="No image!")
               a(ng-if="showImgTmp" href="{{memberToEdit.imgPathTmp}}" target="_blank")
                 img(src="{{memberToEdit.imgPathTmp}}" width="100px" height="auto" alt="No image!")
@@ -43,9 +43,10 @@
             label.col-md-3.control-label(for="imageUpload") New Image File
             .col-md-9
               input(name="imageUpload" type="file" ng-file-select="onFileSelect($files)" accept="image/*")
+              img(ng-if='loadingTmpImg' src='/img/loader.gif')
           .form-group
             .col-md-9.col-md-offset-2
               .pull-right
-                button.btn.btn-primary(ng-click="saveMember()", ng-disabled="memberEditForm.$invalid") Save
+                button.btn.btn-primary(ng-click="saveMember()", ng-disabled="isInvalid()") Save
                 | &nbsp;
                 a.btn.btn-default(href="/members") Cancel

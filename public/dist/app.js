@@ -30,14 +30,7 @@ angular.module('app').config(function($routeProvider, $locationProvider) {
     })
     .when('/rides', { templateUrl: '/partials/rides/rides'
     })
-    .when('/members', { templateUrl: '/partials/members/members',
-      resolve: {
-        members: function (memberService) {
-          memberService.getMembers().then(function (members) {
-            return members;
-          });
-        }
-      }
+    .when('/members', { templateUrl: '/partials/members/members'
     })
     .when('/results', { templateUrl: '/partials/results/results'
     })
@@ -86,44 +79,6 @@ angular.module('app').run(function($rootScope, $location, notifierService) {
     }
   });
 });
-angular.module('app').factory('Member', ['$resource', Member]);
-function Member($resource) {
-  var member = $resource('/api/members', {}, {});
-
-  member.prototype.isAdmin = function() {
-    return this.isRole('admin');
-  };
-  member.prototype.setAdmin = function(isSet) {
-    this.setRole('admin', isSet);
-  };
-
-  member.prototype.isInventory = function() {
-    return this.isRole('inventory');
-  };
-  member.prototype.setInventory = function(isSet) {
-    this.setRole('inventory', isSet);
-  };
-
-  member.prototype.isBoard = function() {
-    return this.isRole('board');
-  };
-  member.prototype.setBoard = function(isSet) {
-    this.setRole('board', isSet);
-  };
-
-  member.prototype.isRole = function(roleName) {
-    return this.roles && this.roles.indexOf(roleName) > -1;
-  };
-  member.prototype.setRole = function(roleName, isSet) {
-    if (isSet && this.roles.indexOf(roleName) === -1) {
-      this.roles.push(roleName);
-    } else {
-      var roleIndex = this.roles.indexOf(roleName);
-      this.roles.splice(roleIndex, 1);
-    }
-  };
-  return member;
-}
 angular.module('app').factory('authorizationService',
   ['$http', '$q', 'identityService', 'Member', authorizationService]);
 function authorizationService($http, $q, identityService, Member) {
@@ -289,8 +244,6 @@ function inventoryService($q, $http, InventoryItem) {
 }
 angular.module('app').factory('memberService', ['$q', '$http', '$upload', 'Member', memberService]);
 function memberService($q, $http, $upload, Member) {
-  var members;
-
   function transformResponse(data) {
     data = JSON.parse(data);
     var members = [];
@@ -316,13 +269,11 @@ function memberService($q, $http, $upload, Member) {
     getMembers: function() {
       var dfd = $q.defer();
       var config = {
-        transformResponse: transformResponse,
-        cache: true
+        transformResponse: transformResponse
       };
       $http.get('/api/members/', config)
         .success(function (data, status, headers, config) {
-          members = data;
-          dfd.resolve(members);
+          dfd.resolve(data);
         })
         .error(function (error, status, headers, config) {
           dfd.reject(error.reason);
@@ -565,6 +516,44 @@ function volunteerEventService($q, $http, $upload) {
     }
   };
 }
+angular.module('app').factory('Member', ['$resource', Member]);
+function Member($resource) {
+  var member = $resource('/api/members', {}, {});
+
+  member.prototype.isAdmin = function() {
+    return this.isRole('admin');
+  };
+  member.prototype.setAdmin = function(isSet) {
+    this.setRole('admin', isSet);
+  };
+
+  member.prototype.isInventory = function() {
+    return this.isRole('inventory');
+  };
+  member.prototype.setInventory = function(isSet) {
+    this.setRole('inventory', isSet);
+  };
+
+  member.prototype.isBoard = function() {
+    return this.isRole('board');
+  };
+  member.prototype.setBoard = function(isSet) {
+    this.setRole('board', isSet);
+  };
+
+  member.prototype.isRole = function(roleName) {
+    return this.roles && this.roles.indexOf(roleName) > -1;
+  };
+  member.prototype.setRole = function(roleName, isSet) {
+    if (isSet && this.roles.indexOf(roleName) === -1) {
+      this.roles.push(roleName);
+    } else {
+      var roleIndex = this.roles.indexOf(roleName);
+      this.roles.splice(roleIndex, 1);
+    }
+  };
+  return member;
+}
 angular.module('app').controller('adminCtrl', adminCtrl);
 adminCtrl.$inject = ['$scope', '$location', 'notifierService', 'authorizationService'];
 function adminCtrl($scope, $location, notifierService, authorizationService) {
@@ -726,11 +715,12 @@ function memberCreateCtrl($scope, $location, notifierService, memberService) {
   };
 }
 angular.module('app').controller('memberEditCtrl', memberEditCtrl);
-memberEditCtrl.$inject = ['$scope', '$route', '$location', 'notifierService', 'memberService', 'identityService'];
-function memberEditCtrl($scope, $route, $location, notifierService, memberService, identityService) {
+memberEditCtrl.$inject = ['$scope', '$route', 'notifierService', 'memberService', 'identityService'];
+function memberEditCtrl($scope, $route, notifierService, memberService, identityService) {
   $scope.identityService = identityService;
   $scope.memberToEdit = undefined;
   $scope.showImgTmp = false;
+  $scope.loadingTmpImg = false;
 
   memberService.getMember($route.current.params.id).then(function(member) {
     $scope.memberToEdit = member;
@@ -750,11 +740,25 @@ function memberEditCtrl($scope, $route, $location, notifierService, memberServic
 
   $scope.onFileSelect = function($files) {
     $scope.memberToEdit.imgTmp = $files[0];
+    $scope.loadingTmpImg = true;
     memberService.saveMemberTmpImg($scope.memberToEdit).then(function(member) {
-      $scope.memberToEdit = member;
-      $scope.memberToEdit.img = $files[0];
       $scope.showImgTmp = true;
+      $scope.loadingTmpImg = false;
+      $scope.memberToEdit.imgPathTmp = member.imgPathTmp;
+      $scope.memberToEdit.img = $files[0];
+    }, function(reason) {
+      $scope.showImgTmp = false;
+      $scope.loadingTmpImg = false;
+      notifierService.error(reason);
     });
+  };
+
+  $scope.isInvalid = function() {
+    var invalid = false;
+    if ($scope.memberEditForm.$invalid || $scope.loadingTmpImg) {
+      invalid = true;
+    }
+    return invalid;
   };
 }
 angular.module('app').controller('memberListCtrl', memberListCtrl);

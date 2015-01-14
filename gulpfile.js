@@ -78,7 +78,7 @@ gulp.task('nodemon', function() {
 });
 
 gulp.task('development', function(callback) {
-  runSequence('public-all', 'server-all', ['watch-all', 'nodemon'], callback);
+  runSequence('public-all', 'server-all', 'watch-all', 'nodemon', callback);
 });
 
 gulp.task('default', function(callback) {

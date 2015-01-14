@@ -30,14 +30,7 @@ angular.module('app').config(function($routeProvider, $locationProvider) {
     })
     .when('/rides', { templateUrl: '/partials/rides/rides'
     })
-    .when('/members', { templateUrl: '/partials/members/members',
-      resolve: {
-        members: function (memberService) {
-          memberService.getMembers().then(function (members) {
-            return members;
-          });
-        }
-      }
+    .when('/members', { templateUrl: '/partials/members/members'
     })
     .when('/results', { templateUrl: '/partials/results/results'
     })
