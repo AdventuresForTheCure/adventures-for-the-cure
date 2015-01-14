@@ -50,3 +50,7 @@
                 button.btn.btn-primary(ng-click="saveMember()", ng-disabled="isInvalid()") Save
                 | &nbsp;
                 a.btn.btn-default(href="/members") Cancel
+            .col-md-9.col-md-offset-2(ng-if="isInvalid()")
+              .pull-right
+                span.special(ng-if="memberEditForm.$invalid()") Must enter username, name, and password
+                span.special(ng-if="loadingTmpImg") Image uploading...
