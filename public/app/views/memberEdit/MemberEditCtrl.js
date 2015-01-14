@@ -18,7 +18,7 @@ function memberEditCtrl($scope, $route, notifierService, memberService, identity
       }
       notifierService.notify('Member has been updated');
     }, function(reason) {
-      notifierService.error(reason);
+      notifierService.error('Error saving member data, please try again...');
     });
   };
 
@@ -33,7 +33,7 @@ function memberEditCtrl($scope, $route, notifierService, memberService, identity
     }, function(reason) {
       $scope.showImgTmp = false;
       $scope.loadingTmpImg = false;
-      notifierService.error(reason);
+      notifierService.error('Error uploading image, please try again...');
     });
   };
 
