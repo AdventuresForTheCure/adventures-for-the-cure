@@ -20,8 +20,10 @@
         table.table.table-striped
           tr(ng-repeat='inventoryItem in inventoryItems[category]')
             // name
-            td
+            td(ng-if='!ableToEdit()')
               span{{inventoryItem.name}}
+            td(ng-if='ableToEdit()')
+              input(type='text' ng-model='inventoryItem.name' ng-change='update(inventoryItem)' style='width:75px' class='inventory-item-input')
             // price
             td
               span Price: {{inventoryItem.price | currency : symbol : 2 }}

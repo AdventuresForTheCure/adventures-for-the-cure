@@ -38,6 +38,8 @@ angular.module('app').config(function($routeProvider, $locationProvider) {
     })
     .when('/inventory', { templateUrl: '/partials/inventory/inventory'
     })
+    .when('/inventory_old', { templateUrl: '/partials/inventory/inventory_old.html'
+    })
     .when('/contact', { templateUrl: '/partials/contact/contact'
     })
     .when('/join', { templateUrl: '/partials/join/join'

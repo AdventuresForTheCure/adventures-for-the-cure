@@ -2,6 +2,13 @@ angular.module('app').controller('inventoryCtrl', inventoryCtrl);
 inventoryCtrl.$inject = ['$scope', 'inventoryService', 'notifierService', 'identityService'];
 function inventoryCtrl($scope, inventoryService, notifierService, identityService) {
   $scope.inventoryItems = {};
+  $scope.newInventoryItemData = {
+    name: 'Adventures For the Cure: The Doc',
+    category: 'General',
+    size: '',
+    quantity: 0,
+    price: 10.00
+  }
 
   $scope.getInventoryItems = function() {
     inventoryService.getInventoryItems().then(function(inventoryItems) {
@@ -29,6 +36,15 @@ function inventoryCtrl($scope, inventoryService, notifierService, identityServic
   $scope.update = function(inventoryItem) {
     inventoryService.save(inventoryItem).then(function(item) {
       notifierService.notify('Inventory item was update');
+    }, function(reason) {
+      notifierService.error(reason);
+    });
+  };
+
+  $scope.create = function() {
+    inventoryService.save(newInventoryItemData).then(function(item) {
+      notifierService.notify('New item was created');
+      $scope.getInventoryItems();
     }, function(reason) {
       notifierService.error(reason);
     });
