@@ -12,7 +12,7 @@ angular.module('app').config(function($routeProvider, $locationProvider) {
       return authorizationService.authorizeAuthorizedMemberForRoute('inventory');
     }},
     member: { auth: function($route, authorizationService) {
-      return authorizationService.authorizeAuthenticatedMemberForRoute($route);
+      return authorizationService.authorizeAuthorizedMemberForRoute();
     }}
   };
 

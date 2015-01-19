@@ -27,7 +27,9 @@ function authorizationService($http, $q, identityService, Member) {
     },
 
     authorizeAuthorizedMemberForRoute: function(role) {
-      if (identityService.isAuthorized(role)) {
+      if (!role && identityService.isAuthenticated()) {
+        return true;
+      } else if (identityService.isAuthorized(role)) {
         return true;
       } else {
         return $q.reject('not authorized');

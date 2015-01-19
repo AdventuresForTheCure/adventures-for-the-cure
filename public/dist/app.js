@@ -12,7 +12,7 @@ angular.module('app').config(function($routeProvider, $locationProvider) {
       return authorizationService.authorizeAuthorizedMemberForRoute('inventory');
     }},
     member: { auth: function($route, authorizationService) {
-      return authorizationService.authorizeAuthenticatedMemberForRoute($route);
+      return authorizationService.authorizeAuthorizedMemberForRoute();
     }}
   };
 
@@ -84,44 +84,6 @@ angular.module('app').run(function($rootScope, $location, notifierService) {
     }
   });
 });
-angular.module('app').factory('Member', ['$resource', Member]);
-function Member($resource) {
-  var member = $resource('/api/members', {}, {});
-
-  member.prototype.isAdmin = function() {
-    return this.isRole('admin');
-  };
-  member.prototype.setAdmin = function(isSet) {
-    this.setRole('admin', isSet);
-  };
-
-  member.prototype.isInventory = function() {
-    return this.isRole('inventory');
-  };
-  member.prototype.setInventory = function(isSet) {
-    this.setRole('inventory', isSet);
-  };
-
-  member.prototype.isBoard = function() {
-    return this.isRole('board');
-  };
-  member.prototype.setBoard = function(isSet) {
-    this.setRole('board', isSet);
-  };
-
-  member.prototype.isRole = function(roleName) {
-    return this.roles && this.roles.indexOf(roleName) > -1;
-  };
-  member.prototype.setRole = function(roleName, isSet) {
-    if (isSet && this.roles.indexOf(roleName) === -1) {
-      this.roles.push(roleName);
-    } else {
-      var roleIndex = this.roles.indexOf(roleName);
-      this.roles.splice(roleIndex, 1);
-    }
-  };
-  return member;
-}
 angular.module('app').factory('authorizationService',
   ['$http', '$q', 'identityService', 'Member', authorizationService]);
 function authorizationService($http, $q, identityService, Member) {
@@ -151,7 +113,9 @@ function authorizationService($http, $q, identityService, Member) {
     },
 
     authorizeAuthorizedMemberForRoute: function(role) {
-      if (identityService.isAuthorized(role)) {
+      if (!role && identityService.isAuthenticated()) {
+        return true;
+      } else if (identityService.isAuthorized(role)) {
         return true;
       } else {
         return $q.reject('not authorized');
@@ -558,6 +522,44 @@ function volunteerEventService($q, $http, $upload) {
       return dfd.promise;
     }
   };
+}
+angular.module('app').factory('Member', ['$resource', Member]);
+function Member($resource) {
+  var member = $resource('/api/members', {}, {});
+
+  member.prototype.isAdmin = function() {
+    return this.isRole('admin');
+  };
+  member.prototype.setAdmin = function(isSet) {
+    this.setRole('admin', isSet);
+  };
+
+  member.prototype.isInventory = function() {
+    return this.isRole('inventory');
+  };
+  member.prototype.setInventory = function(isSet) {
+    this.setRole('inventory', isSet);
+  };
+
+  member.prototype.isBoard = function() {
+    return this.isRole('board');
+  };
+  member.prototype.setBoard = function(isSet) {
+    this.setRole('board', isSet);
+  };
+
+  member.prototype.isRole = function(roleName) {
+    return this.roles && this.roles.indexOf(roleName) > -1;
+  };
+  member.prototype.setRole = function(roleName, isSet) {
+    if (isSet && this.roles.indexOf(roleName) === -1) {
+      this.roles.push(roleName);
+    } else {
+      var roleIndex = this.roles.indexOf(roleName);
+      this.roles.splice(roleIndex, 1);
+    }
+  };
+  return member;
 }
 angular.module('app').controller('adminCtrl', adminCtrl);
 adminCtrl.$inject = ['$scope', '$location', 'notifierService', 'authorizationService'];
