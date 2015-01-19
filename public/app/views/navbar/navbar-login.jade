@@ -41,11 +41,6 @@
               li(ng-if='identityService.isAdmin()')
                 a(href='/member-list') Members List
               li.divider(ng-if='identityService.isAdmin()' role='presentation')
-              li(ng-if='identityService.isBoard()')
-                a(href='/volunteer-event-create') Event Create
-              li(ng-if='identityService.isBoard()')
-                a(href='/volunteer-event-list') Events List
-              li.divider(ng-if='identityService.isAdmin()' role='presentation')
               li
                 a(href='/member-edit/{{identityService.currentMember._id}}') Profile
               li
