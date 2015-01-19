@@ -42,9 +42,7 @@ function saveMemberData(req, res, memberData) {
 
   // create the member
   Member.create(memberData, function (err, member) {
-    if (err) {
-      errorHandler.sendError(req, res, err);
-    }
+    if (err) { errorHandler.sendError(req, res, err); }
     else {
       // if this request to create a member was not made by a current member then log the new member in
       if (!req.user) {

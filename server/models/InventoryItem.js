@@ -3,7 +3,8 @@ var mongoose = require('mongoose');
 var inventoryItemSchema = mongoose.Schema({
   name: {
     type: String,
-    required: '{PATH} is required!'},
+    required: '{PATH} is required!',
+    unique:true},
   quantity: {
     type: Number,
     required: '{PATH} is required!'},
@@ -13,10 +14,6 @@ var inventoryItemSchema = mongoose.Schema({
   price: {
     type: Number,
     required:'{PATH} is required!'},
-  size: {
-    type:String},
-  year: {
-    type: String},
   imageUrl: {
     type:String
   },
@@ -44,7 +41,7 @@ InventoryItem.toInventoryItemData = function(inventoryItem) {
   if (inventoryItem.salePrice) {
     data.salePrice = inventoryItem.salePrice;
   }
-  return data;
+  return data;n
 };
 
 function createDefaultInventoryItems() {

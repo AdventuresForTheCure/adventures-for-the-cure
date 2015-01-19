@@ -61,3 +61,35 @@ exports.deleteInventoryItem = function(req, res) {
     });
   }
 };
+
+exports.updateInventoryItemTmpImg = function(req, res) {
+  var inventoryItemId = req.params.id;
+
+  if(!req.user.hasRole('inventory')) {
+    res.status(403);
+    return res.end();
+  }
+
+  InventoryItem.findById(inventoryItemId, function(err, inventoryItem) {
+    if (!member) { errorHandler.sendError(req, res, 'Inventory Item not found with id: ' + inventoryItemId); }
+    else {
+      var inventoryItemData = {};
+      // if there is an img to save then
+      // save the image by overwriting the old image using the inventoryItemData.imageId parameter
+      if (req.files.file) {
+        var imgName = "tmp " + inventoryItem.name;
+        cloudinaryWrapper.saveImg(req.files.file, imgName, function (err, result) {
+          if (err) { errorHandler.sendError(req, res, err); }
+          else {
+            inventoryItemData.imgPathTmp = result.url;
+            updateInventoryItem(req, res, inventoryItemId, inventoryItemData);
+          }
+        });
+      }
+      // otherwise save the member data
+      else {
+        updateInventoryItem(req, res, inventoryItemId, inventoryItemData);
+      }
+    }
+  });
+};

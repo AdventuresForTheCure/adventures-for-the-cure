@@ -65,6 +65,9 @@ angular.module('app').config(function($routeProvider, $locationProvider) {
     .when('/volunteer-event-list', { templateUrl: '/partials/volunteerEventList/volunteer-event-list',
       resolve: routeRoleChecks.board
     })
+    .when('/member-only', { templateUrl: '/partials/memberOnly/member-only',
+      resolve: routeRoleChecks.member
+    })
     .otherwise({
       templateUrl: '/partials/invalidPage/invalidPage'
     });

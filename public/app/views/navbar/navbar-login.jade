@@ -48,6 +48,8 @@
               li.divider(ng-if='identityService.isAdmin()' role='presentation')
               li
                 a(href='/member-edit/{{identityService.currentMember._id}}') Profile
+              li
+                a(href='/member-only') Members Only
               li.divider(role='presentation')
               li
                 a(href='', ng-click='signout()') Sign Out

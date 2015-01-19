@@ -2,13 +2,14 @@ angular.module('app').controller('inventoryCtrl', inventoryCtrl);
 inventoryCtrl.$inject = ['$scope', 'inventoryService', 'notifierService', 'identityService'];
 function inventoryCtrl($scope, inventoryService, notifierService, identityService) {
   $scope.inventoryItems = {};
-  $scope.newInventoryItemData = {
+  $scope.newItem = {
     name: 'Adventures For the Cure: The Doc',
     category: 'General',
-    size: '',
     quantity: 0,
     price: 10.00
   }
+  $scope.showImgTmp = false;
+  $scope.loadingTmpImg = false;
 
   $scope.getInventoryItems = function() {
     inventoryService.getInventoryItems().then(function(inventoryItems) {
@@ -56,6 +57,21 @@ function inventoryCtrl($scope, inventoryService, notifierService, identityServic
       notifierService.notify('Inventory item was deleted');
     }, function(reason) {
       notifierService.error(reason);
+    });
+  };
+
+  $scope.onFileSelect = function($files) {
+    $scope.memberToEdit.imgTmp = $files[0];
+    $scope.loadingTmpImg = true;
+    memberService.saveMemberTmpImg($scope.memberToEdit).then(function(member) {
+      $scope.showImgTmp = true;
+      $scope.loadingTmpImg = false;
+      $scope.memberToEdit.imgPathTmp = member.imgPathTmp;
+      $scope.memberToEdit.img = $files[0];
+    }, function(reason) {
+      $scope.showImgTmp = false;
+      $scope.loadingTmpImg = false;
+      notifierService.error('Error uploading image, please try again...');
     });
   };
 
