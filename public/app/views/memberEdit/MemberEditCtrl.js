@@ -1,14 +1,10 @@
 angular.module('app').controller('memberEditCtrl', memberEditCtrl);
-memberEditCtrl.$inject = ['$scope', '$route', 'notifierService', 'memberService', 'identityService'];
-function memberEditCtrl($scope, $route, notifierService, memberService, identityService) {
+memberEditCtrl.$inject = ['$scope', '$routeParams', 'notifierService', 'memberService', 'identityService'];
+function memberEditCtrl($scope, $routeParams, notifierService, memberService, identityService) {
   $scope.identityService = identityService;
-  $scope.memberToEdit = undefined;
+  $scope.memberToEdit;
   $scope.showImgTmp = false;
   $scope.loadingTmpImg = false;
-
-  memberService.getMember($route.current.params.id).then(function(member) {
-    $scope.memberToEdit = member;
-  });
 
   $scope.saveMember = function() {
     memberService.saveMember($scope.memberToEdit).then(function(member) {
@@ -44,4 +40,10 @@ function memberEditCtrl($scope, $route, notifierService, memberService, identity
     }
     return invalid;
   };
+
+  $scope.init = function(){
+    memberService.getMember($routeParams.id).then(function (member) {
+      $scope.memberToEdit = member;
+    });
+  }
 }

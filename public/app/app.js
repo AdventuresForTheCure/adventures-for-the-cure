@@ -13,6 +13,9 @@ angular.module('app').config(function($routeProvider, $locationProvider) {
     }},
     member: { auth: function($route, authorizationService) {
       return authorizationService.authorizeAuthorizedMemberForRoute();
+    }},
+    memberWithFullProfile: { auth: function($route, authorizationService) {
+      return authorizationService.authorizeAuthorizedMemberWithFullProfileForRoute();
     }}
   };
 
@@ -66,7 +69,7 @@ angular.module('app').config(function($routeProvider, $locationProvider) {
       resolve: routeRoleChecks.board
     })
     .when('/member-only', { templateUrl: '/partials/memberOnly/member-only',
-      resolve: routeRoleChecks.member
+      resolve: routeRoleChecks.memberWithFullProfile
     })
     .otherwise({
       templateUrl: '/partials/invalidPage/invalidPage'
@@ -77,10 +80,13 @@ angular.module('app').config(function($routeProvider, $locationProvider) {
  * If any route is attempted that the user is not authorized for then send
  * the user back to the home page
  */
-angular.module('app').run(function($rootScope, $location, notifierService) {
+angular.module('app').run(function($rootScope, $location, notifierService, identityService) {
   $rootScope.$on('$routeChangeError', function(evt, current, previous, rejection) {
     if (rejection === 'not authorized') {
       notifierService.error('You are not authorized to view this page.');
+    } else if (rejection === 'not authorized, profile not complete') {
+      notifierService.error('You must upload a bio and picture before you can view this page!');
+      $location.path('/member-edit/' + identityService.currentMember._id);
     }
   });
 });

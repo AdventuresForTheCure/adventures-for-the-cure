@@ -43,7 +43,7 @@ function memberService($q, $http, $upload, Member) {
       // resource will only give us json as a $resource result but $http.get will give us
       // our desired html in the response.
       var dfd = $q.defer();
-      $http.get('/api/members/' + name)
+      $http.get('/api/members/' + name, {})
         .success(function(data, status, headers, config) {
           dfd.resolve(data);
         })

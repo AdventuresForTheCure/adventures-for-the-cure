@@ -36,6 +36,16 @@ function authorizationService($http, $q, identityService, Member) {
       }
     },
 
+    authorizeAuthorizedMemberWithFullProfileForRoute: function(role) {
+      if (!role && identityService.isAuthenticated()) {
+        return checkForBioAndPic();
+      } else if (identityService.isAuthorized(role)) {
+        return checkForBioAndPic();
+      } else {
+        return $q.reject('not authorized');
+      }
+    },
+
     authorizeAuthenticatedMemberForRoute: function($route) {
       if (identityService.isAuthenticated() &&
         ($route.current.params.id === identityService.currentMember._id ||
@@ -58,6 +68,15 @@ function authorizationService($http, $q, identityService, Member) {
       });
 
       return deferred.promise;
+    }
+  };
+
+  function checkForBioAndPic() {
+    if (identityService.currentMember.bio && identityService.currentMember.bio.length > 0 &&
+      identityService.currentMember.imgPath && identityService.currentMember.imgPath.length > 0) {
+      return true;
+    } else {
+      return $q.reject('not authorized, profile not complete');
     }
   };
 }

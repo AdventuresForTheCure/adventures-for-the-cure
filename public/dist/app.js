@@ -13,6 +13,9 @@ angular.module('app').config(function($routeProvider, $locationProvider) {
     }},
     member: { auth: function($route, authorizationService) {
       return authorizationService.authorizeAuthorizedMemberForRoute();
+    }},
+    memberWithFullProfile: { auth: function($route, authorizationService) {
+      return authorizationService.authorizeAuthorizedMemberWithFullProfileForRoute();
     }}
   };
 
@@ -66,7 +69,7 @@ angular.module('app').config(function($routeProvider, $locationProvider) {
       resolve: routeRoleChecks.board
     })
     .when('/member-only', { templateUrl: '/partials/memberOnly/member-only',
-      resolve: routeRoleChecks.member
+      resolve: routeRoleChecks.memberWithFullProfile
     })
     .otherwise({
       templateUrl: '/partials/invalidPage/invalidPage'
@@ -77,10 +80,13 @@ angular.module('app').config(function($routeProvider, $locationProvider) {
  * If any route is attempted that the user is not authorized for then send
  * the user back to the home page
  */
-angular.module('app').run(function($rootScope, $location, notifierService) {
+angular.module('app').run(function($rootScope, $location, notifierService, identityService) {
   $rootScope.$on('$routeChangeError', function(evt, current, previous, rejection) {
     if (rejection === 'not authorized') {
       notifierService.error('You are not authorized to view this page.');
+    } else if (rejection === 'not authorized, profile not complete') {
+      notifierService.error('You must upload a bio and picture before you can view this page!');
+      $location.path('/member-edit/' + identityService.currentMember._id);
     }
   });
 });
@@ -160,6 +166,16 @@ function authorizationService($http, $q, identityService, Member) {
       }
     },
 
+    authorizeAuthorizedMemberWithFullProfileForRoute: function(role) {
+      if (!role && identityService.isAuthenticated()) {
+        return checkForBioAndPic();
+      } else if (identityService.isAuthorized(role)) {
+        return checkForBioAndPic();
+      } else {
+        return $q.reject('not authorized');
+      }
+    },
+
     authorizeAuthenticatedMemberForRoute: function($route) {
       if (identityService.isAuthenticated() &&
         ($route.current.params.id === identityService.currentMember._id ||
@@ -182,6 +198,15 @@ function authorizationService($http, $q, identityService, Member) {
       });
 
       return deferred.promise;
+    }
+  };
+
+  function checkForBioAndPic() {
+    if (identityService.currentMember.bio && identityService.currentMember.bio.length > 0 &&
+      identityService.currentMember.imgPath && identityService.currentMember.imgPath.length > 0) {
+      return true;
+    } else {
+      return $q.reject('not authorized, profile not complete');
     }
   };
 }
@@ -332,7 +357,7 @@ function memberService($q, $http, $upload, Member) {
       // resource will only give us json as a $resource result but $http.get will give us
       // our desired html in the response.
       var dfd = $q.defer();
-      $http.get('/api/members/' + name)
+      $http.get('/api/members/' + name, {})
         .success(function(data, status, headers, config) {
           dfd.resolve(data);
         })
@@ -754,16 +779,12 @@ function memberCreateCtrl($scope, $location, notifierService, memberService) {
   };
 }
 angular.module('app').controller('memberEditCtrl', memberEditCtrl);
-memberEditCtrl.$inject = ['$scope', '$route', 'notifierService', 'memberService', 'identityService'];
-function memberEditCtrl($scope, $route, notifierService, memberService, identityService) {
+memberEditCtrl.$inject = ['$scope', '$routeParams', 'notifierService', 'memberService', 'identityService'];
+function memberEditCtrl($scope, $routeParams, notifierService, memberService, identityService) {
   $scope.identityService = identityService;
-  $scope.memberToEdit = undefined;
+  $scope.memberToEdit;
   $scope.showImgTmp = false;
   $scope.loadingTmpImg = false;
-
-  memberService.getMember($route.current.params.id).then(function(member) {
-    $scope.memberToEdit = member;
-  });
 
   $scope.saveMember = function() {
     memberService.saveMember($scope.memberToEdit).then(function(member) {
@@ -799,6 +820,12 @@ function memberEditCtrl($scope, $route, notifierService, memberService, identity
     }
     return invalid;
   };
+
+  $scope.init = function(){
+    memberService.getMember($routeParams.id).then(function (member) {
+      $scope.memberToEdit = member;
+    });
+  }
 }
 angular.module('app').controller('memberListCtrl', memberListCtrl);
 memberListCtrl.$inject = ['$scope', '$location', '$modal', 'memberService', 'identityService'];

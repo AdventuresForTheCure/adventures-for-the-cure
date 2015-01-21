@@ -1,4 +1,4 @@
-.row(ng-controller='memberEditCtrl')
+.row(ng-controller='memberEditCtrl', ng-init="init()")
   .col-lg-12
     .well
       form.form-horizontal(name="memberEditForm")
@@ -13,9 +13,9 @@
             .col-md-9
               input.form-control(name="name", type="text", placeholder="Name", ng-model="memberToEdit.name", required, autocomplete="off" )
           .form-group
-            label.col-md-3.control-label(for="password") Password (leave blank if no change)
+            label.col-md-3.control-label(for="password") Password
             .col-md-9
-              input.form-control(name="password", type="password", placeholder="Password", ng-model="memberToEdit.password", autocomplete="off" )
+              input.form-control(name="password", type="password", placeholder="leave blank if no change", ng-model="memberToEdit.password", autocomplete="off" )
           .form-group
             label.col-md-3.control-label(for="bio") Bio
             .col-md-9
