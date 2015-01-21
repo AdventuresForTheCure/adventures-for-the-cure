@@ -38,7 +38,8 @@ function membersCtrl($scope, $location, $window, memberService, notifierService,
     $scope.selectedMember = member;
     var currHash = $window.location.hash.substring(1, $window.location.hash.length);
     if (currHash !== encodeURIComponent($scope.selectedMember.name)) {
-      $window.location.hash = $scope.selectedMember.name;
+//      $window.location.hash = $scope.selectedMember.name;
+      $location.hash($scope.selectedMember.name);
     }
   };
 
