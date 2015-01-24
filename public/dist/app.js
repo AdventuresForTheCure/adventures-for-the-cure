@@ -16,6 +16,9 @@ angular.module('app').config(function($routeProvider, $locationProvider) {
     }},
     memberWithFullProfile: { auth: function($route, authorizationService) {
       return authorizationService.authorizeAuthorizedMemberWithFullProfileForRoute();
+    }},
+    boardWithFullProfile: { auth: function($route, authorizationService) {
+      return authorizationService.authorizeAuthorizedMemberWithFullProfileForRoute('board');
     }}
   };
 
@@ -70,6 +73,9 @@ angular.module('app').config(function($routeProvider, $locationProvider) {
     })
     .when('/member-only', { templateUrl: '/partials/memberOnly/member-only',
       resolve: routeRoleChecks.memberWithFullProfile
+    })
+    .when('/board-only', { templateUrl: '/partials/boardOnly/board-only',
+      resolve: routeRoleChecks.boardWithFullProfile
     })
     .otherwise({
       templateUrl: '/partials/invalidPage/invalidPage'
@@ -605,6 +611,9 @@ function adminCtrl($scope, $location, notifierService, authorizationService) {
     });
   };
 }
+angular.module('app').controller('boardOnlyCtrl', boardOnlyCtrl);
+boardOnlyCtrl.$inject = ['$scope'];
+function boardOnlyCtrl($scope) {}
 angular.module('app').controller('campaignsCtrl', campaignsCtrl);
 campaignsCtrl.$inject = ['$scope', '$sce', '$location', 'campaignService'];
 function campaignsCtrl($scope, $sce, $location, campaignService) {
@@ -725,20 +734,6 @@ function inventoryCtrl($scope, inventoryService, notifierService, identityServic
 }
 
 
-angular.module('app').controller('loginCtrl', loginCtrl);
-loginCtrl.$inject = ['$scope', '$location', 'notifierService', 'authorizationService'];
-function loginCtrl($scope, $location, notifierService, authorizationService) {
-  $scope.login = function() {
-    authorizationService.authenticateMember($scope.loginUsername, $scope.loginPassword).then(function(success) {
-      if (success) {
-        notifierService.notify('You have successfully signed in!');
-        $location.path('/');
-      } else {
-        notifierService.error('Username/Password combination incorrect');
-      }
-    });
-  };
-}
 angular.module('app').controller('memberCreateCtrl', memberCreateCtrl);
 memberCreateCtrl.$inject = ['$scope', '$location', 'notifierService', 'memberService'];
 function memberCreateCtrl($scope, $location, notifierService, memberService) {
@@ -827,6 +822,9 @@ function memberEditCtrl($scope, $routeParams, notifierService, memberService, id
     });
   }
 }
+angular.module('app').controller('memberOnlyCtrl', memberOnlyCtrl);
+memberOnlyCtrl.$inject = ['$scope'];
+function memberOnlyCtrl($scope) {}
 angular.module('app').controller('memberListCtrl', memberListCtrl);
 memberListCtrl.$inject = ['$scope', '$location', '$modal', 'memberService', 'identityService'];
 function memberListCtrl($scope, $location, $modal, memberService, identityService) {
@@ -875,9 +873,20 @@ function confirmDeleteMemberCtrl($scope, $modalInstance, memberService, notifier
     $modalInstance.dismiss();
   };
 }
-angular.module('app').controller('memberOnlyCtrl', memberOnlyCtrl);
-memberOnlyCtrl.$inject = ['$scope'];
-function memberOnlyCtrl($scope) {}
+angular.module('app').controller('loginCtrl', loginCtrl);
+loginCtrl.$inject = ['$scope', '$location', 'notifierService', 'authorizationService'];
+function loginCtrl($scope, $location, notifierService, authorizationService) {
+  $scope.login = function() {
+    authorizationService.authenticateMember($scope.loginUsername, $scope.loginPassword).then(function(success) {
+      if (success) {
+        notifierService.notify('You have successfully signed in!');
+        $location.path('/');
+      } else {
+        notifierService.error('Username/Password combination incorrect');
+      }
+    });
+  };
+}
 angular.module('app').controller('membersCtrl', membersCtrl);
 membersCtrl.$inject = ['$scope', '$location', '$window', 'memberService', 'notifierService', 'identityService'];
 function membersCtrl($scope, $location, $window, memberService, notifierService, identityService) {

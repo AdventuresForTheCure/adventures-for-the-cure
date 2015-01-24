@@ -16,6 +16,9 @@ angular.module('app').config(function($routeProvider, $locationProvider) {
     }},
     memberWithFullProfile: { auth: function($route, authorizationService) {
       return authorizationService.authorizeAuthorizedMemberWithFullProfileForRoute();
+    }},
+    boardWithFullProfile: { auth: function($route, authorizationService) {
+      return authorizationService.authorizeAuthorizedMemberWithFullProfileForRoute('board');
     }}
   };
 
@@ -70,6 +73,9 @@ angular.module('app').config(function($routeProvider, $locationProvider) {
     })
     .when('/member-only', { templateUrl: '/partials/memberOnly/member-only',
       resolve: routeRoleChecks.memberWithFullProfile
+    })
+    .when('/board-only', { templateUrl: '/partials/boardOnly/board-only',
+      resolve: routeRoleChecks.boardWithFullProfile
     })
     .otherwise({
       templateUrl: '/partials/invalidPage/invalidPage'
