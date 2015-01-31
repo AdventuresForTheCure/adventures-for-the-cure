@@ -3,13 +3,12 @@ inventoryCtrl.$inject = ['$scope', 'inventoryService', 'notifierService', 'ident
 function inventoryCtrl($scope, inventoryService, notifierService, identityService) {
   $scope.inventoryItems = {};
   $scope.newItem = {
-    name: 'Adventures For the Cure: The Doc',
-    category: 'General',
+    name: '',
+    category: '',
     quantity: 0,
-    price: 10.00
+    price: 0,
+    img: undefined
   }
-  $scope.showImgTmp = false;
-  $scope.loadingTmpImg = false;
 
   $scope.getInventoryItems = function() {
     inventoryService.getInventoryItems().then(function(inventoryItems) {
@@ -43,7 +42,7 @@ function inventoryCtrl($scope, inventoryService, notifierService, identityServic
   };
 
   $scope.create = function() {
-    inventoryService.save(newInventoryItemData).then(function(item) {
+    inventoryService.save($scope.newItem).then(function(item) {
       notifierService.notify('New item was created');
       $scope.getInventoryItems();
     }, function(reason) {
@@ -61,18 +60,7 @@ function inventoryCtrl($scope, inventoryService, notifierService, identityServic
   };
 
   $scope.onFileSelect = function($files) {
-    $scope.memberToEdit.imgTmp = $files[0];
-    $scope.loadingTmpImg = true;
-    memberService.saveMemberTmpImg($scope.memberToEdit).then(function(member) {
-      $scope.showImgTmp = true;
-      $scope.loadingTmpImg = false;
-      $scope.memberToEdit.imgPathTmp = member.imgPathTmp;
-      $scope.memberToEdit.img = $files[0];
-    }, function(reason) {
-      $scope.showImgTmp = false;
-      $scope.loadingTmpImg = false;
-      notifierService.error('Error uploading image, please try again...');
-    });
+    $scope.newItem.img = $files[0];
   };
 
   $scope.getInventoryItems();

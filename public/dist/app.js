@@ -268,8 +268,8 @@ function identityService($window, Member) {
     }
   };
 }
-angular.module('app').factory('inventoryService', ['$q', '$http', inventoryService]);
-function inventoryService($q, $http, InventoryItem) {
+angular.module('app').factory('inventoryService', ['$q', '$http', '$upload', inventoryService]);
+function inventoryService($q, $http, $upload, InventoryItem) {
   return {
     getInventoryItems: function() {
       var dfd = $q.defer();
@@ -293,15 +293,41 @@ function inventoryService($q, $http, InventoryItem) {
         url = '/api/inventoryItems/' + inventoryItem._id;
       }
 
-      $http.post(url, inventoryItem)
-        .success(function(data, status, headers, config) {
-          dfd.resolve(data);
-        })
-        .error(function(error, status, headers, config) {
-          console.log(error);
-          dfd.reject(error.reason);
-        });
+      $upload.upload({
+        url: url,
+        data: inventoryItem,
+        file: inventoryItem.img
+      }).progress(function(evt) {
+        console.log('percent: ' + parseInt(100.0 * evt.loaded / evt.total));
+      }).success(function(data, status, headers, config) {
+        // file is uploaded successfully
+        console.log(data);
+        dfd.resolve(data);
+      }).error(function(error, status, headers, config) {
+        console.log(error);
+        dfd.reject(error.reason);
+      });
 
+      return dfd.promise;
+    },
+
+    saveTmpImg: function(inventoryItem) {
+      var dfd = $q.defer();
+      var url = '/api/inventory/tmpImg/' + inventoryItem._id;
+
+      $upload.upload({
+        url: url,
+        file: inventoryItem.imgTmp
+      }).progress(function(evt) {
+        console.log('percent: ' + parseInt(100.0 * evt.loaded / evt.total));
+      }).success(function(data, status, headers, config) {
+        // file is uploaded successfully
+        console.log(data);
+        dfd.resolve(data);
+      }).error(function(error, status, headers, config) {
+        console.log(error);
+        dfd.reject(error.reason);
+      });
       return dfd.promise;
     },
 
@@ -592,6 +618,9 @@ function volunteerEventService($q, $http, $upload) {
     }
   };
 }
+angular.module('app').controller('boardOnlyCtrl', boardOnlyCtrl);
+boardOnlyCtrl.$inject = ['$scope'];
+function boardOnlyCtrl($scope) {}
 angular.module('app').controller('adminCtrl', adminCtrl);
 adminCtrl.$inject = ['$scope', '$location', 'notifierService', 'authorizationService'];
 function adminCtrl($scope, $location, notifierService, authorizationService) {
@@ -611,9 +640,6 @@ function adminCtrl($scope, $location, notifierService, authorizationService) {
     });
   };
 }
-angular.module('app').controller('boardOnlyCtrl', boardOnlyCtrl);
-boardOnlyCtrl.$inject = ['$scope'];
-function boardOnlyCtrl($scope) {}
 angular.module('app').controller('campaignsCtrl', campaignsCtrl);
 campaignsCtrl.$inject = ['$scope', '$sce', '$location', 'campaignService'];
 function campaignsCtrl($scope, $sce, $location, campaignService) {
@@ -658,13 +684,12 @@ inventoryCtrl.$inject = ['$scope', 'inventoryService', 'notifierService', 'ident
 function inventoryCtrl($scope, inventoryService, notifierService, identityService) {
   $scope.inventoryItems = {};
   $scope.newItem = {
-    name: 'Adventures For the Cure: The Doc',
-    category: 'General',
+    name: '',
+    category: '',
     quantity: 0,
-    price: 10.00
+    price: 0,
+    img: undefined
   }
-  $scope.showImgTmp = false;
-  $scope.loadingTmpImg = false;
 
   $scope.getInventoryItems = function() {
     inventoryService.getInventoryItems().then(function(inventoryItems) {
@@ -698,7 +723,7 @@ function inventoryCtrl($scope, inventoryService, notifierService, identityServic
   };
 
   $scope.create = function() {
-    inventoryService.save(newInventoryItemData).then(function(item) {
+    inventoryService.save($scope.newItem).then(function(item) {
       notifierService.notify('New item was created');
       $scope.getInventoryItems();
     }, function(reason) {
@@ -716,18 +741,7 @@ function inventoryCtrl($scope, inventoryService, notifierService, identityServic
   };
 
   $scope.onFileSelect = function($files) {
-    $scope.memberToEdit.imgTmp = $files[0];
-    $scope.loadingTmpImg = true;
-    memberService.saveMemberTmpImg($scope.memberToEdit).then(function(member) {
-      $scope.showImgTmp = true;
-      $scope.loadingTmpImg = false;
-      $scope.memberToEdit.imgPathTmp = member.imgPathTmp;
-      $scope.memberToEdit.img = $files[0];
-    }, function(reason) {
-      $scope.showImgTmp = false;
-      $scope.loadingTmpImg = false;
-      notifierService.error('Error uploading image, please try again...');
-    });
+    $scope.newItem.img = $files[0];
   };
 
   $scope.getInventoryItems();
@@ -771,6 +785,20 @@ function memberCreateCtrl($scope, $location, notifierService, memberService) {
 
   $scope.onFileSelect = function($files) {
     $scope.img = $files[0];
+  };
+}
+angular.module('app').controller('loginCtrl', loginCtrl);
+loginCtrl.$inject = ['$scope', '$location', 'notifierService', 'authorizationService'];
+function loginCtrl($scope, $location, notifierService, authorizationService) {
+  $scope.login = function() {
+    authorizationService.authenticateMember($scope.loginUsername, $scope.loginPassword).then(function(success) {
+      if (success) {
+        notifierService.notify('You have successfully signed in!');
+        $location.path('/');
+      } else {
+        notifierService.error('Username/Password combination incorrect');
+      }
+    });
   };
 }
 angular.module('app').controller('memberEditCtrl', memberEditCtrl);
@@ -822,9 +850,6 @@ function memberEditCtrl($scope, $routeParams, notifierService, memberService, id
     });
   }
 }
-angular.module('app').controller('memberOnlyCtrl', memberOnlyCtrl);
-memberOnlyCtrl.$inject = ['$scope'];
-function memberOnlyCtrl($scope) {}
 angular.module('app').controller('memberListCtrl', memberListCtrl);
 memberListCtrl.$inject = ['$scope', '$location', '$modal', 'memberService', 'identityService'];
 function memberListCtrl($scope, $location, $modal, memberService, identityService) {
@@ -873,20 +898,9 @@ function confirmDeleteMemberCtrl($scope, $modalInstance, memberService, notifier
     $modalInstance.dismiss();
   };
 }
-angular.module('app').controller('loginCtrl', loginCtrl);
-loginCtrl.$inject = ['$scope', '$location', 'notifierService', 'authorizationService'];
-function loginCtrl($scope, $location, notifierService, authorizationService) {
-  $scope.login = function() {
-    authorizationService.authenticateMember($scope.loginUsername, $scope.loginPassword).then(function(success) {
-      if (success) {
-        notifierService.notify('You have successfully signed in!');
-        $location.path('/');
-      } else {
-        notifierService.error('Username/Password combination incorrect');
-      }
-    });
-  };
-}
+angular.module('app').controller('memberOnlyCtrl', memberOnlyCtrl);
+memberOnlyCtrl.$inject = ['$scope'];
+function memberOnlyCtrl($scope) {}
 angular.module('app').controller('membersCtrl', membersCtrl);
 membersCtrl.$inject = ['$scope', '$location', '$window', 'memberService', 'notifierService', 'identityService'];
 function membersCtrl($scope, $location, $window, memberService, notifierService, identityService) {

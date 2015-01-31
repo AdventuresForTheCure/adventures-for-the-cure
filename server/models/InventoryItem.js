@@ -14,8 +14,9 @@ var inventoryItemSchema = mongoose.Schema({
   price: {
     type: Number,
     required:'{PATH} is required!'},
-  imageUrl: {
-    type:String
+  imgPath: {
+    type:String,
+    default: ''
   },
   salePrice: {
     type: Number
@@ -35,13 +36,13 @@ InventoryItem.toInventoryItemData = function(inventoryItem) {
   if (inventoryItem.year) {
     data.year = inventoryItem.year;
   }
-  if (inventoryItem.imageUrl) {
-    data.imageUrl = inventoryItem.imageUrl;
+  if (inventoryItem.imgPath) {
+    data.imgPath = inventoryItem.imgPath;
   }
   if (inventoryItem.salePrice) {
     data.salePrice = inventoryItem.salePrice;
   }
-  return data;n
+  return data;
 };
 
 function createDefaultInventoryItems() {

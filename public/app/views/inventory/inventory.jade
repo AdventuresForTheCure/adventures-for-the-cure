@@ -16,7 +16,7 @@
       h3 AFC Inventory
       // p Page is under construction... email afc.inventory@gmail.com if there is something you want to buy
       div(ng-if='ableToEdit()')
-        form.form-horizontal(name="inventoryItemAddForm")
+        form.form-horizontal(name="inventoryItemAddForm" role="form")
         fieldset
           legend Add Item
           .form-group
@@ -26,7 +26,7 @@
           .form-group
             label.col-md-3.control-label(for="quantity") Quantity
             .col-md-9
-              input.form-control(name="quantity", type="number", placeholder="Quantity", ng-model="newItem.quantity", required, autocomplete="off" )
+              input.form-control(name="quantity", type="number", placeholder="1", ng-model="newItem.quantity", required, autocomplete="off" )
           .form-group
             label.col-md-3.control-label(for="category") Category
             .col-md-9
@@ -34,23 +34,19 @@
           .form-group
             label.col-md-3.control-label(for="price") Price
             .col-md-9
-              input.form-control(name="price", type="number", placeholder="Price", ng-model="newItem.price", required, autocomplete="off" )
+              input.form-control(name="price", type="number", placeholder="1", ng-model="newItem.price", required, autocomplete="off" )
           .form-group
             label.col-md-3.control-label(for="salePrice") Sale Price
             .col-md-9
-              input.form-control(name="salePrice", type="number", placeholder="On Sale Price", ng-model="newItem.salePrice", autocomplete="off" )
+              input.form-control(name="salePrice", type="number", placeholder="1", ng-model="newItem.salePrice", autocomplete="off" )
           .form-group
-            label.col-md-3.control-label(ng-if="showImgTmp || newItem.imgPath" for="currentImage") Image
+            label.col-md-3.control-label(for="image") Image
             .col-md-9
-              span(ng-if="!showImgTmp && newItem.imgPath" href="{{newItem.imgPath}}" target="_blank")
-                img(src="{{newItem.imgPath}}" width="100px" height="auto" alt="No image!")
-              a(ng-if="showImgTmp" href="{{newItem.imgPathTmp}}" target="_blank")
-                img(src="{{newItem.imgPathTmp}}" width="100px" height="auto" alt="No image!")
+              input(name="img" type="file" ng-file-select="onFileSelect($files)" accept="image/*")
           .form-group
-            label.col-md-3.control-label(for="imageUpload") New Image File
-            .col-md-9
-              input(name="imageUpload" type="file" ng-file-select="onFileSelect($files)" accept="image/*")
-              img(ng-if='loadingTmpImg' src='/img/loader.gif')
+            .col-md-9.col-md-offset-2
+              .pull-right
+                button.btn.btn-primary(ng-click="create()", ng-disabled="inventoryItemAddForm.$invalid") Save
       div(ng-repeat='(category, categoryItems) in inventoryItems')
         hr
         h4 {{category}}
@@ -77,6 +73,10 @@
             td(ng-if='ableToEdit()')
               span Quantity
               input(type='number' ng-model='inventoryItem.quantity' ng-change='update(inventoryItem)' class='inventory-item-input')
+            // image
+            td
+              span(ng-if="inventoryItem.imgPath" href="{{inventoryItem.imgPath}}" target="_blank")
+                img(src="{{inventoryItem.imgPath}}" width="100px" height="auto" alt="No image!")
             td(ng-if='ableToEdit()')
               button.btn.btn-default.btn-sm(ng-click='delete(inventoryItem)' title="Delete")
                 span(class="glyphicon glyphicon-trash" aria-hidden="true")

@@ -1,19 +1,44 @@
 var InventoryItem = require('mongoose').model('InventoryItem');
 var errorHandler = require('../utilities/errorHandler');
+var cloudinaryWrapper = require('../utilities/cloudinaryWrapper');
 
 exports.saveInventoryItem = function(req, res, next) {
-  var inventoryItemData = toInventoryItemData(req.user, req.body);
+  var inventoryItemData = InventoryItem.toInventoryItemData(req.body);
 
   if (!req.user || !req.user.hasRole('inventory')) {
     errorHandler.sendError(req, res, err, 403);
   }
 
+  // if there is an image then save it first
+  if (req.files.img) {
+    cloudinaryWrapper.saveImg(req.files.img, inventoryItemData.name, function (err, result) {
+      if (err) {
+        errorHandler.sendError(req, res, err);
+      }
+      else {
+        if (!result) {
+          inventoryItemData.imgPath = '';
+        } else {
+          inventoryItemData.imgPath = result.url;
+        }
+        // save inventory data
+        saveInventoryData(req, res, inventoryItemData);
+      }
+    });
+  }
+  // save inventory data
+  else {
+    saveInventoryData(req, res, inventoryItemData);
+  }
+};
+
+function saveInventoryData(req, res, inventoryItemData) {
   // create the item
   InventoryItem.create(inventoryItemData, function (err, inventoryItem) {
     if (err) { errorHandler.sendError(req, res, err); }
     res.send(inventoryItem);
   });
-};
+}
 
 exports.updateInventoryItem = function(req, res) {
   var inventoryItemId = req.params.id;

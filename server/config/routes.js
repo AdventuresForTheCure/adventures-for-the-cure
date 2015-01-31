@@ -23,8 +23,8 @@ module.exports = function(app, config) {
   app.delete('/api/members/:id', auth.requiresLoggedInRole('admin'), members.deleteMember);
 
   app.get('/api/inventoryItems', cache.disableBrowserCache, inventoryItems.getInventoryItems);
-  app.post('/api/inventoryItems', auth.requiresLoggedInRole('inventory'), inventoryItems.saveInventoryItem);
-  app.post('/api/inventoryItems/:id', auth.requiresLoggedInRole('inventory'), inventoryItems.updateInventoryItem);
+  app.post('/api/inventoryItems', auth.requiresLoggedInRole('inventory'), multipartMiddleware, inventoryItems.saveInventoryItem);
+  app.post('/api/inventoryItems/:id', auth.requiresLoggedInRole('inventory'), multipartMiddleware, inventoryItems.updateInventoryItem);
   app.delete('/api/inventoryItems/:id', auth.requiresLoggedInRole('inventory'), inventoryItems.deleteInventoryItem);
   app.post('/api/inventoryItems/tmpImg/:id', multipartMiddleware, inventoryItems.updateInventoryItemTmpImg);
 
