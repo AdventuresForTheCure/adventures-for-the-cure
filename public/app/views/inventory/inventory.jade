@@ -20,6 +20,10 @@
         fieldset
           legend Add Item
           .form-group
+            label.col-md-3.control-label(for="category") Category
+            .col-md-9
+              input.form-control(name="category", type="text", placeholder="Category", ng-model="newItem.category", required, autocomplete="off" )
+          .form-group
             label.col-md-3.control-label(for="name") Name
             .col-md-9
               input.form-control(name="name", type="text", placeholder="Name", ng-model="newItem.name", required, autocomplete="off" )
@@ -27,10 +31,6 @@
             label.col-md-3.control-label(for="quantity") Quantity
             .col-md-9
               input.form-control(name="quantity", type="number", placeholder="1", ng-model="newItem.quantity", required, autocomplete="off" )
-          .form-group
-            label.col-md-3.control-label(for="category") Category
-            .col-md-9
-              input.form-control(name="category", type="text", placeholder="Category", ng-model="newItem.category", required, autocomplete="off" )
           .form-group
             label.col-md-3.control-label(for="price") Price
             .col-md-9
@@ -46,7 +46,9 @@
           .form-group
             .col-md-9.col-md-offset-2
               .pull-right
-                button.btn.btn-primary(ng-click="create()", ng-disabled="inventoryItemAddForm.$invalid") Save
+                button.btn.btn-primary(ng-click="createItem()", ng-disabled="inventoryItemAddForm.$invalid") Save
+                &nbsp;
+                button.btn(ng-click="resetForm()") Reset
       div(ng-repeat='(category, categoryItems) in inventoryItems')
         hr
         h4 {{category}}
@@ -56,7 +58,7 @@
             td(ng-if='!ableToEdit()')
               span{{inventoryItem.name}}
             td(ng-if='ableToEdit()')
-              input(type='text' ng-model='inventoryItem.name' ng-change='update(inventoryItem)' style='width:75px' class='inventory-item-input')
+              input.inventory-item-input-name(type='text' ng-model='inventoryItem.name' ng-change='update(inventoryItem)' style='width:75px')
             // price
             td
               span Price: {{inventoryItem.price | currency : symbol : 2 }}
@@ -65,14 +67,14 @@
               span(ng-if='inventoryItem.salePrice > 0') ON SALE: {{inventoryItem.salePrice | currency : symbol : 2 }}
             td(ng-if='ableToEdit()')
               span 'On Sale' Price:
-              input(type='number' ng-model='inventoryItem.salePrice' ng-change='update(inventoryItem)' style='width:75px' class='inventory-item-input')
+              input.inventory-item-input(type='number' ng-model='inventoryItem.salePrice' ng-change='update(inventoryItem)' style='width:75px')
             // quantity
-            td(ng-if='!ableToEdit()')
-              span(ng-if='inventoryItem.quantity <= 0') SOLD OUT!
+            td(ng-if='!ableToEdit() && inventoryItem.quantity >= 0')
+              span(ng-if='inventoryItem.quantity === 0') SOLD OUT!
               span(ng-if='inventoryItem.quantity > 0') {{inventoryItem.quantity}} Remaining
             td(ng-if='ableToEdit()')
               span Quantity
-              input(type='number' ng-model='inventoryItem.quantity' ng-change='update(inventoryItem)' class='inventory-item-input')
+              input.inventory-item-input(type='number' ng-model='inventoryItem.quantity' ng-change='update(inventoryItem)')
             // image
             td
               span(ng-if="inventoryItem.imgPath" href="{{inventoryItem.imgPath}}" target="_blank")

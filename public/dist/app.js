@@ -618,9 +618,6 @@ function volunteerEventService($q, $http, $upload) {
     }
   };
 }
-angular.module('app').controller('boardOnlyCtrl', boardOnlyCtrl);
-boardOnlyCtrl.$inject = ['$scope'];
-function boardOnlyCtrl($scope) {}
 angular.module('app').controller('adminCtrl', adminCtrl);
 adminCtrl.$inject = ['$scope', '$location', 'notifierService', 'authorizationService'];
 function adminCtrl($scope, $location, notifierService, authorizationService) {
@@ -640,6 +637,9 @@ function adminCtrl($scope, $location, notifierService, authorizationService) {
     });
   };
 }
+angular.module('app').controller('boardOnlyCtrl', boardOnlyCtrl);
+boardOnlyCtrl.$inject = ['$scope'];
+function boardOnlyCtrl($scope) {}
 angular.module('app').controller('campaignsCtrl', campaignsCtrl);
 campaignsCtrl.$inject = ['$scope', '$sce', '$location', 'campaignService'];
 function campaignsCtrl($scope, $sce, $location, campaignService) {
@@ -683,13 +683,7 @@ angular.module('app').controller('inventoryCtrl', inventoryCtrl);
 inventoryCtrl.$inject = ['$scope', 'inventoryService', 'notifierService', 'identityService'];
 function inventoryCtrl($scope, inventoryService, notifierService, identityService) {
   $scope.inventoryItems = {};
-  $scope.newItem = {
-    name: '',
-    category: '',
-    quantity: 0,
-    price: 0,
-    img: undefined
-  }
+  $scope.newItem = newItem();
 
   $scope.getInventoryItems = function() {
     inventoryService.getInventoryItems().then(function(inventoryItems) {
@@ -722,13 +716,17 @@ function inventoryCtrl($scope, inventoryService, notifierService, identityServic
     });
   };
 
-  $scope.create = function() {
+  $scope.createItem = function() {
     inventoryService.save($scope.newItem).then(function(item) {
       notifierService.notify('New item was created');
       $scope.getInventoryItems();
     }, function(reason) {
       notifierService.error(reason);
     });
+  };
+
+  $scope.resetForm = function() {
+    $scope.newItem = newItem();
   };
 
   $scope.delete = function(inventoryItem) {
@@ -744,10 +742,35 @@ function inventoryCtrl($scope, inventoryService, notifierService, identityServic
     $scope.newItem.img = $files[0];
   };
 
+  function newItem() {
+    return {
+      name: '',
+      category: '',
+      quantity: 0,
+      price: 0,
+      salePrice: undefined,
+      img: undefined
+    }
+  };
+
   $scope.getInventoryItems();
 }
 
 
+angular.module('app').controller('loginCtrl', loginCtrl);
+loginCtrl.$inject = ['$scope', '$location', 'notifierService', 'authorizationService'];
+function loginCtrl($scope, $location, notifierService, authorizationService) {
+  $scope.login = function() {
+    authorizationService.authenticateMember($scope.loginUsername, $scope.loginPassword).then(function(success) {
+      if (success) {
+        notifierService.notify('You have successfully signed in!');
+        $location.path('/');
+      } else {
+        notifierService.error('Username/Password combination incorrect');
+      }
+    });
+  };
+}
 angular.module('app').controller('memberCreateCtrl', memberCreateCtrl);
 memberCreateCtrl.$inject = ['$scope', '$location', 'notifierService', 'memberService'];
 function memberCreateCtrl($scope, $location, notifierService, memberService) {
@@ -785,20 +808,6 @@ function memberCreateCtrl($scope, $location, notifierService, memberService) {
 
   $scope.onFileSelect = function($files) {
     $scope.img = $files[0];
-  };
-}
-angular.module('app').controller('loginCtrl', loginCtrl);
-loginCtrl.$inject = ['$scope', '$location', 'notifierService', 'authorizationService'];
-function loginCtrl($scope, $location, notifierService, authorizationService) {
-  $scope.login = function() {
-    authorizationService.authenticateMember($scope.loginUsername, $scope.loginPassword).then(function(success) {
-      if (success) {
-        notifierService.notify('You have successfully signed in!');
-        $location.path('/');
-      } else {
-        notifierService.error('Username/Password combination incorrect');
-      }
-    });
   };
 }
 angular.module('app').controller('memberEditCtrl', memberEditCtrl);

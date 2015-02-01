@@ -3,8 +3,7 @@ var mongoose = require('mongoose');
 var inventoryItemSchema = mongoose.Schema({
   name: {
     type: String,
-    required: '{PATH} is required!',
-    unique:true},
+    required: '{PATH} is required!'},
   quantity: {
     type: Number,
     required: '{PATH} is required!'},
@@ -22,6 +21,7 @@ var inventoryItemSchema = mongoose.Schema({
     type: Number
   }
 });
+inventoryItemSchema.index({ name: 1, category: 1 }, { unique: true });
 
 var InventoryItem = mongoose.model('InventoryItem', inventoryItemSchema);
 InventoryItem.toInventoryItemData = function(inventoryItem) {
@@ -30,16 +30,16 @@ InventoryItem.toInventoryItemData = function(inventoryItem) {
   data.quantity = inventoryItem.quantity;
   data.category = inventoryItem.category;
   data.price = inventoryItem.price;
-  if (inventoryItem.size) {
+  if (inventoryItem.size !== null && inventoryItem.size != undefined) {
     data.size = inventoryItem.size;
   }
-  if (inventoryItem.year) {
+  if (inventoryItem.year !== null && inventoryItem.year != undefined) {
     data.year = inventoryItem.year;
   }
-  if (inventoryItem.imgPath) {
+  if (inventoryItem.imgPath !== null && inventoryItem.imgPath != undefined) {
     data.imgPath = inventoryItem.imgPath;
   }
-  if (inventoryItem.salePrice) {
+  if (inventoryItem.salePrice !== null && inventoryItem.salePrice != undefined) {
     data.salePrice = inventoryItem.salePrice;
   }
   return data;

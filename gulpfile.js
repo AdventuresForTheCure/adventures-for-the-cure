@@ -52,8 +52,8 @@ gulp.task('server-test', function() {
     .pipe(plug.mocha({reporter: 'spec'}));
 });
 
-gulp.task('server-all', function(callback) {
-  runSequence('server-jshint', 'server-test', callback);
+gulp.task('server-all', [], function(callback) {
+  runSequence('server-jshint', callback);
 });
 
 gulp.task('watch-all', function() {

@@ -2,13 +2,7 @@ angular.module('app').controller('inventoryCtrl', inventoryCtrl);
 inventoryCtrl.$inject = ['$scope', 'inventoryService', 'notifierService', 'identityService'];
 function inventoryCtrl($scope, inventoryService, notifierService, identityService) {
   $scope.inventoryItems = {};
-  $scope.newItem = {
-    name: '',
-    category: '',
-    quantity: 0,
-    price: 0,
-    img: undefined
-  }
+  $scope.newItem = newItem();
 
   $scope.getInventoryItems = function() {
     inventoryService.getInventoryItems().then(function(inventoryItems) {
@@ -41,13 +35,17 @@ function inventoryCtrl($scope, inventoryService, notifierService, identityServic
     });
   };
 
-  $scope.create = function() {
+  $scope.createItem = function() {
     inventoryService.save($scope.newItem).then(function(item) {
       notifierService.notify('New item was created');
       $scope.getInventoryItems();
     }, function(reason) {
       notifierService.error(reason);
     });
+  };
+
+  $scope.resetForm = function() {
+    $scope.newItem = newItem();
   };
 
   $scope.delete = function(inventoryItem) {
@@ -61,6 +59,17 @@ function inventoryCtrl($scope, inventoryService, notifierService, identityServic
 
   $scope.onFileSelect = function($files) {
     $scope.newItem.img = $files[0];
+  };
+
+  function newItem() {
+    return {
+      name: '',
+      category: '',
+      quantity: 0,
+      price: 0,
+      salePrice: undefined,
+      img: undefined
+    }
   };
 
   $scope.getInventoryItems();
