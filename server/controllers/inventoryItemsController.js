@@ -49,10 +49,7 @@ exports.updateInventoryItem = function(req, res) {
     return res.end();
   }
 
-  InventoryItem.findByIdAndUpdate(inventoryItemId, inventoryItemData, function(err, inventoryItem) {
-    if (err) { errorHandler.sendError(req, res, err); }
-    res.send(inventoryItem);
-  });
+  updateInventoryItem(req, res, inventoryItemId, inventoryItemData);
 };
 
 exports.getInventoryItems = function (req, res) {
@@ -87,7 +84,7 @@ exports.deleteInventoryItem = function(req, res) {
   }
 };
 
-exports.updateInventoryItemTmpImg = function(req, res) {
+exports.updateInventoryItemImg = function(req, res) {
   var inventoryItemId = req.params.id;
 
   if(!req.user.hasRole('inventory')) {
@@ -96,17 +93,17 @@ exports.updateInventoryItemTmpImg = function(req, res) {
   }
 
   InventoryItem.findById(inventoryItemId, function(err, inventoryItem) {
-    if (!member) { errorHandler.sendError(req, res, 'Inventory Item not found with id: ' + inventoryItemId); }
+    if (!inventoryItem) { errorHandler.sendError(req, res, 'Inventory Item not found with id: ' + inventoryItemId); }
     else {
       var inventoryItemData = {};
       // if there is an img to save then
       // save the image by overwriting the old image using the inventoryItemData.imageId parameter
       if (req.files.file) {
-        var imgName = "tmp " + inventoryItem.name;
+        var imgName = inventoryItem.category + "_" + inventoryItem.name;
         cloudinaryWrapper.saveImg(req.files.file, imgName, function (err, result) {
           if (err) { errorHandler.sendError(req, res, err); }
           else {
-            inventoryItemData.imgPathTmp = result.url;
+            inventoryItemData.imgPath = result.url;
             updateInventoryItem(req, res, inventoryItemId, inventoryItemData);
           }
         });
@@ -118,3 +115,10 @@ exports.updateInventoryItemTmpImg = function(req, res) {
     }
   });
 };
+
+function updateInventoryItem(req, res, inventoryItemId, inventoryItemData) {
+  InventoryItem.findByIdAndUpdate(inventoryItemId, inventoryItemData, function(err, inventoryItem) {
+    if (err) { errorHandler.sendError(req, res, err); }
+    res.send(inventoryItem);
+  });
+}

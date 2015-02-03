@@ -41,13 +41,13 @@ function inventoryService($q, $http, $upload, InventoryItem) {
       return dfd.promise;
     },
 
-    saveTmpImg: function(inventoryItem) {
+    saveImg: function(inventoryItem) {
       var dfd = $q.defer();
-      var url = '/api/inventory/tmpImg/' + inventoryItem._id;
+      var url = '/api/inventoryItems/img/' + inventoryItem._id;
 
       $upload.upload({
         url: url,
-        file: inventoryItem.imgTmp
+        file: inventoryItem.img
       }).progress(function(evt) {
         console.log('percent: ' + parseInt(100.0 * evt.loaded / evt.total));
       }).success(function(data, status, headers, config) {

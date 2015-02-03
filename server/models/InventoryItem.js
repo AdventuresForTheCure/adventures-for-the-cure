@@ -17,6 +17,10 @@ var inventoryItemSchema = mongoose.Schema({
     type:String,
     default: ''
   },
+  imgPathTmp: {
+    type: String,
+    default: ''
+  },
   salePrice: {
     type: Number
   }

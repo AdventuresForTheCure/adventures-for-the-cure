@@ -26,7 +26,7 @@ module.exports = function(app, config) {
   app.post('/api/inventoryItems', auth.requiresLoggedInRole('inventory'), multipartMiddleware, inventoryItems.saveInventoryItem);
   app.post('/api/inventoryItems/:id', auth.requiresLoggedInRole('inventory'), multipartMiddleware, inventoryItems.updateInventoryItem);
   app.delete('/api/inventoryItems/:id', auth.requiresLoggedInRole('inventory'), inventoryItems.deleteInventoryItem);
-  app.post('/api/inventoryItems/tmpImg/:id', multipartMiddleware, inventoryItems.updateInventoryItemTmpImg);
+  app.post('/api/inventoryItems/img/:id', multipartMiddleware, inventoryItems.updateInventoryItemImg);
 
   app.get('/api/volunteerEvents', cache.disableBrowserCache, volunteerEvents.getVolunteerEvents);
   app.get('/api/volunteerEvents/:id', cache.disableBrowserCache, volunteerEvents.getVolunteerEvent);

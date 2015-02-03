@@ -61,6 +61,19 @@ function inventoryCtrl($scope, inventoryService, notifierService, identityServic
     $scope.newItem.img = $files[0];
   };
 
+  $scope.onUpdatedFileSelect = function(inventoryItem, $files) {
+    inventoryItem.img = $files[0];
+    inventoryItem.loadingImg = true;
+    inventoryService.saveImg(inventoryItem).then(function(updatedInventoryItem) {
+      inventoryItem.loadingImg = false;
+      inventoryItem.imgPath = updatedInventoryItem.imgPath;
+      inventoryItem.img = $files[0];
+    }, function(reason) {
+      inventoryItem.loadingImg = false;
+      notifierService.error('Error uploading image, please try again...');
+    });
+  };
+
   function newItem() {
     return {
       name: '',
