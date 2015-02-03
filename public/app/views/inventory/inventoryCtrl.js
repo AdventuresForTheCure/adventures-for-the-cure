@@ -24,7 +24,6 @@ function inventoryCtrl($scope, inventoryService, notifierService, identityServic
         var inventoryItem = inventoryItems[i];
         if (angular.isUndefined($scope.inventoryItems[inventoryItem.category])) {
           $scope.inventoryItems[inventoryItem.category] = [];
-          $scope.allCategories.push(inventoryItem.category);
         }
         $scope.inventoryItems[inventoryItem.category].push(inventoryItem);
       }
