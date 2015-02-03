@@ -684,6 +684,19 @@ inventoryCtrl.$inject = ['$scope', 'inventoryService', 'notifierService', 'ident
 function inventoryCtrl($scope, inventoryService, notifierService, identityService) {
   $scope.inventoryItems = {};
   $scope.newItem = newItem();
+  $scope.allCategories = [
+    'DeFeet Socks',
+    'Hats',
+    'Hincapie Merchandise - 2011',
+    'Hincapie Merchandise - 2012',
+    'Hincapie Merchandise - 2013',
+    'Hincapie Merchandise - 2014',
+    'Hincapie Merchandise - 2015',
+    'Movies',
+    'Saucony Running Gear',
+    'Water Bottles',
+    'Winged Foot T-shirts and Sweats'
+  ];
 
   $scope.getInventoryItems = function() {
     inventoryService.getInventoryItems().then(function(inventoryItems) {
@@ -692,6 +705,7 @@ function inventoryCtrl($scope, inventoryService, notifierService, identityServic
         var inventoryItem = inventoryItems[i];
         if (angular.isUndefined($scope.inventoryItems[inventoryItem.category])) {
           $scope.inventoryItems[inventoryItem.category] = [];
+          $scope.allCategories.push(inventoryItem.category);
         }
         $scope.inventoryItems[inventoryItem.category].push(inventoryItem);
       }

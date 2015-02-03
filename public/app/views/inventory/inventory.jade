@@ -22,7 +22,7 @@
           .form-group
             label.col-md-3.control-label(for="category") Category
             .col-md-9
-              input.form-control(name="category", type="text", placeholder="Category", ng-model="newItem.category", required, autocomplete="off" )
+              select.form-control(name='category', ng-model="newItem.category", ng-options='category as category for category in allCategories', required)
           .form-group
             label.col-md-3.control-label(for="name") Name
             .col-md-9
@@ -54,6 +54,9 @@
         h4 {{category}}
         table.table.table-striped
           tr(ng-repeat='inventoryItem in inventoryItems[category]')
+            // category
+            td(ng-if='ableToEdit()')
+              select.form-control(name='category', ng-model="inventoryItem.category", ng-options='category as category for category in allCategories', ng-change='update(inventoryItem)')
             // name
             td(ng-if='!ableToEdit()')
               span{{inventoryItem.name}}
@@ -64,7 +67,7 @@
               span Price: {{inventoryItem.price | currency : symbol : 2 }}
             // sale price
             td(ng-if='!ableToEdit()')
-              span(ng-if='inventoryItem.salePrice > 0') ON SALE: {{inventoryItem.salePrice | currency : symbol : 2 }}
+              span.special(ng-if='inventoryItem.salePrice > 0') ON SALE: {{inventoryItem.salePrice | currency : symbol : 2 }}
             td(ng-if='ableToEdit()')
               span 'On Sale' Price:
               input.inventory-item-input(type='number' ng-model='inventoryItem.salePrice' ng-change='update(inventoryItem)' style='width:75px')
@@ -79,12 +82,14 @@
             td(ng-if='ableToEdit()')
               span(ng-if='inventoryItem.loadingImg')
                 img(src='/img/loader.gif')
-              span(ng-if="!inventoryItem.loadingImg && inventoryItem.imgPath" href="{{inventoryItem.imgPath}}" target="_blank")
-                img(src="{{inventoryItem.imgPath}}" width="100px" height="auto" alt="No image!")
+              span(ng-if="!inventoryItem.loadingImg && inventoryItem.imgPath")
+                a(href="{{inventoryItem.imgPath}}" target="_blank")
+                  img(src="{{inventoryItem.imgPath}}" width="100px" height="auto" alt="No image!")
               input(name="imageUpload" type="file" ng-file-select="onUpdatedFileSelect(inventoryItem, $files)" accept="image/*")
             td(ng-if='!ableToEdit()')
-              span(ng-if="inventoryItem.imgPath" href="{{inventoryItem.imgPath}}" target="_blank")
-                img(src="{{inventoryItem.imgPath}}" width="100px" height="auto" alt="No image!")
+              span(ng-if="inventoryItem.imgPath")
+                a(href="{{inventoryItem.imgPath}}" target="_blank")
+                  img(src="{{inventoryItem.imgPath}}" width="100px" height="auto" alt="No image!")
             // delete
             td(ng-if='ableToEdit()')
               button.btn.btn-default.btn-sm(ng-click='delete(inventoryItem)' title="Delete")
