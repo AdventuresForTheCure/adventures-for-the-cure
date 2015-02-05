@@ -13,6 +13,12 @@
 	background-image: url("/test/img/polka-dots.jpg");
 }
 
+.inventory-item-input-category {
+    min-width: 175px;
+    margin-left: 5px;
+    margin-bottom: 5px;
+}
+
 .inventory-item-input-name {
     min-width: 275px;
     margin-left: 5px;

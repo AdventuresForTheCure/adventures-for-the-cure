@@ -697,6 +697,7 @@ function inventoryCtrl($scope, inventoryService, notifierService, identityServic
     'Water Bottles',
     'Winged Foot T-shirts and Sweats'
   ];
+  $scope.editMode = true;
 
   $scope.getInventoryItems = function() {
     inventoryService.getInventoryItems().then(function(inventoryItems) {
@@ -713,8 +714,12 @@ function inventoryCtrl($scope, inventoryService, notifierService, identityServic
     });
   };
 
+  $scope.toggleEditMode = function() {
+    $scope.editMode = !$scope.editMode;
+  }
+
   $scope.ableToEdit = function() {
-    if (identityService.currentMember && identityService.currentMember.isInventory()) {
+    if (identityService.currentMember && identityService.currentMember.isInventory() && $scope.editMode) {
       return true;
     } else {
       return false;
