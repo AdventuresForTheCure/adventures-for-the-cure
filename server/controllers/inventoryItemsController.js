@@ -1,6 +1,7 @@
 var InventoryItem = require('mongoose').model('InventoryItem');
 var errorHandler = require('../utilities/errorHandler');
 var cloudinaryWrapper = require('../utilities/cloudinaryWrapper');
+var emailer = require('../utilities/emailer');
 
 exports.saveInventoryItem = function(req, res, next) {
   var inventoryItemData = InventoryItem.toInventoryItemData(req.body);
@@ -31,14 +32,6 @@ exports.saveInventoryItem = function(req, res, next) {
     saveInventoryData(req, res, inventoryItemData);
   }
 };
-
-function saveInventoryData(req, res, inventoryItemData) {
-  // create the item
-  InventoryItem.create(inventoryItemData, function (err, inventoryItem) {
-    if (err) { errorHandler.sendError(req, res, err); }
-    res.send(inventoryItem);
-  });
-}
 
 exports.updateInventoryItem = function(req, res) {
   var inventoryItemId = req.params.id;
@@ -75,10 +68,7 @@ exports.deleteInventoryItem = function(req, res) {
       if(err) { errorHandler.sendError(req, res, err, 404); }
       else {
         var inventoryItem = data;
-        inventoryItem.remove(function(err) {
-          if(err) { errorHandler.sendError(req, res, err); }
-          return res.end();
-        });
+        deleteInventoryItem(req, res, inventoryItem);
       }
     });
   }
@@ -117,7 +107,24 @@ exports.updateInventoryItemImg = function(req, res) {
 };
 
 function updateInventoryItem(req, res, inventoryItemId, inventoryItemData) {
+  emailer.sendAuditMessageEMail(req.user.name + ' is updating the inventory item: ' + JSON.stringify(inventoryItemData));
   InventoryItem.findByIdAndUpdate(inventoryItemId, inventoryItemData, function(err, inventoryItem) {
+    if (err) { errorHandler.sendError(req, res, err); }
+    res.send(inventoryItem);
+  });
+};
+
+function deleteInventoryItem(req, res, inventoryItem) {
+  emailer.sendAuditMessageEMail(req.user.name + ' is deleting the inventory item: ' + JSON.stringify(inventoryItem));
+  inventoryItem.remove(function(err) {
+    if(err) { errorHandler.sendError(req, res, err); }
+    return res.end();
+  });
+};
+
+function saveInventoryData(req, res, inventoryItemData) {
+  emailer.sendAuditMessageEMail(req.user.name + ' is saving the inventory item: ' + JSON.stringify(inventoryItemData));
+  InventoryItem.create(inventoryItemData, function (err, inventoryItem) {
     if (err) { errorHandler.sendError(req, res, err); }
     res.send(inventoryItem);
   });
