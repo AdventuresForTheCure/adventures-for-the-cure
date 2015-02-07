@@ -71,11 +71,11 @@
                 .col-md-2
                   .form-group
                     label.special 'ON SALE':
-                    input.special.inventory-item-number-input.form-control(type='number' ng-model='inventoryItem.salePrice')
+                    input.special.inventory-item-number-input.form-control(type='number' ng-model='inventoryItem.salePrice' tooltip="Set to blank or 0 if not on sale")
                 .col-md-2
                   .form-group
                     label Remaining
-                    input.inventory-item-number-input.form-control(type='number' ng-model='inventoryItem.quantity')
+                    input.inventory-item-number-input.form-control(type='number' ng-model='inventoryItem.quantity' tooltip="Set to blank or 0 if sold out")
                 .col-md-2
                   .form-group
                     label Image
@@ -87,12 +87,12 @@
                     input(name="imageUpload" type="file" ng-file-select="onUpdatedFileSelect(inventoryItem, $files)" accept="image/*")
                 .col-md-1
                   .form-group
-                    button.btn.btn-default.btn-sm(ng-if='ableToEdit()' ng-click='toggleEditMode(inventoryItem, $index)' tooltip="Edit Mode")
+                    button.btn.btn-default.btn-sm(ng-if='ableToEdit()' ng-click='toggleEditMode(inventoryItem, $index)')
                       span(class="glyphicon glyphicon-edit" aria-hidden="true")
                     //
                       button.btn.btn-default.btn-sm(ng-if='inEditMode(inventoryItem)' ng-click='delete(inventoryItem)' title="Delete")
                         span(class="glyphicon glyphicon-trash" aria-hidden="true")
-                    button.btn.btn-default.btn-sm(ng-if='ableToEdit() && inEditMode(inventoryItem)' ng-click='update(inventoryItem)' tooltip="Save Changes")
+                    button.btn.btn-default.btn-sm(ng-if='ableToEdit() && inEditMode(inventoryItem)' ng-click='update(inventoryItem)')
                       span(class="glyphicon glyphicon-save" aria-hidden="true")
           div(ng-if='!inEditMode(inventoryItem)')
             .col-md-3
@@ -109,5 +109,5 @@
                 a(href="{{inventoryItem.imgPath}}" target="_blank")
                   img(src="{{inventoryItem.imgPath}}" width="100px" height="auto" alt="No image!")
             .col-md-1
-              button.btn.btn-default.btn-sm(ng-if='ableToEdit()' ng-click='toggleEditMode(inventoryItem, $index)' tooltip="Toggle Edit Mode")
+              button.btn.btn-default.btn-sm(ng-if='ableToEdit()' ng-click='toggleEditMode(inventoryItem, $index)')
                 span(class="glyphicon glyphicon-edit" aria-hidden="true")
