@@ -697,7 +697,6 @@ function inventoryCtrl($scope, inventoryService, notifierService, identityServic
     'Water Bottles',
     'Winged Foot T-shirts and Sweats'
   ];
-  $scope.editMode = true;
 
   $scope.getInventoryItems = function() {
     inventoryService.getInventoryItems().then(function(inventoryItems) {
@@ -708,25 +707,43 @@ function inventoryCtrl($scope, inventoryService, notifierService, identityServic
           $scope.inventoryItems[inventoryItem.category] = [];
         }
         $scope.inventoryItems[inventoryItem.category].push(inventoryItem);
+        inventoryItem.inEditMode = false;
       }
     }, function(reason) {
       notifierService.error(reason);
     });
   };
 
-  $scope.toggleEditMode = function() {
-    $scope.editMode = !$scope.editMode;
+  $scope.ableToEdit = function() {
+    if (identityService.currentMember && identityService.currentMember.isInventory()) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
-  $scope.ableToEdit = function() {
-    if (identityService.currentMember && identityService.currentMember.isInventory() && $scope.editMode) {
+  $scope.inEditMode = function(inventoryItem) {
+    if (identityService.currentMember && identityService.currentMember.isInventory() && inventoryItem.inEditMode) {
       return true;
     } else {
       return false;
     }
   };
 
+  $scope.toggleEditMode = function(inventoryItem, index) {
+    inventoryItem.inEditMode = !inventoryItem.inEditMode;
+    if (inventoryItem.inEditMode) {
+      inventoryItem.master = angular.copy(inventoryItem);
+    } else {
+      $scope.inventoryItems[inventoryItem.category][index] = angular.copy(inventoryItem.master);
+      $scope.inventoryItems[inventoryItem.category][index].inEditMode = false;
+      $scope.inventoryItems[inventoryItem.category][index].master = undefined;
+      delete $scope.inventoryItems[inventoryItem.category][index].master;
+    }
+  };
+
   $scope.update = function(inventoryItem) {
+    inventoryItem.inEditMode = false;
     inventoryService.save(inventoryItem).then(function(item) {
       notifierService.notify('Inventory item was update');
     }, function(reason) {
@@ -1014,25 +1031,6 @@ function membersCtrl($scope, $location, $window, memberService, notifierService,
   };
 }
 
-angular.module('app').controller('navbarLoginCtrl', navbarLoginCtrl);
-navbarLoginCtrl.$inject = ['$scope', '$location', 'identityService', 'notifierService', 'authorizationService'];
-function navbarLoginCtrl($scope, $location, identityService, notifierService, authorizationService) {
-  $scope.identityService = identityService;
-
-  $scope.signout = function() {
-    authorizationService.logoutMember().then(function() {
-      $scope.username = '';
-      $scope.password = '';
-      notifierService.notify('You have successfully signed out!');
-      $location.path('/');
-    });
-  };
-
-  $scope.isActive = function (viewLocation) {
-    return viewLocation === $location.path();
-  };
-}
-
 angular.module('app').controller('resultsCtrl', resultsCtrl);
 resultsCtrl.$inject = ['$scope', '$sce', 'videoService'];
 function resultsCtrl($scope, $sce, videoService) {
@@ -1055,6 +1053,25 @@ function resultsCtrl($scope, $sce, videoService) {
   };
 }
 
+
+angular.module('app').controller('navbarLoginCtrl', navbarLoginCtrl);
+navbarLoginCtrl.$inject = ['$scope', '$location', 'identityService', 'notifierService', 'authorizationService'];
+function navbarLoginCtrl($scope, $location, identityService, notifierService, authorizationService) {
+  $scope.identityService = identityService;
+
+  $scope.signout = function() {
+    authorizationService.logoutMember().then(function() {
+      $scope.username = '';
+      $scope.password = '';
+      notifierService.notify('You have successfully signed out!');
+      $location.path('/');
+    });
+  };
+
+  $scope.isActive = function (viewLocation) {
+    return viewLocation === $location.path();
+  };
+}
 
 angular.module('app').controller('volunteerEventCreateCtrl', volunteerEventCreateCtrl);
 volunteerEventCreateCtrl.$inject = ['$scope', '$location', 'notifierService', 'volunteerEventService'];

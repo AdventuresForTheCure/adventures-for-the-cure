@@ -13,23 +13,20 @@
 	background-image: url("/test/img/polka-dots.jpg");
 }
 
-.inventory-item-input-category {
-    min-width: 175px;
-    margin-left: 5px;
-    margin-bottom: 5px;
+.form-group {
+    padding-left: 10px;
 }
 
-.inventory-item-input-name {
-    min-width: 275px;
-    margin-left: 5px;
-    margin-bottom: 5px;
+form[name='inventoryItemForm'] {
+    width: 100%;
 }
 
-.inventory-item-input {
-    min-width: 25px;
-    max-width: 50px;
-    margin-left: 5px;
-    margin-bottom: 5px;
+form[name='inventoryItemForm'] input.inventory-item-name-input {
+    width: 275px;
+}
+
+form[name='inventoryItemForm'] input.inventory-item-number-input {
+    width: 75px;
 }
 
 .inventory-item-delete {
@@ -138,4 +135,8 @@ a {
     right: 50px;
     top: 300px;
     width: 90%;
+}
+
+div[name='inventoryItemList'] .row {
+    border-top: solid grey thin;
 }
