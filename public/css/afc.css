@@ -34,6 +34,10 @@ form[name='inventoryItemForm'] input.inventory-item-number-input {
     margin-bottom: 2px;
 }
 
+select.inventory-item-select {
+    width: 100%;
+}
+
 body {
 	background-color: #777777;
     padding-top: 90px;

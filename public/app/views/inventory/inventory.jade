@@ -58,32 +58,28 @@
               .row
                 .col-md-3
                   .form-group
-                    .row
-                      label.col-md-3.control-label Category
-                      .col-md-9
-                        select.inventory-item-name-input.form-control(name='category', ng-model="inventoryItem.category", ng-options='category as category for category in allCategories')
-                    .row
-                      label.col-md-3.control-label Name
-                      .col-md-9
-                        input.inventory-item-name-input.form-control(type='text' ng-model='inventoryItem.name')
+                    label.control-label Category
+                    select.form-control(style='width: 100%' name='category', ng-model="inventoryItem.category", ng-options='category as category for category in allCategories')
+                    label.control-label Name
+                    input.form-control(style='width: 100%' type='text' ng-model='inventoryItem.name')
                 .col-md-2
                   .form-group
                     label.control-label Price
-                    input.inventory-item-number-input.form-control(type='number' ng-model='inventoryItem.price')
+                    input.form-control(style='width: 100%' type='number' ng-model='inventoryItem.price')
                 .col-md-2
                   .form-group
                     label.control-label.special 'ON SALE'
-                    input.special.inventory-item-number-input.form-control(type='number' ng-model='inventoryItem.salePrice' tooltip="Set to blank or 0 if not on sale")
+                    input.special.form-control(style='width: 100%' type='number' ng-model='inventoryItem.salePrice' tooltip="Set to blank or 0 if not on sale")
                 .col-md-2
                   .form-group
                     label.control-label Remaining
-                    input.inventory-item-number-input.form-control(type='number' ng-model='inventoryItem.quantity' tooltip="Set to blank or 0 if sold out")
+                    input.form-control(style='width: 100%' type='number' ng-model='inventoryItem.quantity' tooltip="Set to blank or 0 if sold out")
                 .col-md-2
                   .form-group
                     label.control-label Image
-                      div(ng-if='inventoryItem.loadingImg')
+                      div(style='width: 100%' ng-if='inventoryItem.loadingImg')
                         img(src='/img/loader.gif')
-                      div(ng-if="!inventoryItem.loadingImg && inventoryItem.imgPath")
+                      div(style='width: 100%' ng-if="!inventoryItem.loadingImg && inventoryItem.imgPath")
                         a(href="{{inventoryItem.imgPath}}" target="_blank")
                           img(src="{{inventoryItem.imgPath}}" width="100px" height="auto")
                     input(name="imageUpload" type="file" ng-file-select="onUpdatedFileSelect(inventoryItem, $files)" accept="image/*")
