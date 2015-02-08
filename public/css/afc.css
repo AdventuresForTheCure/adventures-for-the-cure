@@ -137,6 +137,6 @@ a {
     width: 90%;
 }
 
-div[name='inventoryItemList'] .row {
+div[name='inventoryItemList'] form > .row, div[name='inventoryItemList'] > .row {
     border-top: solid grey thin;
 }

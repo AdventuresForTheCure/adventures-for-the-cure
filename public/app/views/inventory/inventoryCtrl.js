@@ -1,6 +1,6 @@
 angular.module('app').controller('inventoryCtrl', inventoryCtrl);
-inventoryCtrl.$inject = ['$scope', 'inventoryService', 'notifierService', 'identityService'];
-function inventoryCtrl($scope, inventoryService, notifierService, identityService) {
+inventoryCtrl.$inject = ['$scope', 'inventoryService', 'notifierService', 'identityService', 'confirmModalService'];
+function inventoryCtrl($scope, inventoryService, notifierService, identityService, confirmModalService) {
   $scope.inventoryItems = {};
   $scope.newItem = newItem();
   $scope.allCategories = [
@@ -35,6 +35,14 @@ function inventoryCtrl($scope, inventoryService, notifierService, identityServic
 
   $scope.ableToEdit = function() {
     if (identityService.currentMember && identityService.currentMember.isInventory()) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  $scope.isAdmin = function() {
+    if (identityService.currentMember && identityService.currentMember.isAdmin()) {
       return true;
     } else {
       return false;
@@ -84,12 +92,17 @@ function inventoryCtrl($scope, inventoryService, notifierService, identityServic
   };
 
   $scope.delete = function(inventoryItem) {
-    inventoryService.delete(inventoryItem).then(function(item) {
-      $scope.getInventoryItems();
-      notifierService.notify('Inventory item was deleted');
-    }, function(reason) {
-      notifierService.error(reason);
-    });
+    var message = 'Are you sure you want to delete the item: ' + inventoryItem.name + '?';
+    confirmModalService.showModal(message).then(function(isConfirmed) {
+      if (isConfirmed) {
+        inventoryService.delete(inventoryItem).then(function(item) {
+          $scope.getInventoryItems();
+          notifierService.notify('Inventory item was deleted');
+        }, function(reason) {
+          notifierService.error(reason);
+        });
+      }
+    })
   };
 
   $scope.onFileSelect = function($files) {

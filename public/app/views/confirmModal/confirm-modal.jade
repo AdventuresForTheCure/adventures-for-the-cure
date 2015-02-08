@@ -1,8 +1,8 @@
 div
   .modal-header
-    h3 Confirm Delete
+    h3 Confirm
   .modal-body
-    p Are you sure you want to delete the member: "{{member.name}}" &lt;{{member.username}}&gt;?
+    p {{message}}
   .modal-footer
     button.btn.btn-primary(ng-click="confirm()") Yes
     button.btn(ng-click="cancel()") Cancel

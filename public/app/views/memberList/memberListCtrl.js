@@ -1,6 +1,6 @@
 angular.module('app').controller('memberListCtrl', memberListCtrl);
-memberListCtrl.$inject = ['$scope', '$location', '$modal', 'memberService', 'identityService'];
-function memberListCtrl($scope, $location, $modal, memberService, identityService) {
+memberListCtrl.$inject = ['$scope', '$location', 'notifierService', 'memberService', 'identityService', 'confirmModalService'];
+function memberListCtrl($scope, $location, notifierService, memberService, identityService, confirmModalService) {
   $scope.identity = identityService;
 
   function getMembers() {
@@ -14,35 +14,18 @@ function memberListCtrl($scope, $location, $modal, memberService, identityServic
   };
 
   $scope.deleteMember = function(member) {
-    var modalInstance = $modal.open({
-      templateUrl: '/partials/memberList/confirm-delete-member-modal',
-      controller: confirmDeleteMemberCtrl,
-      resolve: {
-        member: function () {
-          return member;
-        }
+    var message = 'Are you sure you want to delete the member: ' + member.name + ' <' + member.username + '>?';
+    confirmModalService.showModal(message).then(function(isConfirmed) {
+      if (isConfirmed) {
+        memberService.deleteMember(member).then(function() {
+          notifierService.notify('Member ' + member.username + ' has been deleted');
+          getMembers();
+        }, function(reason) {
+          notifierService.error(reason);
+        });
       }
-    });
-    modalInstance.result.then(function() {
-      getMembers();
-    });
+    })
   };
 
   getMembers();
-}
-
-function confirmDeleteMemberCtrl($scope, $modalInstance, memberService, notifierService, member) {
-  $scope.member = member;
-  $scope.confirm = function () {
-    memberService.deleteMember(member).then(function() {
-      notifierService.notify('Member ' + member.username + ' has been deleted');
-    }, function(reason) {
-      notifierService.error(reason);
-    });
-    $modalInstance.close();
-  };
-
-  $scope.cancel = function () {
-    $modalInstance.dismiss();
-  };
 }
