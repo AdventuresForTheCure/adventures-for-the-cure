@@ -637,9 +637,6 @@ function adminCtrl($scope, $location, notifierService, authorizationService) {
     });
   };
 }
-angular.module('app').controller('boardOnlyCtrl', boardOnlyCtrl);
-boardOnlyCtrl.$inject = ['$scope'];
-function boardOnlyCtrl($scope) {}
 angular.module('app').controller('campaignsCtrl', campaignsCtrl);
 campaignsCtrl.$inject = ['$scope', '$sce', '$location', 'campaignService'];
 function campaignsCtrl($scope, $sce, $location, campaignService) {
@@ -679,6 +676,9 @@ function campaignsCtrl($scope, $sce, $location, campaignService) {
 }
 
 
+angular.module('app').controller('boardOnlyCtrl', boardOnlyCtrl);
+boardOnlyCtrl.$inject = ['$scope'];
+function boardOnlyCtrl($scope) {}
 angular.module('app').controller('confirmModalCtrl', confirmModalCtrl);
 confirmModalCtrl.$inject = ['$scope', '$modalInstance', 'message'];
 function confirmModalCtrl ($scope, $modalInstance, message) {
@@ -1060,25 +1060,6 @@ function membersCtrl($scope, $location, $window, memberService, notifierService,
   };
 }
 
-angular.module('app').controller('navbarLoginCtrl', navbarLoginCtrl);
-navbarLoginCtrl.$inject = ['$scope', '$location', 'identityService', 'notifierService', 'authorizationService'];
-function navbarLoginCtrl($scope, $location, identityService, notifierService, authorizationService) {
-  $scope.identityService = identityService;
-
-  $scope.signout = function() {
-    authorizationService.logoutMember().then(function() {
-      $scope.username = '';
-      $scope.password = '';
-      notifierService.notify('You have successfully signed out!');
-      $location.path('/');
-    });
-  };
-
-  $scope.isActive = function (viewLocation) {
-    return viewLocation === $location.path();
-  };
-}
-
 angular.module('app').controller('resultsCtrl', resultsCtrl);
 resultsCtrl.$inject = ['$scope', '$sce', 'videoService'];
 function resultsCtrl($scope, $sce, videoService) {
@@ -1101,6 +1082,25 @@ function resultsCtrl($scope, $sce, videoService) {
   };
 }
 
+
+angular.module('app').controller('navbarLoginCtrl', navbarLoginCtrl);
+navbarLoginCtrl.$inject = ['$scope', '$location', 'identityService', 'notifierService', 'authorizationService'];
+function navbarLoginCtrl($scope, $location, identityService, notifierService, authorizationService) {
+  $scope.identityService = identityService;
+
+  $scope.signout = function() {
+    authorizationService.logoutMember().then(function() {
+      $scope.username = '';
+      $scope.password = '';
+      notifierService.notify('You have successfully signed out!');
+      $location.path('/');
+    });
+  };
+
+  $scope.isActive = function (viewLocation) {
+    return viewLocation === $location.path();
+  };
+}
 
 angular.module('app').controller('volunteerEventCreateCtrl', volunteerEventCreateCtrl);
 volunteerEventCreateCtrl.$inject = ['$scope', '$location', 'notifierService', 'volunteerEventService'];
@@ -1133,6 +1133,35 @@ function volunteerEventCreateCtrl($scope, $location, notifierService, volunteerE
 
   $scope.onFileSelect = function($files) {
     $scope.img = $files[0];
+  };
+}
+angular.module('app').controller('volunteerEventEditCtrl', volunteerEventEditCtrl);
+volunteerEventEditCtrl.$inject = ['$scope', '$route', 'notifierService', 'volunteerEventService', 'identityService'];
+function volunteerEventEditCtrl($scope, $route, notifierService, volunteerEventService, identityService) {
+  $scope.identityService = identityService;
+  $scope.volunteerEventToEdit = undefined;
+  $scope.showImgTmp = false;
+
+  volunteerEventService.getVolunteerEvent($route.current.params.id).then(function(volunteerEvent) {
+    $scope.volunteerEventToEdit = volunteerEvent;
+  });
+
+  $scope.saveVolunteerEvent = function() {
+    volunteerEventService.saveVolunteerEvent($scope.volunteerEventToEdit).then(function(volunteerEvent) {
+      $scope.volunteerEventToEdit = volunteerEvent;
+      notifierService.notify('Volunteer event has been updated');
+    }, function(reason) {
+      notifierService.error(reason);
+    });
+  };
+
+  $scope.onFileSelect = function($files) {
+    $scope.volunteerEventToEdit.imgTmp = $files[0];
+    volunteerEventService.saveVolunteerEventTmpImg($scope.volunteerEventToEdit).then(function(volunteerEvent) {
+      $scope.volunteerEventToEdit = volunteerEvent;
+      $scope.volunteerEventToEdit.img = $files[0];
+      $scope.showImgTmp = true;
+    });
   };
 }
 angular.module('app').controller('volunteerEventListCtrl', volunteerEventListCtrl);
@@ -1181,35 +1210,5 @@ function confirmDeleteVolunteerEventCtrl($scope, $modalInstance, volunteerEventS
 
   $scope.cancel = function () {
     $modalInstance.dismiss();
-  };
-}
-
-angular.module('app').controller('volunteerEventEditCtrl', volunteerEventEditCtrl);
-volunteerEventEditCtrl.$inject = ['$scope', '$route', 'notifierService', 'volunteerEventService', 'identityService'];
-function volunteerEventEditCtrl($scope, $route, notifierService, volunteerEventService, identityService) {
-  $scope.identityService = identityService;
-  $scope.volunteerEventToEdit = undefined;
-  $scope.showImgTmp = false;
-
-  volunteerEventService.getVolunteerEvent($route.current.params.id).then(function(volunteerEvent) {
-    $scope.volunteerEventToEdit = volunteerEvent;
-  });
-
-  $scope.saveVolunteerEvent = function() {
-    volunteerEventService.saveVolunteerEvent($scope.volunteerEventToEdit).then(function(volunteerEvent) {
-      $scope.volunteerEventToEdit = volunteerEvent;
-      notifierService.notify('Volunteer event has been updated');
-    }, function(reason) {
-      notifierService.error(reason);
-    });
-  };
-
-  $scope.onFileSelect = function($files) {
-    $scope.volunteerEventToEdit.imgTmp = $files[0];
-    volunteerEventService.saveVolunteerEventTmpImg($scope.volunteerEventToEdit).then(function(volunteerEvent) {
-      $scope.volunteerEventToEdit = volunteerEvent;
-      $scope.volunteerEventToEdit.img = $files[0];
-      $scope.showImgTmp = true;
-    });
   };
 }
