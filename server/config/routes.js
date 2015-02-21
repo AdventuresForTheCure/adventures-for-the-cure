@@ -1,6 +1,7 @@
 var auth = require('./auth');
 var cache = require('./cache');
 var campaigns = require('../controllers/campaignsController');
+var sponsorLogos = require('../controllers/sponsorLogosController');
 var videos = require('../controllers/videosController');
 var members = require('../controllers/membersController');
 var inventoryItems = require('../controllers/inventoryItemsController');
@@ -11,6 +12,8 @@ var multipartMiddleware = multipart();
 module.exports = function(app, config) {
   app.get('/api/campaigns/:name', cache.disableBrowserCache, campaigns.getCampaign);
   app.get('/api/campaigns', cache.disableBrowserCache, campaigns.getCampaigns);
+
+  app.get('/api/sponsorLogos', cache.disableBrowserCache, sponsorLogos.getSponsorLogos);
 
   app.get('/api/videos/:name', cache.disableBrowserCache, videos.getVideo);
   app.get('/api/videos', cache.disableBrowserCache, videos.getVideos);

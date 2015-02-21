@@ -12,6 +12,8 @@
  */
 var path = require('path');
 var rootPath = path.normalize(__dirname + '/../../');
+var sponsorLogosPath = rootPath + 'public/img/jerseys/';
+var sponsorLogosUrl = 'img/jerseys/';
 var campaignsPath = rootPath + 'public/app/views/campaigns/campaigns/';
 var membersPath = rootPath + 'public/app/views/members/members/';
 var videosPath = rootPath + '/public/app/views/results/videos/';
@@ -28,6 +30,8 @@ var environments = {
       debugMode: true
     },
     rootPath: rootPath,
+    sponsorLogosPath: sponsorLogosPath,
+    sponsorLogosUrl: sponsorLogosUrl,
     campaignsPath: campaignsPath,
     membersPath: membersPath,
     videosPath: videosPath,
@@ -44,6 +48,8 @@ var environments = {
       debugMode: false
     },
     rootPath: rootPath,
+    sponsorLogosPath: sponsorLogosPath,
+    sponsorLogosUrl: sponsorLogosUrl,
     campaignsPath: campaignsPath,
     membersPath: membersPath,
     videosPath: videosPath,

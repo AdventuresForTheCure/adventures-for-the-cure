@@ -42,9 +42,9 @@ angular.module('app').config(function($routeProvider, $locationProvider) {
     })
     .when('/campaigns', { templateUrl: '/partials/campaigns/campaigns'
     })
-    .when('/inventory', { templateUrl: '/partials/inventory/inventory'
+    .when('/sponsor-logos', { templateUrl: '/partials/sponsorLogos/sponsor-logos'
     })
-    .when('/inventory_old', { templateUrl: '/partials/inventory/inventory_old.html'
+    .when('/inventory', { templateUrl: '/partials/inventory/inventory'
     })
     .when('/contact', { templateUrl: '/partials/contact/contact'
     })

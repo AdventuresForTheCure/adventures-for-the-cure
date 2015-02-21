@@ -42,9 +42,9 @@ angular.module('app').config(function($routeProvider, $locationProvider) {
     })
     .when('/campaigns', { templateUrl: '/partials/campaigns/campaigns'
     })
-    .when('/inventory', { templateUrl: '/partials/inventory/inventory'
+    .when('/sponsor-logos', { templateUrl: '/partials/sponsorLogos/sponsor-logos'
     })
-    .when('/inventory_old', { templateUrl: '/partials/inventory/inventory_old.html'
+    .when('/inventory', { templateUrl: '/partials/inventory/inventory'
     })
     .when('/contact', { templateUrl: '/partials/contact/contact'
     })
@@ -457,6 +457,22 @@ function notifierService(toastrService) {
     },
     error: function(msg) {
       toastrService.error(msg);
+    }
+  };
+}
+angular.module('app').factory('sponsorLogosService', ['$q', '$http', sponsorLogosService]);
+function sponsorLogosService($q, $http, Campaign) {
+  return {
+    getSponsorLogos: function() {
+      var dfd = $q.defer();
+      $http.get('/api/sponsorLogos/')
+        .success(function(data, status, headers, config) {
+          dfd.resolve(data);
+        })
+        .error(function(error, status, headers, config) {
+          dfd.reject(error.reason);
+        });
+      return dfd.promise;
     }
   };
 }
@@ -1060,6 +1076,25 @@ function membersCtrl($scope, $location, $window, memberService, notifierService,
   };
 }
 
+angular.module('app').controller('navbarLoginCtrl', navbarLoginCtrl);
+navbarLoginCtrl.$inject = ['$scope', '$location', 'identityService', 'notifierService', 'authorizationService'];
+function navbarLoginCtrl($scope, $location, identityService, notifierService, authorizationService) {
+  $scope.identityService = identityService;
+
+  $scope.signout = function() {
+    authorizationService.logoutMember().then(function() {
+      $scope.username = '';
+      $scope.password = '';
+      notifierService.notify('You have successfully signed out!');
+      $location.path('/');
+    });
+  };
+
+  $scope.isActive = function (viewLocation) {
+    return viewLocation === $location.path();
+  };
+}
+
 angular.module('app').controller('resultsCtrl', resultsCtrl);
 resultsCtrl.$inject = ['$scope', '$sce', 'videoService'];
 function resultsCtrl($scope, $sce, videoService) {
@@ -1083,24 +1118,14 @@ function resultsCtrl($scope, $sce, videoService) {
 }
 
 
-angular.module('app').controller('navbarLoginCtrl', navbarLoginCtrl);
-navbarLoginCtrl.$inject = ['$scope', '$location', 'identityService', 'notifierService', 'authorizationService'];
-function navbarLoginCtrl($scope, $location, identityService, notifierService, authorizationService) {
-  $scope.identityService = identityService;
-
-  $scope.signout = function() {
-    authorizationService.logoutMember().then(function() {
-      $scope.username = '';
-      $scope.password = '';
-      notifierService.notify('You have successfully signed out!');
-      $location.path('/');
-    });
-  };
-
-  $scope.isActive = function (viewLocation) {
-    return viewLocation === $location.path();
-  };
+angular.module('app').controller('sponsorLogosCtrl', sponsorLogosCtrl);
+sponsorLogosCtrl.$inject = ['$scope', 'sponsorLogosService'];
+function sponsorLogosCtrl($scope, sponsorLogosService) {
+  sponsorLogosService.getSponsorLogos().then(function(sponsorLogos) {
+    $scope.sponsorLogos = sponsorLogos;
+  });
 }
+
 
 angular.module('app').controller('volunteerEventCreateCtrl', volunteerEventCreateCtrl);
 volunteerEventCreateCtrl.$inject = ['$scope', '$location', 'notifierService', 'volunteerEventService'];
