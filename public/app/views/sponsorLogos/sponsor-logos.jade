@@ -1,0 +1,6 @@
+.row(ng-controller='sponsorLogosCtrl')
+  .well
+    h4 2015 Sponsor Logos
+    ul(style='padding-left:10px')
+      li(ng-repeat='sponsorLogo in sponsorLogos')
+        a(href='{{sponsorLogo.path}}{{sponsorLogo.name}}' target='_blank') {{sponsorLogo.name}}
