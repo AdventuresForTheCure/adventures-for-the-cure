@@ -23,7 +23,9 @@ exports.getCampaign = function(req, res) {
   var campaignName = req.params.name;
   dirReader.getFileContents(dir, campaignName + '.html', function (err, data) {
     if(err) { errorHandler.sendError(req, res, err); }
-    res.set('Content-Type', 'text/html');
-    return res.send(data.fileContent);
+    else {
+      res.set('Content-Type', 'text/html');
+      return res.send(data.fileContent);
+    }
   });
 };
