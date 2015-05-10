@@ -43,8 +43,7 @@ var environments = {
   production: {
     env: env,
     db: {
-      url: 'mongodb://' + process.env.AFC_MONGO_USERNAME + ':' +
-          process.env.AFC_MONGO_PASSWORD + '@@ds053597.mongolab.com:53597/adventuresforthecure',
+      url: 'mongodb://' + process.env.AFC_MONGO_USERNAME + ':' + process.env.AFC_MONGO_PASSWORD + '@ds053597.mongolab.com:53597/adventuresforthecure',
       debugMode: false
     },
     rootPath: rootPath,
