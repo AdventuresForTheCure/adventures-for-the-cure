@@ -44,7 +44,7 @@ var environments = {
     env: env,
     db: {
       url: 'mongodb://' + process.env.AFC_MONGO_USERNAME + ':' +
-          process.env.AFC_MONGO_PASSWORD + '@ds037688.mongolab.com:37688/adventuresforthecure',
+          process.env.AFC_MONGO_PASSWORD + '@@ds053597.mongolab.com:53597/adventuresforthecure',
       debugMode: false
     },
     rootPath: rootPath,
