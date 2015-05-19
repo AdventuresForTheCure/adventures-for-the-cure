@@ -89,51 +89,14 @@ angular.module('app').config(function($routeProvider, $locationProvider) {
 angular.module('app').run(function($rootScope, $location, notifierService, identityService) {
   $rootScope.$on('$routeChangeError', function(evt, current, previous, rejection) {
     if (rejection === 'not authorized') {
-      notifierService.error('You are not authorized to view this page.');
+      notifierService.error('You are not authorized to view this page.  Are you logged in?');
+      $location.path('/login');
     } else if (rejection === 'not authorized, profile not complete') {
       notifierService.error('You must upload a bio and picture before you can view this page!');
       $location.path('/member-edit/' + identityService.currentMember._id);
     }
   });
 });
-angular.module('app').factory('Member', ['$resource', Member]);
-function Member($resource) {
-  var member = $resource('/api/members', {}, {});
-
-  member.prototype.isAdmin = function() {
-    return this.isRole('admin');
-  };
-  member.prototype.setAdmin = function(isSet) {
-    this.setRole('admin', isSet);
-  };
-
-  member.prototype.isInventory = function() {
-    return this.isRole('inventory');
-  };
-  member.prototype.setInventory = function(isSet) {
-    this.setRole('inventory', isSet);
-  };
-
-  member.prototype.isBoard = function() {
-    return this.isRole('board');
-  };
-  member.prototype.setBoard = function(isSet) {
-    this.setRole('board', isSet);
-  };
-
-  member.prototype.isRole = function(roleName) {
-    return this.roles && this.roles.indexOf(roleName) > -1;
-  };
-  member.prototype.setRole = function(roleName, isSet) {
-    if (isSet && this.roles.indexOf(roleName) === -1) {
-      this.roles.push(roleName);
-    } else {
-      var roleIndex = this.roles.indexOf(roleName);
-      this.roles.splice(roleIndex, 1);
-    }
-  };
-  return member;
-}
 angular.module('app').factory('authorizationService',
   ['$http', '$q', 'identityService', 'Member', authorizationService]);
 function authorizationService($http, $q, identityService, Member) {
@@ -634,6 +597,44 @@ function volunteerEventService($q, $http, $upload) {
     }
   };
 }
+angular.module('app').factory('Member', ['$resource', Member]);
+function Member($resource) {
+  var member = $resource('/api/members', {}, {});
+
+  member.prototype.isAdmin = function() {
+    return this.isRole('admin');
+  };
+  member.prototype.setAdmin = function(isSet) {
+    this.setRole('admin', isSet);
+  };
+
+  member.prototype.isInventory = function() {
+    return this.isRole('inventory');
+  };
+  member.prototype.setInventory = function(isSet) {
+    this.setRole('inventory', isSet);
+  };
+
+  member.prototype.isBoard = function() {
+    return this.isRole('board');
+  };
+  member.prototype.setBoard = function(isSet) {
+    this.setRole('board', isSet);
+  };
+
+  member.prototype.isRole = function(roleName) {
+    return this.roles && this.roles.indexOf(roleName) > -1;
+  };
+  member.prototype.setRole = function(roleName, isSet) {
+    if (isSet && this.roles.indexOf(roleName) === -1) {
+      this.roles.push(roleName);
+    } else {
+      var roleIndex = this.roles.indexOf(roleName);
+      this.roles.splice(roleIndex, 1);
+    }
+  };
+  return member;
+}
 angular.module('app').controller('adminCtrl', adminCtrl);
 adminCtrl.$inject = ['$scope', '$location', 'notifierService', 'authorizationService'];
 function adminCtrl($scope, $location, notifierService, authorizationService) {
@@ -1076,25 +1077,6 @@ function membersCtrl($scope, $location, $window, memberService, notifierService,
   };
 }
 
-angular.module('app').controller('navbarLoginCtrl', navbarLoginCtrl);
-navbarLoginCtrl.$inject = ['$scope', '$location', 'identityService', 'notifierService', 'authorizationService'];
-function navbarLoginCtrl($scope, $location, identityService, notifierService, authorizationService) {
-  $scope.identityService = identityService;
-
-  $scope.signout = function() {
-    authorizationService.logoutMember().then(function() {
-      $scope.username = '';
-      $scope.password = '';
-      notifierService.notify('You have successfully signed out!');
-      $location.path('/');
-    });
-  };
-
-  $scope.isActive = function (viewLocation) {
-    return viewLocation === $location.path();
-  };
-}
-
 angular.module('app').controller('resultsCtrl', resultsCtrl);
 resultsCtrl.$inject = ['$scope', '$sce', 'videoService'];
 function resultsCtrl($scope, $sce, videoService) {
@@ -1117,6 +1099,25 @@ function resultsCtrl($scope, $sce, videoService) {
   };
 }
 
+
+angular.module('app').controller('navbarLoginCtrl', navbarLoginCtrl);
+navbarLoginCtrl.$inject = ['$scope', '$location', 'identityService', 'notifierService', 'authorizationService'];
+function navbarLoginCtrl($scope, $location, identityService, notifierService, authorizationService) {
+  $scope.identityService = identityService;
+
+  $scope.signout = function() {
+    authorizationService.logoutMember().then(function() {
+      $scope.username = '';
+      $scope.password = '';
+      notifierService.notify('You have successfully signed out!');
+      $location.path('/');
+    });
+  };
+
+  $scope.isActive = function (viewLocation) {
+    return viewLocation === $location.path();
+  };
+}
 
 angular.module('app').controller('sponsorLogosCtrl', sponsorLogosCtrl);
 sponsorLogosCtrl.$inject = ['$scope', 'sponsorLogosService'];

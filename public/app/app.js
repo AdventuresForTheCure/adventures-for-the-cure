@@ -89,7 +89,8 @@ angular.module('app').config(function($routeProvider, $locationProvider) {
 angular.module('app').run(function($rootScope, $location, notifierService, identityService) {
   $rootScope.$on('$routeChangeError', function(evt, current, previous, rejection) {
     if (rejection === 'not authorized') {
-      notifierService.error('You are not authorized to view this page.');
+      notifierService.error('You are not authorized to view this page.  Are you logged in?');
+      $location.path('/login');
     } else if (rejection === 'not authorized, profile not complete') {
       notifierService.error('You must upload a bio and picture before you can view this page!');
       $location.path('/member-edit/' + identityService.currentMember._id);
