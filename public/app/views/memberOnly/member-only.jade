@@ -22,6 +22,11 @@
           a(href='https://teamcenter.hincapie.com/' target='_blank') https://teamcenter.hincapie.com/
         li Access Code: adventuresforthecure15
   .well
+    h3 2015 Jersey Images
+    ul
+      li(ng-repeat='jerseyImage in jerseyImages')
+        a(href='{{jerseyImage.path + "/" + jerseyImage.name}}' target='_blank') {{jerseyImage.name}}
+  .well
     h3 AFC Team Member Resources
     p
       ul

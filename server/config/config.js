@@ -14,6 +14,8 @@ var path = require('path');
 var rootPath = path.normalize(__dirname + '/../../');
 var sponsorLogosPath = rootPath + 'public/img/jerseys/';
 var sponsorLogosUrl = 'img/jerseys/';
+var jerseyImagesPath = rootPath + 'public/img/jerseys/2015';
+var jerseyImagesUrl = 'img/jerseys/2015';
 var campaignsPath = rootPath + 'public/app/views/campaigns/campaigns/';
 var membersPath = rootPath + 'public/app/views/members/members/';
 var videosPath = rootPath + '/public/app/views/results/videos/';
@@ -35,6 +37,8 @@ var environments = {
     campaignsPath: campaignsPath,
     membersPath: membersPath,
     videosPath: videosPath,
+    jerseyImagesPath: jerseyImagesPath,
+    jerseyImagesUrl: jerseyImagesUrl,
     port: process.env.PORT || 3030
   },
   /**
