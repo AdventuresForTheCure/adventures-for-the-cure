@@ -56,6 +56,8 @@ var environments = {
     campaignsPath: campaignsPath,
     membersPath: membersPath,
     videosPath: videosPath,
+    jerseyImagesPath: jerseyImagesPath,
+    jerseyImagesUrl: jerseyImagesUrl,
     port: process.env.PORT || 80
   }
 };
