@@ -49,6 +49,10 @@ module.exports = function(app, config) {
 
   app.post('/logout', auth.logout);
 
+  app.get('/robots.txt', function(req, res) {
+    res.render('robots');
+  })
+
   // ensure that the client side application does ALL of the routing
   app.get('*', function(req, res) {
     res.render('index', {

@@ -651,6 +651,9 @@ function volunteerEventService($q, $http, $upload) {
     }
   };
 }
+angular.module('app').controller('boardOnlyCtrl', boardOnlyCtrl);
+boardOnlyCtrl.$inject = ['$scope'];
+function boardOnlyCtrl($scope) {}
 angular.module('app').controller('adminCtrl', adminCtrl);
 adminCtrl.$inject = ['$scope', '$location', 'notifierService', 'authorizationService'];
 function adminCtrl($scope, $location, notifierService, authorizationService) {
@@ -670,9 +673,6 @@ function adminCtrl($scope, $location, notifierService, authorizationService) {
     });
   };
 }
-angular.module('app').controller('boardOnlyCtrl', boardOnlyCtrl);
-boardOnlyCtrl.$inject = ['$scope'];
-function boardOnlyCtrl($scope) {}
 angular.module('app').controller('campaignsCtrl', campaignsCtrl);
 campaignsCtrl.$inject = ['$scope', '$sce', '$location', 'campaignService'];
 function campaignsCtrl($scope, $sce, $location, campaignService) {
@@ -937,6 +937,37 @@ function memberCreateCtrl($scope, $location, notifierService, memberService) {
     $scope.img = $files[0];
   };
 }
+angular.module('app').controller('memberListCtrl', memberListCtrl);
+memberListCtrl.$inject = ['$scope', '$location', 'notifierService', 'memberService', 'identityService', 'confirmModalService'];
+function memberListCtrl($scope, $location, notifierService, memberService, identityService, confirmModalService) {
+  $scope.identity = identityService;
+
+  function getMembers() {
+    memberService.getMembers().then(function (members) {
+      $scope.members = members;
+    });
+  }
+
+  $scope.editMember = function(member) {
+    $location.path('/member-edit/' + member._id);
+  };
+
+  $scope.deleteMember = function(member) {
+    var message = 'Are you sure you want to delete the member: ' + member.name + ' <' + member.username + '>?';
+    confirmModalService.showModal(message).then(function(isConfirmed) {
+      if (isConfirmed) {
+        memberService.deleteMember(member).then(function() {
+          notifierService.notify('Member ' + member.username + ' has been deleted');
+          getMembers();
+        }, function(reason) {
+          notifierService.error(reason);
+        });
+      }
+    })
+  };
+
+  getMembers();
+}
 angular.module('app').controller('memberEditCtrl', memberEditCtrl);
 memberEditCtrl.$inject = ['$scope', '$routeParams', 'notifierService', 'memberService', 'identityService'];
 function memberEditCtrl($scope, $routeParams, notifierService, memberService, identityService) {
@@ -986,37 +1017,12 @@ function memberEditCtrl($scope, $routeParams, notifierService, memberService, id
     });
   }
 }
-angular.module('app').controller('memberListCtrl', memberListCtrl);
-memberListCtrl.$inject = ['$scope', '$location', 'notifierService', 'memberService', 'identityService', 'confirmModalService'];
-function memberListCtrl($scope, $location, notifierService, memberService, identityService, confirmModalService) {
-  $scope.identity = identityService;
-
-  function getMembers() {
-    memberService.getMembers().then(function (members) {
-      $scope.members = members;
-    });
-  }
-
-  $scope.editMember = function(member) {
-    $location.path('/member-edit/' + member._id);
-  };
-
-  $scope.deleteMember = function(member) {
-    var message = 'Are you sure you want to delete the member: ' + member.name + ' <' + member.username + '>?';
-    confirmModalService.showModal(message).then(function(isConfirmed) {
-      if (isConfirmed) {
-        memberService.deleteMember(member).then(function() {
-          notifierService.notify('Member ' + member.username + ' has been deleted');
-          getMembers();
-        }, function(reason) {
-          notifierService.error(reason);
-        });
-      }
-    })
-  };
-
-  getMembers();
-}
+angular.module('app').controller('memberOnlyCtrl', memberOnlyCtrl);
+memberOnlyCtrl.$inject = ['$scope', 'jerseyImagesService'];
+function memberOnlyCtrl($scope, jerseyImagesService) {
+  jerseyImagesService.getJerseyImages().then(function(jerseyImages) {
+  $scope.jerseyImages = jerseyImages;
+});}
 angular.module('app').controller('membersCtrl', membersCtrl);
 membersCtrl.$inject = ['$scope', '$location', '$window', 'memberService', 'notifierService', 'identityService'];
 function membersCtrl($scope, $location, $window, memberService, notifierService, identityService) {
@@ -1090,12 +1096,6 @@ function membersCtrl($scope, $location, $window, memberService, notifierService,
   };
 }
 
-angular.module('app').controller('memberOnlyCtrl', memberOnlyCtrl);
-memberOnlyCtrl.$inject = ['$scope', 'jerseyImagesService'];
-function memberOnlyCtrl($scope, jerseyImagesService) {
-  jerseyImagesService.getJerseyImages().then(function(jerseyImages) {
-  $scope.jerseyImages = jerseyImages;
-});}
 angular.module('app').controller('navbarLoginCtrl', navbarLoginCtrl);
 navbarLoginCtrl.$inject = ['$scope', '$location', 'identityService', 'notifierService', 'authorizationService'];
 function navbarLoginCtrl($scope, $location, identityService, notifierService, authorizationService) {
