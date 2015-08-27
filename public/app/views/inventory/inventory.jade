@@ -1,17 +1,16 @@
 .row(ng-controller='inventoryCtrl')
   .col-lg-12
-    .well
+    .well.pagination-centered
       b To make an order:
       ol
         li
-         | Email us at <a href='mailto:afc.inventory@gmail.com?subject=AFC%20Inventory'>afc.inventory@gmail.com</a> and tell us what you want to buy
-        li Total up the amount of everything you are going to purchase and make a payment by clicking the 'Buy Now' button below
-      .pagination-centered
-        form(action='https://www.paypal.com/cgi-bin/webscr' method='post' target='_top')
-          input(type='hidden' name='cmd' value='_s-xclick')
-          input(type='hidden' name='hosted_button_id' value='H5AWTA55ETLHN')
-          input(type='image' src='https://www.paypalobjects.com/en_US/i/btn/btn_buynowCC_LG.gif' border='0' name='submit' alt='PayPal - The safer, easier way to pay online!')
-          img(alt='' border='0' src='https://www.paypalobjects.com/en_US/i/scr/pixel.gif' width='1' height='1')
+          | Make your purchase using the paypal buttons, after you are done send us an email <a href='mailto:afc.inventory@gmail.com?subject=AFC%20Inventory'>afc.inventory@gmail.com</a> to ccoordinate the pick up or shipping of your items.
+      form(target="paypal" action="https://www.paypal.com/cgi-bin/webscr" method="post")
+        input(type="hidden" name="business" value="adventuresforthecure@gmail.com")
+        input(type="hidden" name="cmd" value="_cart")
+        input(type="hidden" name="display" value="1")
+        input(type="image" name="submit" border="0" src="https://www.paypalobjects.com/en_US/i/btn/btn_viewcart_LG.gif" alt="PayPal - The safer, easier way to pay online")
+        img(alt="" border="0" width="1" height="1" src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" )
     .well.pagination-centered
       h3 AFC Inventory
       // p Page is under construction... email afc.inventory@gmail.com if there is something you want to buy
@@ -53,10 +52,10 @@
         hr
         h4 {{category}}
         .row(ng-repeat='inventoryItem in inventoryItems[category]')
-          div(ng-if='inEditMode(inventoryItem)')
+          div.col-md-12(ng-if='inEditMode(inventoryItem)')
             form.form-inline(name='inventoryItemForm')
               .row
-                .col-md-3
+                .col-md-2
                   .form-group
                     label.control-label Category
                     select.form-control(style='width: 100%' name='category', ng-model="inventoryItem.category", ng-options='category as category for category in allCategories')
@@ -85,28 +84,47 @@
                     input(name="imageUpload" type="file" ng-file-select="onUpdatedFileSelect(inventoryItem, $files)" accept="image/*")
                 .col-md-1
                   .form-group
-                    button.btn.btn-default.btn-sm(ng-if='ableToEdit()' ng-click='toggleEditMode(inventoryItem, $index)')
+                    button.btn.btn-default.btn-sm(ng-if='ableToEdit()' ng-click='toggleEditMode(inventoryItem, $index)' title='toggle edit mode')
                       span(class="glyphicon glyphicon-edit" aria-hidden="true")
                     br
-                    button.btn.btn-default.btn-sm(ng-if='ableToEdit() && inEditMode(inventoryItem)' ng-click='update(inventoryItem)')
+                    button.btn.btn-default.btn-sm(ng-if='ableToEdit() && inEditMode(inventoryItem)' ng-click='update(inventoryItem)' title='Update item')
                       span(class="glyphicon glyphicon-save" aria-hidden="true")
                     br
-                    button.btn.btn-default.btn-sm(ng-if='ableToEdit() && inEditMode(inventoryItem)' ng-click='delete(inventoryItem)')
+                    button.btn.btn-default.btn-sm(ng-if='ableToEdit() && inEditMode(inventoryItem)' ng-click='delete(inventoryItem)' title='Delete item')
                       span(class="glyphicon glyphicon-trash" aria-hidden="true")
-          div(ng-if='!inEditMode(inventoryItem)')
-            .col-md-3
-              span{{inventoryItem.name}}
-            .col-md-2
-              span Price: {{inventoryItem.price | currency : symbol : 2 }}
-            .col-md-2
-              span.special(ng-if='inventoryItem.salePrice > 0') ON SALE: {{inventoryItem.salePrice | currency : symbol : 2 }}
-            .col-md-2(ng-if='inventoryItem.quantity >= 0')
-              span(ng-if='inventoryItem.quantity === 0') SOLD OUT!
-              span(ng-if='inventoryItem.quantity > 0') {{inventoryItem.quantity}} Remaining
-            .col-md-2
-              span(ng-if="inventoryItem.imgPath")
-                a(href="{{inventoryItem.imgPath}}" target="_blank")
-                  img(src="{{inventoryItem.imgPath}}" width="100px" height="auto" alt="No image!")
-            .col-md-1
-              button.btn.btn-default.btn-sm(ng-if='ableToEdit()' ng-click='toggleEditMode(inventoryItem, $index)')
-                span(class="glyphicon glyphicon-edit" aria-hidden="true")
+          div.col-md-12(ng-if='!inEditMode(inventoryItem)')
+            .row
+              .col-md-2
+                span{{inventoryItem.name}}
+              .col-md-2
+                span Price: {{inventoryItem.price | currency : symbol : 2 }}
+              .col-md-2
+                span.special(ng-if='inventoryItem.salePrice > 0') ON SALE: {{inventoryItem.salePrice | currency : symbol : 2 }}
+              .col-md-2(ng-if='inventoryItem.quantity >= 0')
+                span(ng-if='inventoryItem.quantity === 0') SOLD OUT!
+                span(ng-if='inventoryItem.quantity > 0') {{inventoryItem.quantity}} Remaining
+              .col-md-2
+                span(ng-if="inventoryItem.imgPath")
+                  a(href="{{inventoryItem.imgPath}}" target="_blank")
+                    img(src="{{inventoryItem.imgPath}}" width="100px" height="auto" alt="No image!")
+              .col-md-1
+                form(target="paypal" action="https://www.paypal.com/cgi-bin/webscr" method="post")
+                  input(type="hidden" name="business" value="adventuresforthecure@gmail.com")
+                  input(type="hidden" name="cmd" value="_cart")
+                  input(type="hidden" name="add" value="1")
+                  input(type="hidden" name="item_name" value="{{inventoryItem.name}}")
+                  input(type="hidden" name="amount" value="{{inventoryItem.salePrice}}")
+                  input(type="hidden" name="currency_code" value="USD")
+                  input(type="hidden" name="shopping_url" value="http://adventuresforthecure.com/inventory")
+                  input(type="image" name="submit" border="0" src="https://www.paypalobjects.com/en_US/i/btn/btn_cart_LG.gif" alt="PayPal - The safer, easier way to pay online")
+                  img(alt="" border="0" width="1" height="1" src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif")
+                //form(target="paypal" name="_xclick" action="https://www.paypal.com/cgi-bin/webscr" method="post")
+                //  input(type="hidden" name="cmd" value="_xclick")
+                //  input(type="hidden" name="business" value="adventuresforthecure@gmail.com")
+                //  input(type="hidden" name="currency_code" value="USD")
+                //  input(type="hidden" name="item_name" value="{{inventoryItem.name}}")
+                //  input(type="hidden" name="amount" value="{{inventoryItem.salePrice}}")
+                //  input(type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_cart_LG.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!")
+                //  img(alt="" border="0" src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" width="1" height="1")
+                button.btn.btn-default.btn-sm(ng-if='ableToEdit()' ng-click='toggleEditMode(inventoryItem, $index)')
+                  span(class="glyphicon glyphicon-edit" aria-hidden="true")
