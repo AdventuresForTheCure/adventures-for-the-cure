@@ -38,7 +38,8 @@ gulp.task('public-test', function() {
 });
 
 gulp.task('public-all', ['public-clean'], function(callback) {
-  runSequence('public-jshint', 'public-bundlejs', callback);
+//  runSequence('public-jshint', 'public-bundlejs', callback);
+  runSequence('public-bundlejs', callback);
 });
 
 gulp.task('server-jshint', function() {
@@ -82,5 +83,6 @@ gulp.task('development', function(callback) {
 });
 
 gulp.task('default', function(callback) {
-  runSequence('public-all', 'server-all', callback);
+  //runSequence('public-all', 'server-all', callback);
+  runSequence('public-all', callback);
 });
