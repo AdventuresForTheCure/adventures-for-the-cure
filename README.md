@@ -47,3 +47,6 @@
   * git remote add origin https://github.com/INSERT_GITHUB_USERNAME/INSERT_PROJECT_NAME.git
     * for example: git remote add origin https://github.com/pblair12/adventures-for-the-cure.git
   * git push -u origin master
+  
+# Environmental Variables
+ * You must have the following set: XERO_CONSUMER_KEY, XERO_CONSUMER_SECRET

@@ -52,47 +52,7 @@
         hr
         h4 {{category}}
         .row(ng-repeat='inventoryItem in inventoryItems[category]')
-          div.col-md-12(ng-if='inEditMode(inventoryItem)')
-            form.form-inline(name='inventoryItemForm')
-              .row
-                .col-md-2
-                  .form-group
-                    label.control-label Category
-                    select.form-control(style='width: 100%' name='category', ng-model="inventoryItem.category", ng-options='category as category for category in allCategories')
-                    label.control-label Name
-                    input.form-control(style='width: 100%' type='text' ng-model='inventoryItem.name')
-                .col-md-2
-                  .form-group
-                    label.control-label Price
-                    input.form-control(style='width: 100%' type='number' ng-model='inventoryItem.price')
-                .col-md-2
-                  .form-group
-                    label.control-label.special 'ON SALE'
-                    input.special.form-control(style='width: 100%' type='number' ng-model='inventoryItem.salePrice' tooltip="Set to blank or 0 if not on sale")
-                .col-md-2
-                  .form-group
-                    label.control-label Remaining
-                    input.form-control(style='width: 100%' type='number' ng-model='inventoryItem.quantity' tooltip="Set to blank or 0 if sold out")
-                .col-md-2
-                  .form-group
-                    label.control-label Image
-                      div(style='width: 100%' ng-if='inventoryItem.loadingImg')
-                        img(src='/img/loader.gif')
-                      div(style='width: 100%' ng-if="!inventoryItem.loadingImg && inventoryItem.imgPath")
-                        a(href="{{inventoryItem.imgPath}}" target="_blank")
-                          img(src="{{inventoryItem.imgPath}}" width="100px" height="auto")
-                    input(name="imageUpload" type="file" ng-file-select="onUpdatedFileSelect(inventoryItem, $files)" accept="image/*")
-                .col-md-1
-                  .form-group
-                    button.btn.btn-default.btn-sm(ng-if='ableToEdit()' ng-click='toggleEditMode(inventoryItem, $index)' title='toggle edit mode')
-                      span(class="glyphicon glyphicon-edit" aria-hidden="true")
-                    br
-                    button.btn.btn-default.btn-sm(ng-if='ableToEdit() && inEditMode(inventoryItem)' ng-click='update(inventoryItem)' title='Update item')
-                      span(class="glyphicon glyphicon-save" aria-hidden="true")
-                    br
-                    button.btn.btn-default.btn-sm(ng-if='ableToEdit() && inEditMode(inventoryItem)' ng-click='delete(inventoryItem)' title='Delete item')
-                      span(class="glyphicon glyphicon-trash" aria-hidden="true")
-          div.col-md-12(ng-if='!inEditMode(inventoryItem)')
+          div.col-md-12
             .row
               .col-md-2
                 span{{inventoryItem.name}}
@@ -114,9 +74,10 @@
                   input(type="hidden" name="item_name" value="{{inventoryItem.name}}")
                   input(type="hidden" name="amount" value="{{(inventoryItem.salePrice && inventoryItem.salePrice >= 0) ? inventoryItem.salePrice : inventoryItem.price}}")
                   input(type="hidden" name="currency_code" value="USD")
+                  input(type="hidden" name="item_id" value="{{inventoryItem.ItemID}}")
                   input(type="hidden" name="shopping_url" value="http://adventuresforthecure.com/inventory")
                   input(type="image" name="submit" border="0" src="https://www.paypalobjects.com/en_US/i/btn/btn_cart_LG.gif" alt="PayPal - The safer, easier way to pay online")
                   img(alt="" border="0" width="1" height="1" src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif")
-                div(ng-if='inventoryItem.quantity<=0') SOLD OUT!
+                div(ng-if='inventoryItem.quantity <= 0') SOLD OUT!
                 button.btn.btn-default.btn-sm(ng-if='ableToEdit()' ng-click='toggleEditMode(inventoryItem, $index)')
                   span(class="glyphicon glyphicon-edit" aria-hidden="true")

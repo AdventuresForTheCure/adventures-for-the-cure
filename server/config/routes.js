@@ -6,6 +6,7 @@ var jerseyImages = require('../controllers/jerseyImagesController');
 var videos = require('../controllers/videosController');
 var members = require('../controllers/membersController');
 var inventoryItems = require('../controllers/inventoryItemsController');
+var inventoryItemsXero = require('../controllers/inventoryItemsXeroController');
 var volunteerEvents = require('../controllers/volunteerEventsController');
 var multipart = require('connect-multiparty');
 var multipartMiddleware = multipart();
@@ -28,7 +29,7 @@ module.exports = function(app, config) {
   app.post('/api/members', multipartMiddleware, members.saveMember);
   app.delete('/api/members/:id', auth.requiresLoggedInRole('admin'), members.deleteMember);
 
-  app.get('/api/inventoryItems', cache.disableBrowserCache, inventoryItems.getInventoryItems);
+  app.get('/api/inventoryItems', cache.disableBrowserCache, inventoryItemsXero.getInventoryItems);
   app.post('/api/inventoryItems', auth.requiresLoggedInRole('inventory'), multipartMiddleware, inventoryItems.saveInventoryItem);
   app.post('/api/inventoryItems/:id', auth.requiresLoggedInRole('inventory'), multipartMiddleware, inventoryItems.updateInventoryItem);
   app.delete('/api/inventoryItems/:id', auth.requiresLoggedInRole('inventory'), inventoryItems.deleteInventoryItem);
