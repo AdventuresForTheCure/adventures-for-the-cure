@@ -651,9 +651,25 @@ function volunteerEventService($q, $http, $upload) {
     }
   };
 }
-angular.module('app').controller('boardOnlyCtrl', boardOnlyCtrl);
-boardOnlyCtrl.$inject = ['$scope'];
-function boardOnlyCtrl($scope) {}
+angular.module('app').controller('adminCtrl', adminCtrl);
+adminCtrl.$inject = ['$scope', '$location', 'notifierService', 'authorizationService'];
+function adminCtrl($scope, $location, notifierService, authorizationService) {
+  $scope.createMember = function () {
+    var newMemberData = {
+      username: $scope.username,
+      password: $scope.password,
+      firstName: $scope.firstName,
+      lastName: $scope.lastName
+    };
+
+    authorizationService.createMember(newMemberData).then(function () {
+      notifierService.notify('Member account created!');
+      $location.path('/');
+    }, function (reason) {
+      notifierService.error(reason);
+    });
+  };
+}
 angular.module('app').controller('campaignsCtrl', campaignsCtrl);
 campaignsCtrl.$inject = ['$scope', '$sce', '$location', 'campaignService'];
 function campaignsCtrl($scope, $sce, $location, campaignService) {
@@ -693,25 +709,6 @@ function campaignsCtrl($scope, $sce, $location, campaignService) {
 }
 
 
-angular.module('app').controller('adminCtrl', adminCtrl);
-adminCtrl.$inject = ['$scope', '$location', 'notifierService', 'authorizationService'];
-function adminCtrl($scope, $location, notifierService, authorizationService) {
-  $scope.createMember = function () {
-    var newMemberData = {
-      username: $scope.username,
-      password: $scope.password,
-      firstName: $scope.firstName,
-      lastName: $scope.lastName
-    };
-
-    authorizationService.createMember(newMemberData).then(function () {
-      notifierService.notify('Member account created!');
-      $location.path('/');
-    }, function (reason) {
-      notifierService.error(reason);
-    });
-  };
-}
 angular.module('app').controller('confirmModalCtrl', confirmModalCtrl);
 confirmModalCtrl.$inject = ['$scope', '$modalInstance', 'message'];
 function confirmModalCtrl ($scope, $modalInstance, message) {
@@ -745,12 +742,148 @@ function confirmModalService($modal, $q) {
     }
   }
 }
+angular.module('app').controller('boardOnlyCtrl', boardOnlyCtrl);
+boardOnlyCtrl.$inject = ['$scope'];
+function boardOnlyCtrl($scope) {}
 angular.module('app').controller('inventoryCtrl', inventoryCtrl);
 inventoryCtrl.$inject = ['$scope', 'inventoryService', 'notifierService', 'identityService', 'confirmModalService'];
 function inventoryCtrl($scope, inventoryService, notifierService, identityService, confirmModalService) {
   $scope.inventoryItems = {};
+  $scope.newItem = newItem();
+  $scope.allCategories = [
+    'DeFeet Socks',
+    'Hats',
+    'Hincapie Merchandise - 2011',
+    'Hincapie Merchandise - 2012',
+    'Hincapie Merchandise - 2013',
+    'Hincapie Merchandise - 2014',
+    'Hincapie Merchandise - 2015',
+    'Movies',
+    'Saucony Running Gear',
+    'Water Bottles',
+    'Winged Foot T-shirts and Sweats'
+  ];
 
   $scope.getInventoryItems = function() {
+    inventoryService.getInventoryItems().then(function(inventoryItems) {
+      $scope.inventoryItems = {};
+      for (var i = 0; i < inventoryItems.length; i++) {
+        var inventoryItem = inventoryItems[i];
+        if (angular.isUndefined($scope.inventoryItems[inventoryItem.category])) {
+          $scope.inventoryItems[inventoryItem.category] = [];
+        }
+        $scope.inventoryItems[inventoryItem.category].push(inventoryItem);
+        inventoryItem.inEditMode = false;
+      }
+    }, function(reason) {
+      notifierService.error(reason);
+    });
+  };
+
+  $scope.ableToEdit = function() {
+    if (identityService.currentMember && identityService.currentMember.isInventory()) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  $scope.isAdmin = function() {
+    if (identityService.currentMember && identityService.currentMember.isAdmin()) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  $scope.inEditMode = function(inventoryItem) {
+    if (identityService.currentMember && identityService.currentMember.isInventory() && inventoryItem.inEditMode) {
+      return true;
+    } else {
+      return false;
+    }
+  };
+
+  $scope.toggleEditMode = function(inventoryItem, index) {
+    inventoryItem.inEditMode = !inventoryItem.inEditMode;
+    if (inventoryItem.inEditMode) {
+      inventoryItem.master = angular.copy(inventoryItem);
+    } else {
+      $scope.inventoryItems[inventoryItem.category][index] = angular.copy(inventoryItem.master);
+      $scope.inventoryItems[inventoryItem.category][index].inEditMode = false;
+      $scope.inventoryItems[inventoryItem.category][index].master = undefined;
+      delete $scope.inventoryItems[inventoryItem.category][index].master;
+    }
+  };
+
+  $scope.update = function(inventoryItem) {
+    inventoryItem.inEditMode = false;
+    inventoryService.save(inventoryItem).then(function(item) {
+      notifierService.notify('Inventory item was update');
+    }, function(reason) {
+      notifierService.error(reason);
+    });
+  };
+
+  $scope.createItem = function() {
+    inventoryService.save($scope.newItem).then(function(item) {
+      notifierService.notify('New item was created');
+      $scope.getInventoryItems();
+    }, function(reason) {
+      notifierService.error(reason);
+    });
+  };
+
+  $scope.resetForm = function() {
+    $scope.newItem = newItem();
+  };
+
+  $scope.delete = function(inventoryItem) {
+    var message = 'Are you sure you want to delete the item: ' + inventoryItem.name + '?';
+    confirmModalService.showModal(message).then(function(isConfirmed) {
+      if (isConfirmed) {
+        inventoryService.delete(inventoryItem).then(function(item) {
+          $scope.getInventoryItems();
+          notifierService.notify('Inventory item was deleted');
+        }, function(reason) {
+          notifierService.error(reason);
+        });
+      }
+    })
+  };
+
+  $scope.onFileSelect = function($files) {
+    $scope.newItem.img = $files[0];
+  };
+
+  $scope.onUpdatedFileSelect = function(inventoryItem, $files) {
+    inventoryItem.img = $files[0];
+    inventoryItem.loadingImg = true;
+    inventoryService.saveImg(inventoryItem).then(function(updatedInventoryItem) {
+      inventoryItem.loadingImg = false;
+      inventoryItem.imgPath = updatedInventoryItem.imgPath;
+      inventoryItem.img = $files[0];
+    }, function(reason) {
+      inventoryItem.loadingImg = false;
+      notifierService.error('Error uploading image, please try again...');
+    });
+  };
+
+  function newItem() {
+    return {
+      name: '',
+      category: '',
+      quantity: 0,
+      price: 0,
+      salePrice: undefined,
+      img: undefined
+    }
+  };
+
+  $scope.getInventoryItems();
+}
+
+//$scope.getInventoryItems = function() {
 //    inventoryService.getInventoryItems().then(function(data) {
 //      $scope.inventoryItems = {};
 //      for (var i = 0; i < data.Items.length; i++) {
@@ -770,23 +903,6 @@ function inventoryCtrl($scope, inventoryService, notifierService, identityServic
 //    }, function(reason) {
 //      notifierService.error(reason);
 //    });
-    inventoryService.getInventoryItems().then(function(inventoryItems) {
-      $scope.inventoryItems = {};
-      for (var i = 0; i < inventoryItems.length; i++) {
-        var inventoryItem = inventoryItems[i];
-        if (angular.isUndefined($scope.inventoryItems[inventoryItem.category])) {
-          $scope.inventoryItems[inventoryItem.category] = [];
-        }
-        $scope.inventoryItems[inventoryItem.category].push(inventoryItem);
-        inventoryItem.inEditMode = false;
-      }
-    }, function(reason) {
-      notifierService.error(reason);
-    });
-  };
-
-  $scope.getInventoryItems();
-}
 
 
 angular.module('app').controller('loginCtrl', loginCtrl);
@@ -842,37 +958,6 @@ function memberCreateCtrl($scope, $location, notifierService, memberService) {
     $scope.img = $files[0];
   };
 }
-angular.module('app').controller('memberListCtrl', memberListCtrl);
-memberListCtrl.$inject = ['$scope', '$location', 'notifierService', 'memberService', 'identityService', 'confirmModalService'];
-function memberListCtrl($scope, $location, notifierService, memberService, identityService, confirmModalService) {
-  $scope.identity = identityService;
-
-  function getMembers() {
-    memberService.getMembers().then(function (members) {
-      $scope.members = members;
-    });
-  }
-
-  $scope.editMember = function(member) {
-    $location.path('/member-edit/' + member._id);
-  };
-
-  $scope.deleteMember = function(member) {
-    var message = 'Are you sure you want to delete the member: ' + member.name + ' <' + member.username + '>?';
-    confirmModalService.showModal(message).then(function(isConfirmed) {
-      if (isConfirmed) {
-        memberService.deleteMember(member).then(function() {
-          notifierService.notify('Member ' + member.username + ' has been deleted');
-          getMembers();
-        }, function(reason) {
-          notifierService.error(reason);
-        });
-      }
-    })
-  };
-
-  getMembers();
-}
 angular.module('app').controller('memberEditCtrl', memberEditCtrl);
 memberEditCtrl.$inject = ['$scope', '$routeParams', 'notifierService', 'memberService', 'identityService'];
 function memberEditCtrl($scope, $routeParams, notifierService, memberService, identityService) {
@@ -922,6 +1007,43 @@ function memberEditCtrl($scope, $routeParams, notifierService, memberService, id
     });
   }
 }
+angular.module('app').controller('memberListCtrl', memberListCtrl);
+memberListCtrl.$inject = ['$scope', '$location', 'notifierService', 'memberService', 'identityService', 'confirmModalService'];
+function memberListCtrl($scope, $location, notifierService, memberService, identityService, confirmModalService) {
+  $scope.identity = identityService;
+
+  function getMembers() {
+    memberService.getMembers().then(function (members) {
+      $scope.members = members;
+    });
+  }
+
+  $scope.editMember = function(member) {
+    $location.path('/member-edit/' + member._id);
+  };
+
+  $scope.deleteMember = function(member) {
+    var message = 'Are you sure you want to delete the member: ' + member.name + ' <' + member.username + '>?';
+    confirmModalService.showModal(message).then(function(isConfirmed) {
+      if (isConfirmed) {
+        memberService.deleteMember(member).then(function() {
+          notifierService.notify('Member ' + member.username + ' has been deleted');
+          getMembers();
+        }, function(reason) {
+          notifierService.error(reason);
+        });
+      }
+    })
+  };
+
+  getMembers();
+}
+angular.module('app').controller('memberOnlyCtrl', memberOnlyCtrl);
+memberOnlyCtrl.$inject = ['$scope', 'jerseyImagesService'];
+function memberOnlyCtrl($scope, jerseyImagesService) {
+  jerseyImagesService.getJerseyImages().then(function(jerseyImages) {
+  $scope.jerseyImages = jerseyImages;
+});}
 angular.module('app').controller('membersCtrl', membersCtrl);
 membersCtrl.$inject = ['$scope', '$location', '$window', 'memberService', 'notifierService', 'identityService'];
 function membersCtrl($scope, $location, $window, memberService, notifierService, identityService) {
@@ -995,12 +1117,25 @@ function membersCtrl($scope, $location, $window, memberService, notifierService,
   };
 }
 
-angular.module('app').controller('memberOnlyCtrl', memberOnlyCtrl);
-memberOnlyCtrl.$inject = ['$scope', 'jerseyImagesService'];
-function memberOnlyCtrl($scope, jerseyImagesService) {
-  jerseyImagesService.getJerseyImages().then(function(jerseyImages) {
-  $scope.jerseyImages = jerseyImages;
-});}
+angular.module('app').controller('navbarLoginCtrl', navbarLoginCtrl);
+navbarLoginCtrl.$inject = ['$scope', '$location', 'identityService', 'notifierService', 'authorizationService'];
+function navbarLoginCtrl($scope, $location, identityService, notifierService, authorizationService) {
+  $scope.identityService = identityService;
+
+  $scope.signout = function() {
+    authorizationService.logoutMember().then(function() {
+      $scope.username = '';
+      $scope.password = '';
+      notifierService.notify('You have successfully signed out!');
+      $location.path('/');
+    });
+  };
+
+  $scope.isActive = function (viewLocation) {
+    return viewLocation === $location.path();
+  };
+}
+
 angular.module('app').controller('resultsCtrl', resultsCtrl);
 resultsCtrl.$inject = ['$scope', '$sce', 'videoService'];
 function resultsCtrl($scope, $sce, videoService) {
@@ -1023,25 +1158,6 @@ function resultsCtrl($scope, $sce, videoService) {
   };
 }
 
-
-angular.module('app').controller('navbarLoginCtrl', navbarLoginCtrl);
-navbarLoginCtrl.$inject = ['$scope', '$location', 'identityService', 'notifierService', 'authorizationService'];
-function navbarLoginCtrl($scope, $location, identityService, notifierService, authorizationService) {
-  $scope.identityService = identityService;
-
-  $scope.signout = function() {
-    authorizationService.logoutMember().then(function() {
-      $scope.username = '';
-      $scope.password = '';
-      notifierService.notify('You have successfully signed out!');
-      $location.path('/');
-    });
-  };
-
-  $scope.isActive = function (viewLocation) {
-    return viewLocation === $location.path();
-  };
-}
 
 angular.module('app').controller('sponsorLogosCtrl', sponsorLogosCtrl);
 sponsorLogosCtrl.$inject = ['$scope', 'sponsorLogosService'];
