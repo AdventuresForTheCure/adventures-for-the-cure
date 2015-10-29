@@ -284,6 +284,18 @@ function inventoryService($q, $http, $upload, InventoryItem) {
       return dfd.promise;
     },
 
+    getXeroInventoryItems: function() {
+      var dfd = $q.defer();
+      $http.get('/api/xero/inventoryItems/')
+        .success(function(data, status, headers, config) {
+          dfd.resolve(data);
+        })
+        .error(function(error, status, headers, config) {
+          dfd.reject(error.reason);
+        });
+      return dfd.promise;
+    },
+
     save: function(inventoryItem) {
       var dfd = $q.defer();
 
@@ -670,6 +682,9 @@ function adminCtrl($scope, $location, notifierService, authorizationService) {
     });
   };
 }
+angular.module('app').controller('boardOnlyCtrl', boardOnlyCtrl);
+boardOnlyCtrl.$inject = ['$scope'];
+function boardOnlyCtrl($scope) {}
 angular.module('app').controller('campaignsCtrl', campaignsCtrl);
 campaignsCtrl.$inject = ['$scope', '$sce', '$location', 'campaignService'];
 function campaignsCtrl($scope, $sce, $location, campaignService) {
@@ -742,9 +757,6 @@ function confirmModalService($modal, $q) {
     }
   }
 }
-angular.module('app').controller('boardOnlyCtrl', boardOnlyCtrl);
-boardOnlyCtrl.$inject = ['$scope'];
-function boardOnlyCtrl($scope) {}
 angular.module('app').controller('inventoryCtrl', inventoryCtrl);
 inventoryCtrl.$inject = ['$scope', 'inventoryService', 'notifierService', 'identityService', 'confirmModalService'];
 function inventoryCtrl($scope, inventoryService, notifierService, identityService, confirmModalService) {
@@ -763,22 +775,6 @@ function inventoryCtrl($scope, inventoryService, notifierService, identityServic
     'Water Bottles',
     'Winged Foot T-shirts and Sweats'
   ];
-
-  $scope.getInventoryItems = function() {
-    inventoryService.getInventoryItems().then(function(inventoryItems) {
-      $scope.inventoryItems = {};
-      for (var i = 0; i < inventoryItems.length; i++) {
-        var inventoryItem = inventoryItems[i];
-        if (angular.isUndefined($scope.inventoryItems[inventoryItem.category])) {
-          $scope.inventoryItems[inventoryItem.category] = [];
-        }
-        $scope.inventoryItems[inventoryItem.category].push(inventoryItem);
-        inventoryItem.inEditMode = false;
-      }
-    }, function(reason) {
-      notifierService.error(reason);
-    });
-  };
 
   $scope.ableToEdit = function() {
     if (identityService.currentMember && identityService.currentMember.isInventory()) {
@@ -880,31 +876,25 @@ function inventoryCtrl($scope, inventoryService, notifierService, identityServic
     }
   };
 
+  $scope.getInventoryItems = function() {
+    inventoryService.getInventoryItems().then(function(inventoryItems) {
+//    inventoryService.getXeroInventoryItems().then(function(inventoryItems) {
+      $scope.inventoryItems = {};
+      for (var i = 0; i < inventoryItems.length; i++) {
+        var inventoryItem = inventoryItems[i];
+        if (angular.isUndefined($scope.inventoryItems[inventoryItem.category])) {
+          $scope.inventoryItems[inventoryItem.category] = [];
+        }
+        $scope.inventoryItems[inventoryItem.category].push(inventoryItem);
+        inventoryItem.inEditMode = false;
+      }
+    }, function(reason) {
+      notifierService.error(reason);
+    });
+  };
+
   $scope.getInventoryItems();
 }
-
-//$scope.getInventoryItems = function() {
-//    inventoryService.getInventoryItems().then(function(data) {
-//      $scope.inventoryItems = {};
-//      for (var i = 0; i < data.Items.length; i++) {
-//        var item = data.Items[i];
-//        if (item.SalesDetails.UnitPrice && item.SalesDetails.UnitPrice > 0) {
-//          if (angular.isUndefined($scope.inventoryItems[item.description])) {
-//            $scope.inventoryItems[item.description] = [];
-//          }
-//          $scope.inventoryItems[item.description].push({
-//            name: item.Description,
-//            price: item.SalesDetails.UnitPrice,
-//            //          quantity: item.SalesDetails.Quantity
-//            quantity: 2
-//          });
-//        }
-//      }
-//    }, function(reason) {
-//      notifierService.error(reason);
-//    });
-
-
 angular.module('app').controller('loginCtrl', loginCtrl);
 loginCtrl.$inject = ['$scope', '$location', 'notifierService', 'authorizationService'];
 function loginCtrl($scope, $location, notifierService, authorizationService) {
