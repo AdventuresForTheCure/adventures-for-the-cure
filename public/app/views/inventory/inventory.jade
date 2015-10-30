@@ -1,83 +1,42 @@
 .row(ng-controller='inventoryCtrl')
   .col-lg-12
-    .well.pagination-centered
-      b To make an order:
-      br
-      span
-        | Make your purchase using the paypal buttons, after you are done send us an email <a href='mailto:afc.inventory@gmail.com?subject=AFC%20Inventory'>afc.inventory@gmail.com</a> to ccoordinate the pick up or shipping of your items.
-      form(target="paypal" action="https://www.paypal.com/cgi-bin/webscr" method="post")
-        input(type="hidden" name="business" value="adventuresforthecure@gmail.com")
-        input(type="hidden" name="cmd" value="_cart")
-        input(type="hidden" name="display" value="1")
-        input(type="image" name="submit" border="0" src="https://www.paypalobjects.com/en_US/i/btn/btn_viewcart_LG.gif" alt="PayPal - The safer, easier way to pay online")
-        img(alt="" border="0" width="1" height="1" src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" )
-    .well.pagination-centered
-      h3 AFC Inventory
-      // p Page is under construction... email afc.inventory@gmail.com if there is something you want to buy
-      div(ng-if='ableToEdit()')
-        form.form-horizontal(name="inventoryItemAddForm" role="form")
-        fieldset
-          legend Add Item
-          .form-group
-            label.col-md-3.control-label(for="category") Category
-            .col-md-9
-              select.form-control(name='category', ng-model="newItem.category", ng-options='category as category for category in allCategories', required)
-          .form-group
-            label.col-md-3.control-label(for="name") Name
-            .col-md-9
-              input.form-control(name="name", type="text", placeholder="Name", ng-model="newItem.name", required, autocomplete="off" )
-          .form-group
-            label.col-md-3.control-label(for="quantity") Quantity
-            .col-md-9
-              input.form-control(name="quantity", type="number", placeholder="1", ng-model="newItem.quantity", required, autocomplete="off" )
-          .form-group
-            label.col-md-3.control-label(for="price") Price
-            .col-md-9
-              input.form-control(name="price", type="number", placeholder="1", ng-model="newItem.price", required, autocomplete="off" )
-          .form-group
-            label.col-md-3.control-label(for="salePrice") Sale Price
-            .col-md-9
-              input.form-control(name="salePrice", type="number", placeholder="1", ng-model="newItem.salePrice", autocomplete="off" )
-          .form-group
-            label.col-md-3.control-label(for="image") Image
-            .col-md-9
-              input(name="img" type="file" ng-file-select="onFileSelect($files)" accept="image/*")
-          .form-group
-            .col-md-9.col-md-offset-2
-              .pull-right
-                button.btn.btn-primary(ng-click="createItem()", ng-disabled="inventoryItemAddForm.$invalid") Save
-                span &nbsp;
-                button.btn(ng-click="resetForm()") Reset
-      div(name='inventoryItemList' ng-repeat='(category, categoryItems) in inventoryItems')
-        hr
-        h4 {{category}}
-        .row(ng-repeat='inventoryItem in inventoryItems[category]')
-          div.col-md-12
-            .row
-              .col-md-2
-                span{{inventoryItem.name}}
-              .col-md-2
-                span Price: {{inventoryItem.price | currency : symbol : 2 }}
-              .col-md-2
-                span.special(ng-if='inventoryItem.salePrice > 0') ON SALE: {{inventoryItem.salePrice | currency : symbol : 2 }}
-              .col-md-2(ng-if='inventoryItem.quantity >= 0')
-                span {{inventoryItem.quantity}} Remaining
-              .col-md-2
-                span(ng-if="inventoryItem.imgPath")
-                  a(href="{{inventoryItem.imgPath}}" target="_blank")
-                    img(src="{{inventoryItem.imgPath}}" width="100px" height="auto" alt="No image!")
-              .col-md-1
-                form(ng-if='inventoryItem.quantity > 0' target="paypal" action="https://www.paypal.com/cgi-bin/webscr" method="post")
-                  input(type="hidden" name="business" value="adventuresforthecure@gmail.com")
-                  input(type="hidden" name="cmd" value="_cart")
-                  input(type="hidden" name="add" value="1")
-                  input(type="hidden" name="item_name" value="{{inventoryItem.name}}")
-                  input(type="hidden" name="amount" value="{{(inventoryItem.salePrice && inventoryItem.salePrice >= 0) ? inventoryItem.salePrice : inventoryItem.price}}")
-                  input(type="hidden" name="currency_code" value="USD")
-                  input(type="hidden" name="item_id" value="{{inventoryItem.ItemID}}")
-                  input(type="hidden" name="shopping_url" value="http://adventuresforthecure.com/inventory")
-                  input(type="image" name="submit" border="0" src="https://www.paypalobjects.com/en_US/i/btn/btn_cart_LG.gif" alt="PayPal - The safer, easier way to pay online")
-                  img(alt="" border="0" width="1" height="1" src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif")
-                div(ng-if='inventoryItem.quantity <= 0') SOLD OUT!
-                button.btn.btn-default.btn-sm(ng-if='ableToEdit()' ng-click='toggleEditMode(inventoryItem, $index)')
-                  span(class="glyphicon glyphicon-edit" aria-hidden="true")
+  .well.pagination-centered
+    b To make an order:
+    br
+    span
+      | Make your purchase using the paypal buttons, after you are done send us an email <a href='mailto:afc.inventory@gmail.com?subject=AFC%20Inventory'>afc.inventory@gmail.com</a> to ccoordinate the pick up or shipping of your items.
+    form(target="paypal" action="https://www.paypal.com/cgi-bin/webscr" method="post")
+      input(type="hidden" name="business" value="adventuresforthecure@gmail.com")
+      input(type="hidden" name="cmd" value="_cart")
+      input(type="hidden" name="display" value="1")
+      input(type="image" name="submit" border="0" src="https://www.paypalobjects.com/en_US/i/btn/btn_viewcart_LG.gif" alt="PayPal - The safer, easier way to pay online")
+      img(alt="" border="0" width="1" height="1" src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" )
+  .well.pagination-centered
+    h3 AFC Inventory
+    // p Page is under construction... email afc.inventory@gmail.com if there is something you want to buy
+    div(name='inventoryItemList' ng-repeat='(category, categoryItems) in inventoryItems')
+      hr
+      h4 {{category}}
+      .row(ng-repeat='inventoryItem in inventoryItems[category]')
+        .col-md-4
+          span{{inventoryItem.name}}
+        .col-md-2
+          span Price: {{inventoryItem.price | currency : symbol : 2 }}
+        .col-md-2(ng-if='inventoryItem.quantity >= 0')
+          span {{inventoryItem.quantity}} Remaining
+        .col-md-2
+          span(ng-if="inventoryItem.imgPath")
+            a(href="{{inventoryItem.imgPath}}" target="_blank")
+              img(src="{{inventoryItem.imgPath}}" width="100px" height="auto" alt="No image!")
+        .col-md-2
+          form(target="paypal" action="https://www.paypal.com/cgi-bin/webscr" method="post")
+            input(type="hidden" name="business" value="adventuresforthecure@gmail.com")
+            input(type="hidden" name="cmd" value="_cart")
+            input(type="hidden" name="add" value="1")
+            input(type="hidden" name="item_name" value="{{inventoryItem.name}}")
+            input(type="hidden" name="custom" value="{{inventoryItem.code}}")
+            input(type="hidden" name="amount" value="{{(inventoryItem.salePrice && inventoryItem.salePrice >= 0) ? inventoryItem.salePrice : inventoryItem.price}}")
+            input(type="hidden" name="currency_code" value="USD")
+            input(type="hidden" name="shopping_url" value="http://adventuresforthecure.com/inventory")
+            input(type="image" name="submit" border="0" src="https://www.paypalobjects.com/en_US/i/btn/btn_cart_LG.gif" alt="PayPal - The safer, easier way to pay online")
+            img(alt="" border="0" width="1" height="1" src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif")

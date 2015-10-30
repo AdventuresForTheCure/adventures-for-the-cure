@@ -29,7 +29,9 @@ module.exports = function(app, config) {
   app.post('/api/members', multipartMiddleware, members.saveMember);
   app.delete('/api/members/:id', auth.requiresLoggedInRole('admin'), members.deleteMember);
 
-  app.get('/api/inventoryItems', cache.disableBrowserCache, inventoryItemsXero.getInventoryItems);
+  app.get('/api/xero/inventoryItems', cache.disableBrowserCache, inventoryItemsXero.getInventoryItems);
+
+  app.get('/api/inventoryItems', cache.disableBrowserCache, inventoryItems.getInventoryItems);
   app.post('/api/inventoryItems', auth.requiresLoggedInRole('inventory'), multipartMiddleware, inventoryItems.saveInventoryItem);
   app.post('/api/inventoryItems/:id', auth.requiresLoggedInRole('inventory'), multipartMiddleware, inventoryItems.updateInventoryItem);
   app.delete('/api/inventoryItems/:id', auth.requiresLoggedInRole('inventory'), inventoryItems.deleteInventoryItem);
