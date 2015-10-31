@@ -21,7 +21,7 @@
         .col-md-4
           span{{inventoryItem.name}}
         .col-md-2
-          span Price: {{inventoryItem.price | currency : symbol : 2 }}
+          span Price: {{(inventoryItem.salePrice && inventoryItem.salePrice >= 0) ? inventoryItem.salePrice : inventoryItem.price | currency : symbol : 2 }}
         .col-md-2(ng-if='inventoryItem.quantity >= 0')
           span {{inventoryItem.quantity}} Remaining
         .col-md-2

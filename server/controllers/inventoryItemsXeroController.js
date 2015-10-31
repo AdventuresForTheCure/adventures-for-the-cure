@@ -25,6 +25,11 @@ exports.getInventoryItems = function(req, res) {
             quantity: item.QuantityOnHand
           });
         }
+        // TODO add the DVDs even though their quantity is 0
+        else if (item.Name === 'DVD') {
+
+
+        }
       }
       return res.send(200, items);
     }

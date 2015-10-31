@@ -663,25 +663,6 @@ function volunteerEventService($q, $http, $upload) {
     }
   };
 }
-angular.module('app').controller('adminCtrl', adminCtrl);
-adminCtrl.$inject = ['$scope', '$location', 'notifierService', 'authorizationService'];
-function adminCtrl($scope, $location, notifierService, authorizationService) {
-  $scope.createMember = function () {
-    var newMemberData = {
-      username: $scope.username,
-      password: $scope.password,
-      firstName: $scope.firstName,
-      lastName: $scope.lastName
-    };
-
-    authorizationService.createMember(newMemberData).then(function () {
-      notifierService.notify('Member account created!');
-      $location.path('/');
-    }, function (reason) {
-      notifierService.error(reason);
-    });
-  };
-}
 angular.module('app').controller('boardOnlyCtrl', boardOnlyCtrl);
 boardOnlyCtrl.$inject = ['$scope'];
 function boardOnlyCtrl($scope) {}
@@ -724,6 +705,25 @@ function campaignsCtrl($scope, $sce, $location, campaignService) {
 }
 
 
+angular.module('app').controller('adminCtrl', adminCtrl);
+adminCtrl.$inject = ['$scope', '$location', 'notifierService', 'authorizationService'];
+function adminCtrl($scope, $location, notifierService, authorizationService) {
+  $scope.createMember = function () {
+    var newMemberData = {
+      username: $scope.username,
+      password: $scope.password,
+      firstName: $scope.firstName,
+      lastName: $scope.lastName
+    };
+
+    authorizationService.createMember(newMemberData).then(function () {
+      notifierService.notify('Member account created!');
+      $location.path('/');
+    }, function (reason) {
+      notifierService.error(reason);
+    });
+  };
+}
 angular.module('app').controller('confirmModalCtrl', confirmModalCtrl);
 confirmModalCtrl.$inject = ['$scope', '$modalInstance', 'message'];
 function confirmModalCtrl ($scope, $modalInstance, message) {
