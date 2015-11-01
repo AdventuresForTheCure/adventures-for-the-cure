@@ -118,8 +118,8 @@ function inventoryCtrl($scope, inventoryService, notifierService, identityServic
   };
 
   $scope.getInventoryItems = function() {
-    inventoryService.getInventoryItems().then(function(inventoryItems) {
-//    inventoryService.getXeroInventoryItems().then(function(inventoryItems) {
+//    inventoryService.getInventoryItems().then(function(inventoryItems) {
+    inventoryService.getXeroInventoryItems().then(function(inventoryItems) {
       $scope.inventoryItems = {};
       for (var i = 0; i < inventoryItems.length; i++) {
         var inventoryItem = inventoryItems[i];

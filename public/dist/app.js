@@ -663,6 +663,9 @@ function volunteerEventService($q, $http, $upload) {
     }
   };
 }
+angular.module('app').controller('boardOnlyCtrl', boardOnlyCtrl);
+boardOnlyCtrl.$inject = ['$scope'];
+function boardOnlyCtrl($scope) {}
 angular.module('app').controller('adminCtrl', adminCtrl);
 adminCtrl.$inject = ['$scope', '$location', 'notifierService', 'authorizationService'];
 function adminCtrl($scope, $location, notifierService, authorizationService) {
@@ -682,9 +685,6 @@ function adminCtrl($scope, $location, notifierService, authorizationService) {
     });
   };
 }
-angular.module('app').controller('boardOnlyCtrl', boardOnlyCtrl);
-boardOnlyCtrl.$inject = ['$scope'];
-function boardOnlyCtrl($scope) {}
 angular.module('app').controller('campaignsCtrl', campaignsCtrl);
 campaignsCtrl.$inject = ['$scope', '$sce', '$location', 'campaignService'];
 function campaignsCtrl($scope, $sce, $location, campaignService) {
@@ -756,6 +756,20 @@ function confirmModalService($modal, $q) {
       return deferred.promise;
     }
   }
+}
+angular.module('app').controller('loginCtrl', loginCtrl);
+loginCtrl.$inject = ['$scope', '$location', 'notifierService', 'authorizationService'];
+function loginCtrl($scope, $location, notifierService, authorizationService) {
+  $scope.login = function() {
+    authorizationService.authenticateMember($scope.loginUsername, $scope.loginPassword).then(function(success) {
+      if (success) {
+        notifierService.notify('You have successfully signed in!');
+        $location.path('/');
+      } else {
+        notifierService.error('Username/Password combination incorrect');
+      }
+    });
+  };
 }
 angular.module('app').controller('inventoryCtrl', inventoryCtrl);
 inventoryCtrl.$inject = ['$scope', 'inventoryService', 'notifierService', 'identityService', 'confirmModalService'];
@@ -877,8 +891,8 @@ function inventoryCtrl($scope, inventoryService, notifierService, identityServic
   };
 
   $scope.getInventoryItems = function() {
-    inventoryService.getInventoryItems().then(function(inventoryItems) {
-//    inventoryService.getXeroInventoryItems().then(function(inventoryItems) {
+//    inventoryService.getInventoryItems().then(function(inventoryItems) {
+    inventoryService.getXeroInventoryItems().then(function(inventoryItems) {
       $scope.inventoryItems = {};
       for (var i = 0; i < inventoryItems.length; i++) {
         var inventoryItem = inventoryItems[i];
@@ -894,20 +908,6 @@ function inventoryCtrl($scope, inventoryService, notifierService, identityServic
   };
 
   $scope.getInventoryItems();
-}
-angular.module('app').controller('loginCtrl', loginCtrl);
-loginCtrl.$inject = ['$scope', '$location', 'notifierService', 'authorizationService'];
-function loginCtrl($scope, $location, notifierService, authorizationService) {
-  $scope.login = function() {
-    authorizationService.authenticateMember($scope.loginUsername, $scope.loginPassword).then(function(success) {
-      if (success) {
-        notifierService.notify('You have successfully signed in!');
-        $location.path('/');
-      } else {
-        notifierService.error('Username/Password combination incorrect');
-      }
-    });
-  };
 }
 angular.module('app').controller('memberCreateCtrl', memberCreateCtrl);
 memberCreateCtrl.$inject = ['$scope', '$location', 'notifierService', 'memberService'];
@@ -1034,6 +1034,25 @@ function memberOnlyCtrl($scope, jerseyImagesService) {
   jerseyImagesService.getJerseyImages().then(function(jerseyImages) {
   $scope.jerseyImages = jerseyImages;
 });}
+angular.module('app').controller('navbarLoginCtrl', navbarLoginCtrl);
+navbarLoginCtrl.$inject = ['$scope', '$location', 'identityService', 'notifierService', 'authorizationService'];
+function navbarLoginCtrl($scope, $location, identityService, notifierService, authorizationService) {
+  $scope.identityService = identityService;
+
+  $scope.signout = function() {
+    authorizationService.logoutMember().then(function() {
+      $scope.username = '';
+      $scope.password = '';
+      notifierService.notify('You have successfully signed out!');
+      $location.path('/');
+    });
+  };
+
+  $scope.isActive = function (viewLocation) {
+    return viewLocation === $location.path();
+  };
+}
+
 angular.module('app').controller('membersCtrl', membersCtrl);
 membersCtrl.$inject = ['$scope', '$location', '$window', 'memberService', 'notifierService', 'identityService'];
 function membersCtrl($scope, $location, $window, memberService, notifierService, identityService) {
@@ -1107,25 +1126,6 @@ function membersCtrl($scope, $location, $window, memberService, notifierService,
   };
 }
 
-angular.module('app').controller('navbarLoginCtrl', navbarLoginCtrl);
-navbarLoginCtrl.$inject = ['$scope', '$location', 'identityService', 'notifierService', 'authorizationService'];
-function navbarLoginCtrl($scope, $location, identityService, notifierService, authorizationService) {
-  $scope.identityService = identityService;
-
-  $scope.signout = function() {
-    authorizationService.logoutMember().then(function() {
-      $scope.username = '';
-      $scope.password = '';
-      notifierService.notify('You have successfully signed out!');
-      $location.path('/');
-    });
-  };
-
-  $scope.isActive = function (viewLocation) {
-    return viewLocation === $location.path();
-  };
-}
-
 angular.module('app').controller('resultsCtrl', resultsCtrl);
 resultsCtrl.$inject = ['$scope', '$sce', 'videoService'];
 function resultsCtrl($scope, $sce, videoService) {
@@ -1146,15 +1146,6 @@ function resultsCtrl($scope, $sce, videoService) {
       $scope.selectedVideoHtml = $sce.trustAsHtml(videoHtml);
     });
   };
-}
-
-
-angular.module('app').controller('sponsorLogosCtrl', sponsorLogosCtrl);
-sponsorLogosCtrl.$inject = ['$scope', 'sponsorLogosService'];
-function sponsorLogosCtrl($scope, sponsorLogosService) {
-  sponsorLogosService.getSponsorLogos().then(function(sponsorLogos) {
-    $scope.sponsorLogos = sponsorLogos;
-  });
 }
 
 
@@ -1191,6 +1182,15 @@ function volunteerEventCreateCtrl($scope, $location, notifierService, volunteerE
     $scope.img = $files[0];
   };
 }
+angular.module('app').controller('sponsorLogosCtrl', sponsorLogosCtrl);
+sponsorLogosCtrl.$inject = ['$scope', 'sponsorLogosService'];
+function sponsorLogosCtrl($scope, sponsorLogosService) {
+  sponsorLogosService.getSponsorLogos().then(function(sponsorLogos) {
+    $scope.sponsorLogos = sponsorLogos;
+  });
+}
+
+
 angular.module('app').controller('volunteerEventEditCtrl', volunteerEventEditCtrl);
 volunteerEventEditCtrl.$inject = ['$scope', '$route', 'notifierService', 'volunteerEventService', 'identityService'];
 function volunteerEventEditCtrl($scope, $route, notifierService, volunteerEventService, identityService) {
