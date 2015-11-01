@@ -51,7 +51,7 @@ exports.getInventoryItems = function(req, res) {
             name: item.Name,
             category: 'Movie',
             price: item.SalesDetails.UnitPrice,
-            quantity: item.QuantityOnHand
+            quantity: 100
           });
         }
       }
