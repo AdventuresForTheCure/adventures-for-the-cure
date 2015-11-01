@@ -16,6 +16,7 @@ function inventoryCtrl($scope, inventoryService, notifierService, identityServic
     'Water Bottles',
     'Winged Foot T-shirts and Sweats'
   ];
+  $scope.isLoading = false;
 
   $scope.ableToEdit = function() {
     if (identityService.currentMember && identityService.currentMember.isInventory()) {
@@ -118,8 +119,10 @@ function inventoryCtrl($scope, inventoryService, notifierService, identityServic
   };
 
   $scope.getInventoryItems = function() {
+    $scope.isLoading = true;
 //    inventoryService.getInventoryItems().then(function(inventoryItems) {
     inventoryService.getXeroInventoryItems().then(function(inventoryItems) {
+      $scope.isLoading = false;
       $scope.inventoryItems = {};
       for (var i = 0; i < inventoryItems.length; i++) {
         var inventoryItem = inventoryItems[i];
@@ -130,6 +133,7 @@ function inventoryCtrl($scope, inventoryService, notifierService, identityServic
         inventoryItem.inEditMode = false;
       }
     }, function(reason) {
+      $scope.isLoading = false;
       notifierService.error(reason);
     });
   };

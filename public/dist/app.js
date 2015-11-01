@@ -663,9 +663,6 @@ function volunteerEventService($q, $http, $upload) {
     }
   };
 }
-angular.module('app').controller('boardOnlyCtrl', boardOnlyCtrl);
-boardOnlyCtrl.$inject = ['$scope'];
-function boardOnlyCtrl($scope) {}
 angular.module('app').controller('adminCtrl', adminCtrl);
 adminCtrl.$inject = ['$scope', '$location', 'notifierService', 'authorizationService'];
 function adminCtrl($scope, $location, notifierService, authorizationService) {
@@ -684,6 +681,42 @@ function adminCtrl($scope, $location, notifierService, authorizationService) {
       notifierService.error(reason);
     });
   };
+}
+angular.module('app').controller('boardOnlyCtrl', boardOnlyCtrl);
+boardOnlyCtrl.$inject = ['$scope'];
+function boardOnlyCtrl($scope) {}
+angular.module('app').controller('confirmModalCtrl', confirmModalCtrl);
+confirmModalCtrl.$inject = ['$scope', '$modalInstance', 'message'];
+function confirmModalCtrl ($scope, $modalInstance, message) {
+  $scope.message = message;
+  $scope.confirm = function () {
+    $modalInstance.close(true);
+  };
+
+  $scope.cancel = function () {
+    $modalInstance.dismiss();
+  };
+}
+angular.module('app').factory('confirmModalService', ['$modal', '$q', confirmModalService]);
+function confirmModalService($modal, $q) {
+  return {
+    showModal: function (message) {
+      var deferred = $q.defer();
+      var modalInstance = $modal.open({
+        templateUrl: '/partials/confirmModal/confirm-modal',
+        controller: confirmModalCtrl,
+        resolve: {
+          message: function () {
+            return message;
+          }
+        }
+      });
+      modalInstance.result.then(function () {
+        deferred.resolve(true);
+      });
+      return deferred.promise;
+    }
+  }
 }
 angular.module('app').controller('campaignsCtrl', campaignsCtrl);
 campaignsCtrl.$inject = ['$scope', '$sce', '$location', 'campaignService'];
@@ -724,53 +757,6 @@ function campaignsCtrl($scope, $sce, $location, campaignService) {
 }
 
 
-angular.module('app').controller('confirmModalCtrl', confirmModalCtrl);
-confirmModalCtrl.$inject = ['$scope', '$modalInstance', 'message'];
-function confirmModalCtrl ($scope, $modalInstance, message) {
-  $scope.message = message;
-  $scope.confirm = function () {
-    $modalInstance.close(true);
-  };
-
-  $scope.cancel = function () {
-    $modalInstance.dismiss();
-  };
-}
-angular.module('app').factory('confirmModalService', ['$modal', '$q', confirmModalService]);
-function confirmModalService($modal, $q) {
-  return {
-    showModal: function (message) {
-      var deferred = $q.defer();
-      var modalInstance = $modal.open({
-        templateUrl: '/partials/confirmModal/confirm-modal',
-        controller: confirmModalCtrl,
-        resolve: {
-          message: function () {
-            return message;
-          }
-        }
-      });
-      modalInstance.result.then(function () {
-        deferred.resolve(true);
-      });
-      return deferred.promise;
-    }
-  }
-}
-angular.module('app').controller('loginCtrl', loginCtrl);
-loginCtrl.$inject = ['$scope', '$location', 'notifierService', 'authorizationService'];
-function loginCtrl($scope, $location, notifierService, authorizationService) {
-  $scope.login = function() {
-    authorizationService.authenticateMember($scope.loginUsername, $scope.loginPassword).then(function(success) {
-      if (success) {
-        notifierService.notify('You have successfully signed in!');
-        $location.path('/');
-      } else {
-        notifierService.error('Username/Password combination incorrect');
-      }
-    });
-  };
-}
 angular.module('app').controller('inventoryCtrl', inventoryCtrl);
 inventoryCtrl.$inject = ['$scope', 'inventoryService', 'notifierService', 'identityService', 'confirmModalService'];
 function inventoryCtrl($scope, inventoryService, notifierService, identityService, confirmModalService) {
@@ -789,6 +775,7 @@ function inventoryCtrl($scope, inventoryService, notifierService, identityServic
     'Water Bottles',
     'Winged Foot T-shirts and Sweats'
   ];
+  $scope.isLoading = false;
 
   $scope.ableToEdit = function() {
     if (identityService.currentMember && identityService.currentMember.isInventory()) {
@@ -891,8 +878,10 @@ function inventoryCtrl($scope, inventoryService, notifierService, identityServic
   };
 
   $scope.getInventoryItems = function() {
+    $scope.isLoading = true;
 //    inventoryService.getInventoryItems().then(function(inventoryItems) {
     inventoryService.getXeroInventoryItems().then(function(inventoryItems) {
+      $scope.isLoading = false;
       $scope.inventoryItems = {};
       for (var i = 0; i < inventoryItems.length; i++) {
         var inventoryItem = inventoryItems[i];
@@ -903,11 +892,26 @@ function inventoryCtrl($scope, inventoryService, notifierService, identityServic
         inventoryItem.inEditMode = false;
       }
     }, function(reason) {
+      $scope.isLoading = false;
       notifierService.error(reason);
     });
   };
 
   $scope.getInventoryItems();
+}
+angular.module('app').controller('loginCtrl', loginCtrl);
+loginCtrl.$inject = ['$scope', '$location', 'notifierService', 'authorizationService'];
+function loginCtrl($scope, $location, notifierService, authorizationService) {
+  $scope.login = function() {
+    authorizationService.authenticateMember($scope.loginUsername, $scope.loginPassword).then(function(success) {
+      if (success) {
+        notifierService.notify('You have successfully signed in!');
+        $location.path('/');
+      } else {
+        notifierService.error('Username/Password combination incorrect');
+      }
+    });
+  };
 }
 angular.module('app').controller('memberCreateCtrl', memberCreateCtrl);
 memberCreateCtrl.$inject = ['$scope', '$location', 'notifierService', 'memberService'];
@@ -947,6 +951,37 @@ function memberCreateCtrl($scope, $location, notifierService, memberService) {
   $scope.onFileSelect = function($files) {
     $scope.img = $files[0];
   };
+}
+angular.module('app').controller('memberListCtrl', memberListCtrl);
+memberListCtrl.$inject = ['$scope', '$location', 'notifierService', 'memberService', 'identityService', 'confirmModalService'];
+function memberListCtrl($scope, $location, notifierService, memberService, identityService, confirmModalService) {
+  $scope.identity = identityService;
+
+  function getMembers() {
+    memberService.getMembers().then(function (members) {
+      $scope.members = members;
+    });
+  }
+
+  $scope.editMember = function(member) {
+    $location.path('/member-edit/' + member._id);
+  };
+
+  $scope.deleteMember = function(member) {
+    var message = 'Are you sure you want to delete the member: ' + member.name + ' <' + member.username + '>?';
+    confirmModalService.showModal(message).then(function(isConfirmed) {
+      if (isConfirmed) {
+        memberService.deleteMember(member).then(function() {
+          notifierService.notify('Member ' + member.username + ' has been deleted');
+          getMembers();
+        }, function(reason) {
+          notifierService.error(reason);
+        });
+      }
+    })
+  };
+
+  getMembers();
 }
 angular.module('app').controller('memberEditCtrl', memberEditCtrl);
 memberEditCtrl.$inject = ['$scope', '$routeParams', 'notifierService', 'memberService', 'identityService'];
@@ -997,62 +1032,12 @@ function memberEditCtrl($scope, $routeParams, notifierService, memberService, id
     });
   }
 }
-angular.module('app').controller('memberListCtrl', memberListCtrl);
-memberListCtrl.$inject = ['$scope', '$location', 'notifierService', 'memberService', 'identityService', 'confirmModalService'];
-function memberListCtrl($scope, $location, notifierService, memberService, identityService, confirmModalService) {
-  $scope.identity = identityService;
-
-  function getMembers() {
-    memberService.getMembers().then(function (members) {
-      $scope.members = members;
-    });
-  }
-
-  $scope.editMember = function(member) {
-    $location.path('/member-edit/' + member._id);
-  };
-
-  $scope.deleteMember = function(member) {
-    var message = 'Are you sure you want to delete the member: ' + member.name + ' <' + member.username + '>?';
-    confirmModalService.showModal(message).then(function(isConfirmed) {
-      if (isConfirmed) {
-        memberService.deleteMember(member).then(function() {
-          notifierService.notify('Member ' + member.username + ' has been deleted');
-          getMembers();
-        }, function(reason) {
-          notifierService.error(reason);
-        });
-      }
-    })
-  };
-
-  getMembers();
-}
 angular.module('app').controller('memberOnlyCtrl', memberOnlyCtrl);
 memberOnlyCtrl.$inject = ['$scope', 'jerseyImagesService'];
 function memberOnlyCtrl($scope, jerseyImagesService) {
   jerseyImagesService.getJerseyImages().then(function(jerseyImages) {
   $scope.jerseyImages = jerseyImages;
 });}
-angular.module('app').controller('navbarLoginCtrl', navbarLoginCtrl);
-navbarLoginCtrl.$inject = ['$scope', '$location', 'identityService', 'notifierService', 'authorizationService'];
-function navbarLoginCtrl($scope, $location, identityService, notifierService, authorizationService) {
-  $scope.identityService = identityService;
-
-  $scope.signout = function() {
-    authorizationService.logoutMember().then(function() {
-      $scope.username = '';
-      $scope.password = '';
-      notifierService.notify('You have successfully signed out!');
-      $location.path('/');
-    });
-  };
-
-  $scope.isActive = function (viewLocation) {
-    return viewLocation === $location.path();
-  };
-}
-
 angular.module('app').controller('membersCtrl', membersCtrl);
 membersCtrl.$inject = ['$scope', '$location', '$window', 'memberService', 'notifierService', 'identityService'];
 function membersCtrl($scope, $location, $window, memberService, notifierService, identityService) {
@@ -1126,6 +1111,25 @@ function membersCtrl($scope, $location, $window, memberService, notifierService,
   };
 }
 
+angular.module('app').controller('navbarLoginCtrl', navbarLoginCtrl);
+navbarLoginCtrl.$inject = ['$scope', '$location', 'identityService', 'notifierService', 'authorizationService'];
+function navbarLoginCtrl($scope, $location, identityService, notifierService, authorizationService) {
+  $scope.identityService = identityService;
+
+  $scope.signout = function() {
+    authorizationService.logoutMember().then(function() {
+      $scope.username = '';
+      $scope.password = '';
+      notifierService.notify('You have successfully signed out!');
+      $location.path('/');
+    });
+  };
+
+  $scope.isActive = function (viewLocation) {
+    return viewLocation === $location.path();
+  };
+}
+
 angular.module('app').controller('resultsCtrl', resultsCtrl);
 resultsCtrl.$inject = ['$scope', '$sce', 'videoService'];
 function resultsCtrl($scope, $sce, videoService) {
@@ -1146,6 +1150,15 @@ function resultsCtrl($scope, $sce, videoService) {
       $scope.selectedVideoHtml = $sce.trustAsHtml(videoHtml);
     });
   };
+}
+
+
+angular.module('app').controller('sponsorLogosCtrl', sponsorLogosCtrl);
+sponsorLogosCtrl.$inject = ['$scope', 'sponsorLogosService'];
+function sponsorLogosCtrl($scope, sponsorLogosService) {
+  sponsorLogosService.getSponsorLogos().then(function(sponsorLogos) {
+    $scope.sponsorLogos = sponsorLogos;
+  });
 }
 
 
@@ -1182,15 +1195,6 @@ function volunteerEventCreateCtrl($scope, $location, notifierService, volunteerE
     $scope.img = $files[0];
   };
 }
-angular.module('app').controller('sponsorLogosCtrl', sponsorLogosCtrl);
-sponsorLogosCtrl.$inject = ['$scope', 'sponsorLogosService'];
-function sponsorLogosCtrl($scope, sponsorLogosService) {
-  sponsorLogosService.getSponsorLogos().then(function(sponsorLogos) {
-    $scope.sponsorLogos = sponsorLogos;
-  });
-}
-
-
 angular.module('app').controller('volunteerEventEditCtrl', volunteerEventEditCtrl);
 volunteerEventEditCtrl.$inject = ['$scope', '$route', 'notifierService', 'volunteerEventService', 'identityService'];
 function volunteerEventEditCtrl($scope, $route, notifierService, volunteerEventService, identityService) {
