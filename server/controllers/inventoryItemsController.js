@@ -47,7 +47,9 @@ exports.updateInventoryItem = function(req, res) {
 
 exports.getInventoryItems = function (req, res) {
   InventoryItem.find({}).exec(function (err, collection) {
-    if (err) { errorHandler.sendError(req, res, err);}
+    if (err) {
+      errorHandler.sendError(req, res, err);
+    }
     res.send(collection);
   });
 };

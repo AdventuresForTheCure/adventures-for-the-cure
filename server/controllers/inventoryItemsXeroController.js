@@ -18,6 +18,8 @@ exports.getInventoryItems = function(req, res) {
         if (item.IsTrackedAsInventory && item.QuantityOnHand > 0 && item.Name.indexOf('test') < 0) {
           if (item.Name.indexOf('shirt') >= 0) {
             category = 'T-Shirts'
+          } else if (item.Name.indexOf('2012') === 0) {
+            category = '2012 Kit'
           } else if (item.Name.indexOf('2013') === 0) {
             category = '2013 Kit'
           } else if (item.Name.indexOf('2014') === 0) {

@@ -1,0 +1,54 @@
+{"_id":{"$oid":"54cdf29f0cb3ab9c73382cf2"},"__v":0,"category":"Movies","imgPath":"http://res.cloudinary.com/http-adventuresforthecure-com/image/upload/v1422783136/Adventures%20For%20the%20Cure:%20The%20Doc.jpg","name":"Adventures For the Cure: The Doc","price":10,"quantity":50}
+{"_id":{"$oid":"54cdf874cdc85218172c1218"},"name":"22oz","quantity":0,"category":"Water Bottles","price":7,"imgPath":"","__v":0}
+{"_id":{"$oid":"54cdf880cdc85218172c1219"},"name":"26oz","quantity":0,"category":"Water Bottles","price":8,"imgPath":"","__v":0}
+{"_id":{"$oid":"54cdf8a8cdc85218172c121a"},"name":"Womens Tri Top - Medium","quantity":1,"category":"Hincapie Merchandise - 2011","price":65,"salePrice":20,"imgPath":"","__v":0}
+{"_id":{"$oid":"54cdf8c2cdc85218172c121b"},"name":"Womens Tri Shorts - Medium","quantity":1,"category":"Hincapie Merchandise - 2011","price":68,"salePrice":25,"imgPath":"","__v":0}
+{"_id":{"$oid":"54cdf8e0cdc85218172c121d"},"name":"Womens Short Sleeve V-Neck T-shirt - Large","quantity":1,"category":"Hincapie Merchandise - 2011","price":30,"salePrice":10,"imgPath":"","__v":0}
+{"_id":{"$oid":"54cdf916cdc85218172c121e"},"name":"Knee Warmers - Medium","quantity":1,"category":"Hincapie Merchandise - 2011","price":34,"salePrice":10,"imgPath":"","__v":0}
+{"_id":{"$oid":"54cdf941cdc85218172c121f"},"name":"Men Short Sleeve Velocity Jersey - XSmall","quantity":3,"category":"Hincapie Merchandise - 2012","price":75,"salePrice":30,"imgPath":"","__v":0}
+{"_id":{"$oid":"54cdf94bcdc85218172c1220"},"name":"Men Short Sleeve Velocity Jersey - Small","quantity":2,"category":"Hincapie Merchandise - 2012","price":75,"salePrice":30,"imgPath":"","__v":0}
+{"_id":{"$oid":"54cdf96dcdc85218172c1221"},"name":"Men Velocity Shorts - Small","quantity":2,"category":"Hincapie Merchandise - 2012","price":75,"salePrice":40,"imgPath":"","__v":0}
+{"_id":{"$oid":"54cdf979cdc85218172c1222"},"name":"Men Velocity Shorts - Large","quantity":1,"category":"Hincapie Merchandise - 2012","price":75,"salePrice":40,"imgPath":"","__v":0}
+{"_id":{"$oid":"54cdf98fcdc85218172c1223"},"name":"Men Tri Top - Small","quantity":1,"category":"Hincapie Merchandise - 2012","price":65,"salePrice":30,"imgPath":"","__v":0}
+{"_id":{"$oid":"54cdf9a5cdc85218172c1224"},"name":"Knee Warmers","quantity":1,"category":"Hincapie Merchandise - 2012","price":35,"salePrice":15,"imgPath":"","__v":0}
+{"_id":{"$oid":"54cdfc1316c402dc3570fab8"},"name":"Men Short Sleeve Velocity Jersey - XSmall","quantity":3,"category":"Hincapie Merchandise - 2013","price":55,"imgPath":"","__v":0}
+{"_id":{"$oid":"54cdfc3616c402dc3570fab9"},"name":"Men Short Sleeve Velocity Jersey - Small","quantity":1,"category":"Hincapie Merchandise - 2013","price":55,"imgPath":"","__v":0}
+{"_id":{"$oid":"54cdfc4a16c402dc3570faba"},"name":"Men Velocity Bibshorts - Large","quantity":1,"category":"Hincapie Merchandise - 2013","price":67,"imgPath":"","__v":0}
+{"_id":{"$oid":"54cdfc6416c402dc3570fabb"},"name":"Men Velocity Shorts - Small","quantity":2,"category":"Hincapie Merchandise - 2013","price":62,"imgPath":"","__v":0}
+{"_id":{"$oid":"54cdfc6d16c402dc3570fabc"},"name":"Men Velocity Shorts - Large","quantity":4,"category":"Hincapie Merchandise - 2013","price":62,"imgPath":"","__v":0}
+{"_id":{"$oid":"54cdfc8016c402dc3570fabd"},"name":"Men Long Sleeve Skinsuit - Large","quantity":1,"category":"Hincapie Merchandise - 2013","price":91,"imgPath":"","__v":0}
+{"_id":{"$oid":"54cdfc9616c402dc3570fabe"},"name":"Men Windtex Vest - Small","quantity":1,"category":"Hincapie Merchandise - 2013","price":59,"imgPath":"","__v":0}
+{"_id":{"$oid":"54cdfca816c402dc3570fabf"},"name":"Men Windtex Jacket - Small","quantity":2,"category":"Hincapie Merchandise - 2013","price":80,"imgPath":"","__v":0}
+{"_id":{"$oid":"54cdfcbc16c402dc3570fac0"},"name":"Men Bib Tights - Large","quantity":2,"category":"Hincapie Merchandise - 2013","price":77,"imgPath":"","__v":0}
+{"_id":{"$oid":"54cdfcd716c402dc3570fac1"},"name":"Men Tri Top - Small","quantity":1,"category":"Hincapie Merchandise - 2013","price":50,"imgPath":"","__v":0}
+{"_id":{"$oid":"54cdfceb16c402dc3570fac2"},"name":"Men Tri Shorts - Medium","quantity":1,"category":"Hincapie Merchandise - 2013","price":52,"imgPath":"","__v":0}
+{"_id":{"$oid":"54cdfcf316c402dc3570fac3"},"name":"Men Tri Shorts - Large","quantity":1,"category":"Hincapie Merchandise - 2013","price":52,"imgPath":"","__v":0}
+{"_id":{"$oid":"54cdfd0d16c402dc3570fac4"},"name":"Men Tri Suit - Medium","quantity":2,"category":"Hincapie Merchandise - 2013","price":108,"imgPath":"","__v":0}
+{"_id":{"$oid":"54cdfd1816c402dc3570fac5"},"name":"Men Tri Suit - Large","quantity":1,"category":"Hincapie Merchandise - 2013","price":108,"imgPath":"","__v":0}
+{"_id":{"$oid":"54cdfd2a16c402dc3570fac6"},"name":"Men V-neck T-shirt - Small","quantity":2,"category":"Hincapie Merchandise - 2013","price":27,"imgPath":"","__v":0}
+{"_id":{"$oid":"54cdfd3016c402dc3570fac7"},"name":"Men V-neck T-shirt - Large","quantity":2,"category":"Hincapie Merchandise - 2013","price":27,"imgPath":"","__v":0}
+{"_id":{"$oid":"54cdfd5116c402dc3570fac8"},"name":"Women Short Sleeve Velocity Jersey - Large","quantity":3,"category":"Hincapie Merchandise - 2013","price":55,"imgPath":"","__v":0}
+{"_id":{"$oid":"54cdfd6316c402dc3570fac9"},"name":"Women Velocity Shorts - Small","quantity":1,"category":"Hincapie Merchandise - 2013","price":62,"imgPath":"","__v":0}
+{"_id":{"$oid":"54cdfd7816c402dc3570faca"},"name":"Arm Warmers - Small","quantity":2,"category":"Hincapie Merchandise - 2013","price":27,"imgPath":"","__v":0}
+{"_id":{"$oid":"54cdfd8016c402dc3570facb"},"name":"Arm Warmers - Large","quantity":1,"category":"Hincapie Merchandise - 2013","price":27,"imgPath":"","__v":0}
+{"_id":{"$oid":"54cdfd8e16c402dc3570facc"},"name":"Knee Warmers - Large","quantity":1,"category":"Hincapie Merchandise - 2013","price":31,"imgPath":"","__v":0}
+{"_id":{"$oid":"54cdfdbb16c402dc3570facd"},"name":"Kid's Jersey - Large","quantity":1,"category":"Hincapie Merchandise - 2013","price":63,"salePrice":57,"imgPath":"","__v":0}
+{"_id":{"$oid":"54cdfef0b1c66740589121b2"},"name":"Men Short Sleeve Velocity Jersey - Small","quantity":1,"category":"Hincapie Merchandise - 2014","price":60,"imgPath":"","__v":0}
+{"_id":{"$oid":"54cdfefdb1c66740589121b3"},"name":"Men Short Sleeve Velocity Jersey - Medium","quantity":0,"category":"Hincapie Merchandise - 2014","price":60,"imgPath":"","__v":0}
+{"_id":{"$oid":"54cdff06b1c66740589121b4"},"name":"Men Short Sleeve Velocity Jersey - Large","quantity":3,"category":"Hincapie Merchandise - 2014","price":60,"imgPath":"","__v":0}
+{"_id":{"$oid":"54cdff26b1c66740589121b5"},"name":"Men Velocity Shorts - Medium","quantity":0,"category":"Hincapie Merchandise - 2014","price":64,"imgPath":"","__v":0}
+{"_id":{"$oid":"54cdff50b1c66740589121b6"},"name":"Men Singlets - Small","quantity":2,"category":"Saucony Running Gear","price":40,"imgPath":"","__v":0}
+{"_id":{"$oid":"54cdff58b1c66740589121b7"},"name":"Men Singlets - Medium","quantity":1,"category":"Saucony Running Gear","price":40,"imgPath":"","__v":0}
+{"_id":{"$oid":"54cdff5fb1c66740589121b8"},"name":"Men Singlets - Large","quantity":1,"category":"Saucony Running Gear","price":40,"imgPath":"","__v":0}
+{"_id":{"$oid":"54cdff78b1c66740589121b9"},"name":"Men Shorts - 2.5\" - Medium","quantity":1,"category":"Saucony Running Gear","price":36,"imgPath":"","__v":0}
+{"_id":{"$oid":"54cdff7fb1c66740589121ba"},"name":"Men Shorts - 2.5\" - Large","quantity":1,"category":"Saucony Running Gear","price":36,"imgPath":"","__v":0}
+{"_id":{"$oid":"54cdff92b1c66740589121bb"},"name":"Men Compression Shorts - Small","quantity":1,"category":"Saucony Running Gear","price":30,"imgPath":"","__v":0}
+{"_id":{"$oid":"54cdff9eb1c66740589121bc"},"name":"Men Compression Shorts - Medium","quantity":3,"category":"Saucony Running Gear","price":30,"imgPath":"","__v":0}
+{"_id":{"$oid":"54cdffb1b1c66740589121bd"},"name":"Women Singlets - Medium","quantity":1,"category":"Saucony Running Gear","price":40,"imgPath":"","__v":0}
+{"_id":{"$oid":"54cdffb6b1c66740589121be"},"name":"Women Singlets - Large","quantity":1,"category":"Saucony Running Gear","price":40,"imgPath":"","__v":0}
+{"_id":{"$oid":"54cdfff7b1c66740589121bf"},"name":"Red Anything T-shirts - Large","quantity":22,"category":"Winged Foot T-shirts and Sweats","price":15,"imgPath":"","__v":0}
+{"_id":{"$oid":"54cdffffb1c66740589121c0"},"name":"Red Anything T-shirts - XLarge","quantity":8,"category":"Winged Foot T-shirts and Sweats","price":15,"imgPath":"","__v":0}
+{"_id":{"$oid":"54ce0010b1c66740589121c1"},"name":"Black Anything Hoodies - XLarge","quantity":1,"category":"Winged Foot T-shirts and Sweats","price":40,"imgPath":"","__v":0}
+{"_id":{"$oid":"54ce0059b1c66740589121c6"},"name":"AFC Wool Caps","quantity":1,"category":"Hats","price":10,"imgPath":"","__v":0}
+{"_id":{"$oid":"54ce007ab1c66740589121c7"},"name":"Black AFC Wool Socks - Small","quantity":16,"category":"DeFeet Socks","price":10,"imgPath":"","__v":0,"salePrice":0}
+{"_id":{"$oid":"54ce0080b1c66740589121c8"},"__v":0,"category":"DeFeet Socks","imgPath":"","name":"Black AFC Wool Socks - Medium","price":10,"quantity":2,"salePrice":0}
