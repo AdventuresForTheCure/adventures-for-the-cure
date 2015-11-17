@@ -682,9 +682,6 @@ function adminCtrl($scope, $location, notifierService, authorizationService) {
     });
   };
 }
-angular.module('app').controller('boardOnlyCtrl', boardOnlyCtrl);
-boardOnlyCtrl.$inject = ['$scope'];
-function boardOnlyCtrl($scope) {}
 angular.module('app').controller('campaignsCtrl', campaignsCtrl);
 campaignsCtrl.$inject = ['$scope', '$sce', '$location', 'campaignService'];
 function campaignsCtrl($scope, $sce, $location, campaignService) {
@@ -724,6 +721,9 @@ function campaignsCtrl($scope, $sce, $location, campaignService) {
 }
 
 
+angular.module('app').controller('boardOnlyCtrl', boardOnlyCtrl);
+boardOnlyCtrl.$inject = ['$scope'];
+function boardOnlyCtrl($scope) {}
 angular.module('app').controller('confirmModalCtrl', confirmModalCtrl);
 confirmModalCtrl.$inject = ['$scope', '$modalInstance', 'message'];
 function confirmModalCtrl ($scope, $modalInstance, message) {
