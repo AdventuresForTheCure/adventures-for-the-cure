@@ -1,30 +1,14 @@
 .row(ng-controller='campaignsCtrl')
-  .col-lg-12
+  .col-lg-4
     .well
-      h4 What is an AFC Campaign?
       p
-        | If you have an idea for how to raise money for any good cause you can use AFC contact us
-        | at <span class='email'>afc-board-of-directors@googlegroups.com</span>.
-        | We will supply you with a donation page, we will collect your donations
-        | and when you are finished we will send the money you collected to your charity of choice!!
-      h4 Start Today!
-      ol.ordered-list(style='padding-left:15px')
-        li Write a brief description of what you will do and what you are raising money for.
-        li Get some pictures to help promote your effort.  People like to see pictures on webpages!
-        li
-          | Contact us at <span class='email'>afc-board-of-directors@googlegroups.com</span> and
-          | tell us your idea (send description/pictures).
-        li The AFC Board of Directors will decide to add your cause as an AFC campaign.
-        li
-          | We will create your webpage and set up an online donation option.  You will automatically
-          | be notified when a donation is made.
-        li Finally, do your thing and let us know if there is anything else we can do to help.
-    .row
-      .col-lg-4
-        .well
-          h4 AFC Campaign List
-          ul(style='padding-left:10px')
-            li(ng-repeat='campaign in campaigns | orderBy:"name":true')
-              a(ng-click='selectCampaign(campaign)' href='') {{campaign.name}}
-      .col-lg-8
-        .well(ng-bind-html='selectedCampaignHtml')
+       | Email
+       | <span class='email'>afc-board-of-directors@googlegroups.com</span>
+       | to learn how to start your own AFC Campaign
+    .well
+      h4 AFC Campaign List
+      ul(style='padding-left:10px')
+        li(ng-repeat='campaign in campaigns | orderBy:"name":true')
+          a(ng-click='selectCampaign(campaign)' href='') {{campaign.name}}
+  .col-lg-8
+    .well(ng-bind-html='selectedCampaignHtml')
