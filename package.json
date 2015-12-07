@@ -11,8 +11,8 @@
     "postinstall": "gulp"
   },
   "engines": {
-    "node": "0.10.x",
-    "npm": "2.0.2"
+    "node": "4.2.x",
+    "npm": "3.5.x"
   },
   "author": "",
   "license": "ISC",
