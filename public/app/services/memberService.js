@@ -81,6 +81,25 @@ function memberService($q, $http, $upload, Member) {
       return dfd.promise;
     },
 
+    updateActiveStatus: function(member) {
+      var dfd = $q.defer();
+
+      if (member.isActive) {
+        url = '/api/member/activate/' + member._id;
+      } else {
+        url = '/api/member/deactivate/' + member._id;
+      }
+      $http.get(url, {})
+        .success(function(data, status, headers, config) {
+          dfd.resolve(data);
+        })
+        .error(function(error, status, headers, config) {
+          dfd.reject(error.reason);
+        });
+
+      return dfd.promise;
+    },
+
     saveMemberTmpImg: function(member) {
       var dfd = $q.defer();
       var url = '/api/members/tmpImg/' + member._id;

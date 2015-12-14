@@ -28,6 +28,8 @@ module.exports = function(app, config) {
   app.post('/api/members/tmpImg/:id', multipartMiddleware, members.updateMemberTmpImg);
   app.post('/api/members', multipartMiddleware, members.saveMember);
   app.delete('/api/members/:id', auth.requiresLoggedInRole('admin'), members.deleteMember);
+  app.get('/api/member/activate/:id', auth.requiresLoggedInRole('admin'), members.activateMember);
+  app.get('/api/member/deactivate/:id', auth.requiresLoggedInRole('admin'), members.deactivateMember);
 
   app.get('/api/xero/inventoryItems', cache.disableBrowserCache, inventoryItemsXero.getInventoryItems);
 

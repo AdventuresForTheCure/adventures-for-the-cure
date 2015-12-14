@@ -26,5 +26,10 @@
               button.btn.btn-default.btn-sm(ng-click="editMember(member)" title="Edit")
                 span(class="glyphicon glyphicon-edit" aria-hidden="true")
               | &nbsp;
+              button.btn.btn-default.btn-sm(ng-show='member.isActive' ng-click="deactivateMembership(member)" title="Deactivate membership")
+                span(class="glyphicon glyphicon-ok" aria-hidden="true")
+              button.btn.btn-default.btn-sm(ng-show='!member.isActive' ng-click="activateMembership(member)" title="Activate membership")
+                span(class="glyphicon glyphicon-warning-sign" aria-hidden="true")
+              | &nbsp;
               button.btn.btn-default.btn-sm(ng-click="deleteMember(member)" title="Delete")
                 span(class="glyphicon glyphicon-trash" aria-hidden="true")

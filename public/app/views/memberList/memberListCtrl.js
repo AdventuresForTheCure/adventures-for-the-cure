@@ -27,5 +27,25 @@ function memberListCtrl($scope, $location, notifierService, memberService, ident
     })
   };
 
+  $scope.deactivateMembership = function(member) {
+    member.isActive = false;
+    memberService.updateActiveStatus(member).then(function() {
+      notifierService.notify('Member ' + member.username + ' has been deactivated');
+      getMembers();
+    }, function(reason) {
+      notifierService.error(reason);
+    });
+  }
+
+  $scope.activateMembership = function(member) {
+    member.isActive = true;
+    memberService.updateActiveStatus(member).then(function() {
+      notifierService.notify('Member ' + member.username + ' has been activated');
+      getMembers();
+    }, function(reason) {
+      notifierService.error(reason);
+    });
+  }
+
   getMembers();
 }

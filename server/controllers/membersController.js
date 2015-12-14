@@ -95,6 +95,16 @@ exports.updateMember = function(req, res) {
   });
 };
 
+exports.activateMember = function(req, res) {
+  var memberId = req.params.id;
+  updateMember(req, res, memberId, {isActive: true});
+};
+
+exports.deactivateMember = function(req, res) {
+  var memberId = req.params.id;
+  updateMember(req, res, memberId, {isActive: false});
+};
+
 exports.updateMemberTmpImg = function(req, res) {
   var memberId = req.params.id;
 
