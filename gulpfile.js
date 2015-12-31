@@ -24,7 +24,7 @@ gulp.task('public-jshint', function() {
 
 gulp.task('public-bundlejs', function() {
   return gulp.src(publicjs)
-//    .pipe(plug.ngAnnotate())
+    .pipe(plug.ngAnnotate())
     .pipe(plug.concat('app.js'))
     .pipe(gulp.dest(publicdist));
 //    .pipe(plug.rename({suffix: '.min'}))
@@ -38,8 +38,8 @@ gulp.task('public-test', function() {
 });
 
 gulp.task('public-all', ['public-clean'], function(callback) {
-//  runSequence('public-jshint', 'public-bundlejs', callback);
-  runSequence('public-bundlejs', callback);
+  runSequence('public-jshint', 'public-bundlejs', callback);
+//  runSequence('public-bundlejs', callback);
 });
 
 gulp.task('server-jshint', function() {

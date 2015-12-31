@@ -1,6 +1,6 @@
 angular.module('app', ['ngResource', 'ngRoute', 'ui.bootstrap', 'angularFileUpload']);
 
-angular.module('app').config(function($routeProvider, $locationProvider) {
+angular.module('app').config(["$routeProvider", "$locationProvider", function($routeProvider, $locationProvider) {
   var routeRoleChecks = {
     admin: { auth: function(authorizationService) {
       return authorizationService.authorizeAuthorizedMemberForRoute('admin');
@@ -80,13 +80,13 @@ angular.module('app').config(function($routeProvider, $locationProvider) {
     .otherwise({
       templateUrl: '/partials/invalidPage/invalidPage'
     });
-});
+}]);
 
 /**
  * If any route is attempted that the user is not authorized for then send
  * the user back to the home page
  */
-angular.module('app').run(function($rootScope, $location, notifierService, identityService) {
+angular.module('app').run(["$rootScope", "$location", "notifierService", "identityService", function($rootScope, $location, notifierService, identityService) {
   $rootScope.$on('$routeChangeError', function(evt, current, previous, rejection) {
     if (rejection === 'not authorized') {
       notifierService.error('You are not authorized to view this page.  Are you logged in?');
@@ -96,7 +96,7 @@ angular.module('app').run(function($rootScope, $location, notifierService, ident
       $location.path('/member-edit/' + identityService.currentMember._id);
     }
   });
-});
+}]);
 angular.module('app').factory('Member', ['$resource', Member]);
 function Member($resource) {
   var member = $resource('/api/members', {}, {});
@@ -682,25 +682,6 @@ function volunteerEventService($q, $http, $upload) {
     }
   };
 }
-angular.module('app').controller('adminCtrl', adminCtrl);
-adminCtrl.$inject = ['$scope', '$location', 'notifierService', 'authorizationService'];
-function adminCtrl($scope, $location, notifierService, authorizationService) {
-  $scope.createMember = function () {
-    var newMemberData = {
-      username: $scope.username,
-      password: $scope.password,
-      firstName: $scope.firstName,
-      lastName: $scope.lastName
-    };
-
-    authorizationService.createMember(newMemberData).then(function () {
-      notifierService.notify('Member account created!');
-      $location.path('/');
-    }, function (reason) {
-      notifierService.error(reason);
-    });
-  };
-}
 angular.module('app').controller('boardOnlyCtrl', boardOnlyCtrl);
 boardOnlyCtrl.$inject = ['$scope'];
 function boardOnlyCtrl($scope) {}
@@ -1071,6 +1052,12 @@ function memberListCtrl($scope, $location, notifierService, memberService, ident
 
   getMembers();
 }
+angular.module('app').controller('memberOnlyCtrl', memberOnlyCtrl);
+memberOnlyCtrl.$inject = ['$scope', 'jerseyImagesService'];
+function memberOnlyCtrl($scope, jerseyImagesService) {
+  jerseyImagesService.getJerseyImages().then(function(jerseyImages) {
+  $scope.jerseyImages = jerseyImages;
+});}
 angular.module('app').controller('membersCtrl', membersCtrl);
 membersCtrl.$inject = ['$scope', '$location', '$window', 'memberService', 'notifierService', 'identityService'];
 function membersCtrl($scope, $location, $window, memberService, notifierService, identityService) {
@@ -1108,11 +1095,15 @@ function membersCtrl($scope, $location, $window, memberService, notifierService,
   };
 
   $scope.selectMember = function(member) {
-    $scope.selectedMember = member;
-    var currHash = $window.location.hash.substring(1, $window.location.hash.length);
-    if (currHash !== encodeURIComponent($scope.selectedMember.name)) {
-//      $window.location.hash = $scope.selectedMember.name;
-      $location.hash($scope.selectedMember.name);
+    if (member.isActive) {
+      $scope.selectedMember = member;
+      var currHash = $window.location.hash.substring(1, $window.location.hash.length);
+      if (currHash !== encodeURIComponent($scope.selectedMember.name)) {
+        //      $window.location.hash = $scope.selectedMember.name;
+        $location.hash($scope.selectedMember.name);
+      }
+    } else {
+      $scope.selectedMember = {};
     }
   };
 
@@ -1144,12 +1135,6 @@ function membersCtrl($scope, $location, $window, memberService, notifierService,
   };
 }
 
-angular.module('app').controller('memberOnlyCtrl', memberOnlyCtrl);
-memberOnlyCtrl.$inject = ['$scope', 'jerseyImagesService'];
-function memberOnlyCtrl($scope, jerseyImagesService) {
-  jerseyImagesService.getJerseyImages().then(function(jerseyImages) {
-  $scope.jerseyImages = jerseyImages;
-});}
 angular.module('app').controller('navbarLoginCtrl', navbarLoginCtrl);
 navbarLoginCtrl.$inject = ['$scope', '$location', 'identityService', 'notifierService', 'authorizationService'];
 function navbarLoginCtrl($scope, $location, identityService, notifierService, authorizationService) {
@@ -1311,3 +1296,4 @@ function confirmDeleteVolunteerEventCtrl($scope, $modalInstance, volunteerEventS
     $modalInstance.dismiss();
   };
 }
+confirmDeleteVolunteerEventCtrl.$inject = ["$scope", "$modalInstance", "volunteerEventService", "notifierService", "volunteerEvent"];
