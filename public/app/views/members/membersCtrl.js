@@ -10,7 +10,7 @@ function membersCtrl($scope, $location, $window, memberService, notifierService,
   memberService.getActiveMembers().then(function(members) {
     $scope.allMembers = members;
     $scope.membersColumn1 = members.slice(0, (members.length / 2) + 1);
-    $scope.membersColumn2 = members.slice((members.length / 2) + 1, members.length);
+    $scope.membersColumn2 = members.slice((members.length / 2), members.length);
     var urlMemberName = $location.hash();
     for (var i = 0; i < members.length; i++) {
       if (members[i].name === urlMemberName) {
