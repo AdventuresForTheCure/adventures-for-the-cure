@@ -23,6 +23,7 @@ module.exports = function(app, config) {
   app.get('/api/videos', cache.disableBrowserCache, videos.getVideos);
 
   app.get('/api/members', cache.disableBrowserCache, members.getMembers);
+  app.get('/api/members/active', cache.disableBrowserCache, members.getActiveMembers);
   app.get('/api/members/:id', cache.disableBrowserCache, members.getMember);
   app.post('/api/members/:id', multipartMiddleware, members.updateMember);
   app.post('/api/members/tmpImg/:id', multipartMiddleware, members.updateMemberTmpImg);

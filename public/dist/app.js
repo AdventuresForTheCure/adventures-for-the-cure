@@ -412,6 +412,21 @@ function memberService($q, $http, $upload, Member) {
       return dfd.promise;
     },
 
+    getActiveMembers: function() {
+      var dfd = $q.defer();
+      var config = {
+        transformResponse: transformResponse
+      };
+      $http.get('/api/members/active/', config)
+        .success(function (data, status, headers, config) {
+          dfd.resolve(data);
+        })
+        .error(function (error, status, headers, config) {
+          dfd.reject(error.reason);
+        });
+      return dfd.promise;
+    },
+
     getMember: function(name) {
       // because we need to get a html file as the content for a given member
       // we must use the $http.get method and not the Member resource.  The Member
@@ -1067,7 +1082,7 @@ function membersCtrl($scope, $location, $window, memberService, notifierService,
   $scope.showImgTmp = false;
   $scope.notifierService = notifierService;
 
-  memberService.getMembers().then(function(members) {
+  memberService.getActiveMembers().then(function(members) {
     $scope.allMembers = members;
     $scope.membersColumn1 = members.slice(0, (members.length / 2) + 1);
     $scope.membersColumn2 = members.slice((members.length / 2) + 1, members.length);

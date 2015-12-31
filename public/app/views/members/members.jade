@@ -12,11 +12,11 @@
         tr
           td(style='vertical-align:top')
             ul(style='padding-left:8px')
-              li(ng-show='member.isActive' ng-repeat='member in membersColumn1')
+              li(ng-repeat='member in membersColumn1')
                 a(ng-click='selectMember(member)' href='') {{member.name}}
           td(style='vertical-align:top')
             ul(style='padding-left:20px')
-              li(ng-show='member.isActive' ng-repeat='member in membersColumn2')
+              li(ng-repeat='member in membersColumn2')
                 a(ng-click='selectMember(member)' href='') {{member.name}}
   .col-lg-7
     .well
