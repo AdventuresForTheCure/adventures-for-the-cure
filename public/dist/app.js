@@ -97,44 +97,6 @@ angular.module('app').run(["$rootScope", "$location", "notifierService", "identi
     }
   });
 }]);
-angular.module('app').factory('Member', ['$resource', Member]);
-function Member($resource) {
-  var member = $resource('/api/members', {}, {});
-
-  member.prototype.isAdmin = function() {
-    return this.isRole('admin');
-  };
-  member.prototype.setAdmin = function(isSet) {
-    this.setRole('admin', isSet);
-  };
-
-  member.prototype.isInventory = function() {
-    return this.isRole('inventory');
-  };
-  member.prototype.setInventory = function(isSet) {
-    this.setRole('inventory', isSet);
-  };
-
-  member.prototype.isBoard = function() {
-    return this.isRole('board');
-  };
-  member.prototype.setBoard = function(isSet) {
-    this.setRole('board', isSet);
-  };
-
-  member.prototype.isRole = function(roleName) {
-    return this.roles && this.roles.indexOf(roleName) > -1;
-  };
-  member.prototype.setRole = function(roleName, isSet) {
-    if (isSet && this.roles.indexOf(roleName) === -1) {
-      this.roles.push(roleName);
-    } else {
-      var roleIndex = this.roles.indexOf(roleName);
-      this.roles.splice(roleIndex, 1);
-    }
-  };
-  return member;
-}
 angular.module('app').factory('authorizationService',
   ['$http', '$q', 'identityService', 'Member', authorizationService]);
 function authorizationService($http, $q, identityService, Member) {
@@ -697,6 +659,44 @@ function volunteerEventService($q, $http, $upload) {
     }
   };
 }
+angular.module('app').factory('Member', ['$resource', Member]);
+function Member($resource) {
+  var member = $resource('/api/members', {}, {});
+
+  member.prototype.isAdmin = function() {
+    return this.isRole('admin');
+  };
+  member.prototype.setAdmin = function(isSet) {
+    this.setRole('admin', isSet);
+  };
+
+  member.prototype.isInventory = function() {
+    return this.isRole('inventory');
+  };
+  member.prototype.setInventory = function(isSet) {
+    this.setRole('inventory', isSet);
+  };
+
+  member.prototype.isBoard = function() {
+    return this.isRole('board');
+  };
+  member.prototype.setBoard = function(isSet) {
+    this.setRole('board', isSet);
+  };
+
+  member.prototype.isRole = function(roleName) {
+    return this.roles && this.roles.indexOf(roleName) > -1;
+  };
+  member.prototype.setRole = function(roleName, isSet) {
+    if (isSet && this.roles.indexOf(roleName) === -1) {
+      this.roles.push(roleName);
+    } else {
+      var roleIndex = this.roles.indexOf(roleName);
+      this.roles.splice(roleIndex, 1);
+    }
+  };
+  return member;
+}
 angular.module('app').controller('boardOnlyCtrl', boardOnlyCtrl);
 boardOnlyCtrl.$inject = ['$scope'];
 function boardOnlyCtrl($scope) {}
@@ -1084,8 +1084,8 @@ function membersCtrl($scope, $location, $window, memberService, notifierService,
 
   memberService.getActiveMembers().then(function(members) {
     $scope.allMembers = members;
-    $scope.membersColumn1 = members.slice(0, (members.length / 2) + 1);
-    $scope.membersColumn2 = members.slice((members.length / 2) + 1, members.length);
+    $scope.membersColumn1 = members.slice(0, (members.length / 2));
+    $scope.membersColumn2 = members.slice((members.length / 2), members.length);
     var urlMemberName = $location.hash();
     for (var i = 0; i < members.length; i++) {
       if (members[i].name === urlMemberName) {
@@ -1110,15 +1110,11 @@ function membersCtrl($scope, $location, $window, memberService, notifierService,
   };
 
   $scope.selectMember = function(member) {
-    if (member.isActive) {
-      $scope.selectedMember = member;
-      var currHash = $window.location.hash.substring(1, $window.location.hash.length);
-      if (currHash !== encodeURIComponent($scope.selectedMember.name)) {
-        //      $window.location.hash = $scope.selectedMember.name;
-        $location.hash($scope.selectedMember.name);
-      }
-    } else {
-      $scope.selectedMember = {};
+    $scope.selectedMember = member;
+    var currHash = $window.location.hash.substring(1, $window.location.hash.length);
+    if (currHash !== encodeURIComponent($scope.selectedMember.name)) {
+      //      $window.location.hash = $scope.selectedMember.name;
+      $location.hash($scope.selectedMember.name);
     }
   };
 
@@ -1189,15 +1185,6 @@ function resultsCtrl($scope, $sce, videoService) {
       $scope.selectedVideoHtml = $sce.trustAsHtml(videoHtml);
     });
   };
-}
-
-
-angular.module('app').controller('sponsorLogosCtrl', sponsorLogosCtrl);
-sponsorLogosCtrl.$inject = ['$scope', 'sponsorLogosService'];
-function sponsorLogosCtrl($scope, sponsorLogosService) {
-  sponsorLogosService.getSponsorLogos().then(function(sponsorLogos) {
-    $scope.sponsorLogos = sponsorLogos;
-  });
 }
 
 
@@ -1312,3 +1299,12 @@ function confirmDeleteVolunteerEventCtrl($scope, $modalInstance, volunteerEventS
   };
 }
 confirmDeleteVolunteerEventCtrl.$inject = ["$scope", "$modalInstance", "volunteerEventService", "notifierService", "volunteerEvent"];
+
+angular.module('app').controller('sponsorLogosCtrl', sponsorLogosCtrl);
+sponsorLogosCtrl.$inject = ['$scope', 'sponsorLogosService'];
+function sponsorLogosCtrl($scope, sponsorLogosService) {
+  sponsorLogosService.getSponsorLogos().then(function(sponsorLogos) {
+    $scope.sponsorLogos = sponsorLogos;
+  });
+}
+
