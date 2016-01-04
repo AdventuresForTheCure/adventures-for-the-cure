@@ -38,9 +38,9 @@ function authorizationService($http, $q, identityService, Member) {
 
     authorizeAuthorizedMemberWithFullProfileForRoute: function(role) {
       if (!role && identityService.isAuthenticated()) {
-        return checkForBioAndPic();
+        return checkForActiveMemberAndBioAndPic();
       } else if (identityService.isAuthorized(role)) {
-        return checkForBioAndPic();
+        return checkForActiveMemberAndBioAndPic();
       } else {
         return $q.reject('not authorized');
       }
@@ -71,12 +71,14 @@ function authorizationService($http, $q, identityService, Member) {
     }
   };
 
-  function checkForBioAndPic() {
-    if (identityService.currentMember.bio && identityService.currentMember.bio.length > 0 &&
-      identityService.currentMember.imgPath && identityService.currentMember.imgPath.length > 0) {
-      return true;
-    } else {
+  function checkForActiveMemberAndBioAndPic() {
+    if (identityService.currentMember.isActive === false) {
+      return $q.reject('not authorized, membership is not active');
+    } else if (!identityService.currentMember.bio || identityService.currentMember.bio.length <= 0 ||
+               !identityService.currentMember.imgPath || identityService.currentMember.imgPath.length <= 0) {
       return $q.reject('not authorized, profile not complete');
+    } else {
+      return true;
     }
   };
 }

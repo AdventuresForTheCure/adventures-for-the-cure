@@ -94,6 +94,9 @@ angular.module('app').run(function($rootScope, $location, notifierService, ident
     } else if (rejection === 'not authorized, profile not complete') {
       notifierService.error('You must upload a bio and picture before you can view this page!');
       $location.path('/member-edit/' + identityService.currentMember._id);
+    } else if (rejection === 'not authorized, membership is not active') {
+      notifierService.error('You are not an active member of AFC, please contact adventuresforthecure@gmail.com with questions');
+      $location.path('/member-edit/' + identityService.currentMember._id);
     }
   });
 });
