@@ -140,14 +140,14 @@ exports.updateMemberTmpImg = function(req, res) {
 };
 
 exports.getMembers = function(req, res) {
-  Member.find({}).sort({name: 1}).exec(function (err, collection) {
+  Member.find({}).sort({name: 1}).lean().exec(function (err, collection) {
     if (err) { errorHandler.sendError(req, res, err);}
     res.send(collection);
   });
 };
 
 exports.getActiveMembers = function(req, res) {
-  Member.find({isActive: true}).sort({name: 1}).exec(function (err, collection) {
+  Member.find({isActive: true}).sort({name: 1}).lean().exec(function (err, collection) {
     if (err) { errorHandler.sendError(req, res, err);}
     res.send(collection);
   });
@@ -157,7 +157,7 @@ exports.getMember = function(req, res) {
   var memberId = req.params.id;
   if (!memberId) { errorHandler.sendError(req, res, 'memberId is a required request parameter'); }
   else {
-    Member.findOne({_id: memberId}).exec(function (err, member) {
+    Member.findOne({_id: memberId}).lean().exec(function (err, member) {
       if (err) {
         errorHandler.sendError(req, res, err);
       }
