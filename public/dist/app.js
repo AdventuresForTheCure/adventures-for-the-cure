@@ -100,44 +100,6 @@ angular.module('app').run(["$rootScope", "$location", "notifierService", "identi
     }
   });
 }]);
-angular.module('app').factory('Member', ['$resource', Member]);
-function Member($resource) {
-  var member = $resource('/api/members', {}, {});
-
-  member.prototype.isAdmin = function() {
-    return this.isRole('admin');
-  };
-  member.prototype.setAdmin = function(isSet) {
-    this.setRole('admin', isSet);
-  };
-
-  member.prototype.isInventory = function() {
-    return this.isRole('inventory');
-  };
-  member.prototype.setInventory = function(isSet) {
-    this.setRole('inventory', isSet);
-  };
-
-  member.prototype.isBoard = function() {
-    return this.isRole('board');
-  };
-  member.prototype.setBoard = function(isSet) {
-    this.setRole('board', isSet);
-  };
-
-  member.prototype.isRole = function(roleName) {
-    return this.roles && this.roles.indexOf(roleName) > -1;
-  };
-  member.prototype.setRole = function(roleName, isSet) {
-    if (isSet && this.roles.indexOf(roleName) === -1) {
-      this.roles.push(roleName);
-    } else {
-      var roleIndex = this.roles.indexOf(roleName);
-      this.roles.splice(roleIndex, 1);
-    }
-  };
-  return member;
-}
 angular.module('app').factory('authorizationService',
   ['$http', '$q', 'identityService', 'Member', authorizationService]);
 function authorizationService($http, $q, identityService, Member) {
@@ -702,9 +664,44 @@ function volunteerEventService($q, $http, $upload) {
     }
   };
 }
-angular.module('app').controller('boardOnlyCtrl', boardOnlyCtrl);
-boardOnlyCtrl.$inject = ['$scope'];
-function boardOnlyCtrl($scope) {}
+angular.module('app').factory('Member', ['$resource', Member]);
+function Member($resource) {
+  var member = $resource('/api/members', {}, {});
+
+  member.prototype.isAdmin = function() {
+    return this.isRole('admin');
+  };
+  member.prototype.setAdmin = function(isSet) {
+    this.setRole('admin', isSet);
+  };
+
+  member.prototype.isInventory = function() {
+    return this.isRole('inventory');
+  };
+  member.prototype.setInventory = function(isSet) {
+    this.setRole('inventory', isSet);
+  };
+
+  member.prototype.isBoard = function() {
+    return this.isRole('board');
+  };
+  member.prototype.setBoard = function(isSet) {
+    this.setRole('board', isSet);
+  };
+
+  member.prototype.isRole = function(roleName) {
+    return this.roles && this.roles.indexOf(roleName) > -1;
+  };
+  member.prototype.setRole = function(roleName, isSet) {
+    if (isSet && this.roles.indexOf(roleName) === -1) {
+      this.roles.push(roleName);
+    } else {
+      var roleIndex = this.roles.indexOf(roleName);
+      this.roles.splice(roleIndex, 1);
+    }
+  };
+  return member;
+}
 angular.module('app').controller('campaignsCtrl', campaignsCtrl);
 campaignsCtrl.$inject = ['$scope', '$sce', '$location', 'campaignService'];
 function campaignsCtrl($scope, $sce, $location, campaignService) {
@@ -744,6 +741,9 @@ function campaignsCtrl($scope, $sce, $location, campaignService) {
 }
 
 
+angular.module('app').controller('boardOnlyCtrl', boardOnlyCtrl);
+boardOnlyCtrl.$inject = ['$scope'];
+function boardOnlyCtrl($scope) {}
 angular.module('app').controller('confirmModalCtrl', confirmModalCtrl);
 confirmModalCtrl.$inject = ['$scope', '$modalInstance', 'message'];
 function confirmModalCtrl ($scope, $modalInstance, message) {
@@ -972,6 +972,55 @@ function memberCreateCtrl($scope, $location, notifierService, memberService) {
     $scope.img = $files[0];
   };
 }
+angular.module('app').controller('memberEditCtrl', memberEditCtrl);
+memberEditCtrl.$inject = ['$scope', '$routeParams', 'notifierService', 'memberService', 'identityService'];
+function memberEditCtrl($scope, $routeParams, notifierService, memberService, identityService) {
+  $scope.identityService = identityService;
+  $scope.memberToEdit;
+  $scope.showImgTmp = false;
+  $scope.loadingTmpImg = false;
+
+  $scope.saveMember = function() {
+    memberService.saveMember($scope.memberToEdit).then(function(member) {
+      $scope.memberToEdit = member;
+      if (identityService.currentMember._id === $scope.memberToEdit._id) {
+        angular.extend(identityService.currentMember, $scope.memberToEdit);
+      }
+      notifierService.notify('Member has been updated');
+    }, function(reason) {
+      notifierService.error('Error saving member data, please try again...');
+    });
+  };
+
+  $scope.onFileSelect = function($files) {
+    $scope.memberToEdit.imgTmp = $files[0];
+    $scope.loadingTmpImg = true;
+    memberService.saveMemberTmpImg($scope.memberToEdit).then(function(member) {
+      $scope.showImgTmp = true;
+      $scope.loadingTmpImg = false;
+      $scope.memberToEdit.imgPathTmp = member.imgPathTmp;
+      $scope.memberToEdit.img = $files[0];
+    }, function(reason) {
+      $scope.showImgTmp = false;
+      $scope.loadingTmpImg = false;
+      notifierService.error('Error uploading image, please try again...');
+    });
+  };
+
+  $scope.isInvalid = function() {
+    var invalid = false;
+    if ($scope.memberEditForm.$invalid || $scope.loadingTmpImg) {
+      invalid = true;
+    }
+    return invalid;
+  };
+
+  $scope.init = function(){
+    memberService.getMember($routeParams.id).then(function (member) {
+      $scope.memberToEdit = member;
+    });
+  }
+}
 angular.module('app').controller('memberListCtrl', memberListCtrl);
 memberListCtrl.$inject = ['$scope', '$location', 'notifierService', 'memberService', 'identityService', 'confirmModalService'];
 function memberListCtrl($scope, $location, notifierService, memberService, identityService, confirmModalService) {
@@ -1022,55 +1071,6 @@ function memberListCtrl($scope, $location, notifierService, memberService, ident
   }
 
   getMembers();
-}
-angular.module('app').controller('memberEditCtrl', memberEditCtrl);
-memberEditCtrl.$inject = ['$scope', '$routeParams', 'notifierService', 'memberService', 'identityService'];
-function memberEditCtrl($scope, $routeParams, notifierService, memberService, identityService) {
-  $scope.identityService = identityService;
-  $scope.memberToEdit;
-  $scope.showImgTmp = false;
-  $scope.loadingTmpImg = false;
-
-  $scope.saveMember = function() {
-    memberService.saveMember($scope.memberToEdit).then(function(member) {
-      $scope.memberToEdit = member;
-      if (identityService.currentMember._id === $scope.memberToEdit._id) {
-        angular.extend(identityService.currentMember, $scope.memberToEdit);
-      }
-      notifierService.notify('Member has been updated');
-    }, function(reason) {
-      notifierService.error('Error saving member data, please try again...');
-    });
-  };
-
-  $scope.onFileSelect = function($files) {
-    $scope.memberToEdit.imgTmp = $files[0];
-    $scope.loadingTmpImg = true;
-    memberService.saveMemberTmpImg($scope.memberToEdit).then(function(member) {
-      $scope.showImgTmp = true;
-      $scope.loadingTmpImg = false;
-      $scope.memberToEdit.imgPathTmp = member.imgPathTmp;
-      $scope.memberToEdit.img = $files[0];
-    }, function(reason) {
-      $scope.showImgTmp = false;
-      $scope.loadingTmpImg = false;
-      notifierService.error('Error uploading image, please try again...');
-    });
-  };
-
-  $scope.isInvalid = function() {
-    var invalid = false;
-    if ($scope.memberEditForm.$invalid || $scope.loadingTmpImg) {
-      invalid = true;
-    }
-    return invalid;
-  };
-
-  $scope.init = function(){
-    memberService.getMember($routeParams.id).then(function (member) {
-      $scope.memberToEdit = member;
-    });
-  }
 }
 angular.module('app').controller('memberOnlyCtrl', memberOnlyCtrl);
 memberOnlyCtrl.$inject = ['$scope', 'jerseyImagesService'];
