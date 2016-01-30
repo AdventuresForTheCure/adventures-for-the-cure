@@ -100,6 +100,44 @@ angular.module('app').run(["$rootScope", "$location", "notifierService", "identi
     }
   });
 }]);
+angular.module('app').factory('Member', ['$resource', Member]);
+function Member($resource) {
+  var member = $resource('/api/members', {}, {});
+
+  member.prototype.isAdmin = function() {
+    return this.isRole('admin');
+  };
+  member.prototype.setAdmin = function(isSet) {
+    this.setRole('admin', isSet);
+  };
+
+  member.prototype.isInventory = function() {
+    return this.isRole('inventory');
+  };
+  member.prototype.setInventory = function(isSet) {
+    this.setRole('inventory', isSet);
+  };
+
+  member.prototype.isBoard = function() {
+    return this.isRole('board');
+  };
+  member.prototype.setBoard = function(isSet) {
+    this.setRole('board', isSet);
+  };
+
+  member.prototype.isRole = function(roleName) {
+    return this.roles && this.roles.indexOf(roleName) > -1;
+  };
+  member.prototype.setRole = function(roleName, isSet) {
+    if (isSet && this.roles.indexOf(roleName) === -1) {
+      this.roles.push(roleName);
+    } else {
+      var roleIndex = this.roles.indexOf(roleName);
+      this.roles.splice(roleIndex, 1);
+    }
+  };
+  return member;
+}
 angular.module('app').factory('authorizationService',
   ['$http', '$q', 'identityService', 'Member', authorizationService]);
 function authorizationService($http, $q, identityService, Member) {
@@ -664,44 +702,6 @@ function volunteerEventService($q, $http, $upload) {
     }
   };
 }
-angular.module('app').factory('Member', ['$resource', Member]);
-function Member($resource) {
-  var member = $resource('/api/members', {}, {});
-
-  member.prototype.isAdmin = function() {
-    return this.isRole('admin');
-  };
-  member.prototype.setAdmin = function(isSet) {
-    this.setRole('admin', isSet);
-  };
-
-  member.prototype.isInventory = function() {
-    return this.isRole('inventory');
-  };
-  member.prototype.setInventory = function(isSet) {
-    this.setRole('inventory', isSet);
-  };
-
-  member.prototype.isBoard = function() {
-    return this.isRole('board');
-  };
-  member.prototype.setBoard = function(isSet) {
-    this.setRole('board', isSet);
-  };
-
-  member.prototype.isRole = function(roleName) {
-    return this.roles && this.roles.indexOf(roleName) > -1;
-  };
-  member.prototype.setRole = function(roleName, isSet) {
-    if (isSet && this.roles.indexOf(roleName) === -1) {
-      this.roles.push(roleName);
-    } else {
-      var roleIndex = this.roles.indexOf(roleName);
-      this.roles.splice(roleIndex, 1);
-    }
-  };
-  return member;
-}
 angular.module('app').controller('campaignsCtrl', campaignsCtrl);
 campaignsCtrl.$inject = ['$scope', '$sce', '$location', 'campaignService'];
 function campaignsCtrl($scope, $sce, $location, campaignService) {
@@ -919,20 +919,6 @@ function inventoryCtrl($scope, inventoryService, notifierService, identityServic
 
   $scope.getInventoryItems();
 }
-angular.module('app').controller('loginCtrl', loginCtrl);
-loginCtrl.$inject = ['$scope', '$location', 'notifierService', 'authorizationService'];
-function loginCtrl($scope, $location, notifierService, authorizationService) {
-  $scope.login = function() {
-    authorizationService.authenticateMember($scope.loginUsername, $scope.loginPassword).then(function(success) {
-      if (success) {
-        notifierService.notify('You have successfully signed in!');
-        $location.path('/');
-      } else {
-        notifierService.error('Username/Password combination incorrect');
-      }
-    });
-  };
-}
 angular.module('app').controller('memberCreateCtrl', memberCreateCtrl);
 memberCreateCtrl.$inject = ['$scope', '$location', 'notifierService', 'memberService'];
 function memberCreateCtrl($scope, $location, notifierService, memberService) {
@@ -970,6 +956,20 @@ function memberCreateCtrl($scope, $location, notifierService, memberService) {
 
   $scope.onFileSelect = function($files) {
     $scope.img = $files[0];
+  };
+}
+angular.module('app').controller('loginCtrl', loginCtrl);
+loginCtrl.$inject = ['$scope', '$location', 'notifierService', 'authorizationService'];
+function loginCtrl($scope, $location, notifierService, authorizationService) {
+  $scope.login = function() {
+    authorizationService.authenticateMember($scope.loginUsername, $scope.loginPassword).then(function(success) {
+      if (success) {
+        notifierService.notify('You have successfully signed in!');
+        $location.path('/');
+      } else {
+        notifierService.error('Username/Password combination incorrect');
+      }
+    });
   };
 }
 angular.module('app').controller('memberEditCtrl', memberEditCtrl);
