@@ -13,7 +13,7 @@
 var path = require('path');
 var rootPath = path.normalize(__dirname + '/../../');
 var sponsorLogosPath = rootPath + 'public/img/jerseys/';
-var sponsorLogosUrl = 'img/jerseys/';
+var sponsorLogosUrl = 'img/sponsors/2016/highres';
 var jerseyImagesPath = rootPath + 'public/img/jerseys/2015';
 var jerseyImagesUrl = 'img/jerseys/2015';
 var campaignsPath = rootPath + 'public/app/views/campaigns/campaigns/';
