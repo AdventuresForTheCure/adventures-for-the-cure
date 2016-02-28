@@ -13,11 +13,11 @@
           td(style='vertical-align:top')
             ul(style='padding-left:8px')
               li(ng-repeat='member in membersColumn1')
-                a(ng-click='selectMember(member)' href='') {{member.name}}
+                a(ng-click='selectMember(member)' href='{{"/members#" + member.name}}') {{member.name}}
           td(style='vertical-align:top')
             ul(style='padding-left:20px')
               li(ng-repeat='member in membersColumn2')
-                a(ng-click='selectMember(member)' href='') {{member.name}}
+                a(ng-click='selectMember(member)' href='{{"/members#" + member.name}}') {{member.name}}
   .col-lg-7
     .well
       h2(style='text-align:center') {{selectedMember.name}}
