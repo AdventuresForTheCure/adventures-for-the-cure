@@ -1,6 +1,7 @@
 var nodemailer = require('nodemailer');
 var htmlUtils = require('../utilities/htmlUtils');
 var Member = require('mongoose').model('Member');
+var config = require('../config/config');
 
 var emailSubjectPrefix = '[afc-website]';
 
@@ -17,7 +18,7 @@ smtpTransport = nodemailer.createTransport('SMTP',{
   service: 'Gmail',
   auth: {
     user: 'adventuresforthecure@gmail.com',
-    pass: 'OakieHouseChurch'
+    pass: config.emailer.password
   }
 });
 

@@ -39,7 +39,10 @@ var environments = {
     videosPath: videosPath,
     jerseyImagesPath: jerseyImagesPath,
     jerseyImagesUrl: jerseyImagesUrl,
-    port: process.env.PORT || 3030
+    port: process.env.PORT || 3030,
+    emailer: {
+      password: process.env.AFC_EMAIL_PASSWORD
+    }
   },
   /**
    * Production configuration
@@ -58,7 +61,10 @@ var environments = {
     videosPath: videosPath,
     jerseyImagesPath: jerseyImagesPath,
     jerseyImagesUrl: jerseyImagesUrl,
-    port: process.env.PORT || 80
+    port: process.env.PORT || 80,
+    emailer: {
+      password: process.env.AFC_EMAIL_PASSWORD
+    }
   }
 };
 
