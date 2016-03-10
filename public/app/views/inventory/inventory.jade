@@ -1,46 +1,46 @@
 .row(ng-controller='inventoryCtrl')
   .col-lg-12
-  .well.pagination-centered
-    b To make an order:
-    br
-    span
-      | Make your purchase using the paypal buttons, after you are done send us an email
-      | <a href='mailto:adventuresforthecure@gmail.com?subject=AFC%20Inventory'>adventuresforthecure@gmail.com</a>
-      | to coordinate the pick up or shipping of your items.
-    form(target="paypal" action="https://www.paypal.com/cgi-bin/webscr" method="post")
-      input(type="hidden" name="business" value="adventuresforthecure@gmail.com")
-      input(type="hidden" name="cmd" value="_cart")
-      input(type="hidden" name="display" value="1")
-      input(type="image" name="submit" border="0" src="https://www.paypalobjects.com/en_US/i/btn/btn_viewcart_LG.gif" alt="PayPal - The safer, easier way to pay online")
-      img(alt="" border="0" width="1" height="1" src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" )
-  .well.pagination-centered
-    h3 AFC Inventory
-    div(ng-show='isLoading')
-      span Loading inventory items....
-      img(src='/img/loader.gif')
-    div(ng-show='!isLoading' name='inventoryItemList' ng-repeat='(category, categoryItems) in inventoryItems')
-      hr
-      h4 {{category}}
-      .row(ng-repeat='inventoryItem in inventoryItems[category]')
-        .col-md-4
-          span{{inventoryItem.name}}
-        .col-md-2
-          span Price: {{(inventoryItem.salePrice && inventoryItem.salePrice >= 0) ? inventoryItem.salePrice : inventoryItem.price | currency : symbol : 2 }}
-        .col-md-2(ng-if='inventoryItem.quantity >= 0')
-          span {{inventoryItem.quantity}} Remaining
-        .col-md-2
-          span(ng-if="inventoryItem.imgPath")
-            a(href="{{inventoryItem.imgPath}}" target="_blank")
-              img(src="{{inventoryItem.imgPath}}" width="100px" height="auto" alt="No image!")
-        .col-md-2
-          form(target="paypal" action="https://www.paypal.com/cgi-bin/webscr" method="post")
-            input(type="hidden" name="business" value="adventuresforthecure@gmail.com")
-            input(type="hidden" name="cmd" value="_cart")
-            input(type="hidden" name="add" value="1")
-            input(type="hidden" name="item_name" value="{{inventoryItem.name}}")
-            input(type="hidden" name="custom" value="{{inventoryItem.code}}")
-            input(type="hidden" name="amount" value="{{(inventoryItem.salePrice && inventoryItem.salePrice >= 0) ? inventoryItem.salePrice : inventoryItem.price}}")
-            input(type="hidden" name="currency_code" value="USD")
-            input(type="hidden" name="shopping_url" value="http://adventuresforthecure.com/inventory")
-            input(type="image" name="submit" border="0" src="https://www.paypalobjects.com/en_US/i/btn/btn_cart_LG.gif" alt="PayPal - The safer, easier way to pay online")
-            img(alt="" border="0" width="1" height="1" src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif")
+    .well.pagination-centered
+      h3 2016 Jerseys
+      p All of our 2016 jersey items are available on the <a href='https://ridebiker.com/store/AdventuresfortheCure/products' target='_blank'>Ridebiker Alliance AFC Store</a>.
+    .well.pagination-centered
+      h3 2012 / 2013 / 2014 / 2015 Jerseys and Other AFC Items
+      p
+        | Make your purchase using the paypal buttons, after you are done send us an email
+        | <a href='mailto:adventuresforthecure@gmail.com?subject=AFC%20Inventory'>adventuresforthecure@gmail.com</a>
+        | to coordinate pick up or shipping.
+      form(target="paypal" action="https://www.paypal.com/cgi-bin/webscr" method="post")
+        input(type="hidden" name="business" value="adventuresforthecure@gmail.com")
+        input(type="hidden" name="cmd" value="_cart")
+        input(type="hidden" name="display" value="1")
+        input(type="image" name="submit" border="0" src="https://www.paypalobjects.com/en_US/i/btn/btn_viewcart_LG.gif" alt="PayPal - The safer, easier way to pay online")
+        img(alt="" border="0" width="1" height="1" src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" )
+      div(ng-show='isLoading')
+        span Loading inventory items....
+        img(src='/img/loader.gif')
+      div(ng-show='!isLoading' name='inventoryItemList' ng-repeat='(category, categoryItems) in inventoryItems')
+        hr
+        h4 {{category}}
+        .row(ng-repeat='inventoryItem in inventoryItems[category]')
+          .col-md-4
+            span{{inventoryItem.name}}
+          .col-md-2
+            span Price: {{(inventoryItem.salePrice && inventoryItem.salePrice >= 0) ? inventoryItem.salePrice : inventoryItem.price | currency : symbol : 2 }}
+          .col-md-2(ng-if='inventoryItem.quantity >= 0')
+            span {{inventoryItem.quantity}} Remaining
+          .col-md-2
+            span(ng-if="inventoryItem.imgPath")
+              a(href="{{inventoryItem.imgPath}}" target="_blank")
+                img(src="{{inventoryItem.imgPath}}" width="100px" height="auto" alt="No image!")
+          .col-md-2
+            form(target="paypal" action="https://www.paypal.com/cgi-bin/webscr" method="post")
+              input(type="hidden" name="business" value="adventuresforthecure@gmail.com")
+              input(type="hidden" name="cmd" value="_cart")
+              input(type="hidden" name="add" value="1")
+              input(type="hidden" name="item_name" value="{{inventoryItem.name}}")
+              input(type="hidden" name="custom" value="{{inventoryItem.code}}")
+              input(type="hidden" name="amount" value="{{(inventoryItem.salePrice && inventoryItem.salePrice >= 0) ? inventoryItem.salePrice : inventoryItem.price}}")
+              input(type="hidden" name="currency_code" value="USD")
+              input(type="hidden" name="shopping_url" value="http://adventuresforthecure.com/inventory")
+              input(type="image" name="submit" border="0" src="https://www.paypalobjects.com/en_US/i/btn/btn_cart_LG.gif" alt="PayPal - The safer, easier way to pay online")
+              img(alt="" border="0" width="1" height="1" src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif")
