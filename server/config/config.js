@@ -18,12 +18,12 @@ var jerseyImagesPath = rootPath + 'public/img/jerseys/2016';
 var jerseyImagesUrl = 'img/jerseys/2016';
 var campaignsPath = rootPath + 'public/app/views/campaigns/campaigns/';
 var membersPath = rootPath + 'public/app/views/members/members/';
-var videosPath = rootPath + '/public/app/views/results/videos/';
+var videosPath = rootPath + 'public/app/views/results/videos/';
 var env = process.env.NODE_ENV = process.env.NODE_ENV || 'development';
 var fs = require('fs');
 
-var privateKey  = fs.readFileSync(rootPath + 'resources/certs/server.key', 'utf8');
-var certificate = fs.readFileSync(rootPath + 'resources/certs/server.crt', 'utf8');
+var privateKey  = fs.readFileSync(rootPath + 'server/certs/server.key', 'utf8');
+var certificate = fs.readFileSync(rootPath + 'server/certs/server.crt', 'utf8');
 
 var environments = {
   /**
