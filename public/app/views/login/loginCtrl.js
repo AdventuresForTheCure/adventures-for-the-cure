@@ -5,7 +5,7 @@ function loginCtrl($scope, $location, $window, notifierService, authorizationSer
     if ($location.protocol() !== 'https') {
       $window.location.href = $location.absUrl().replace('http', 'https').replace(configService.config.port, configService.config.sslport);
     }
-  } 
+  }
   forceSSL();
   $scope.login = function() {
     authorizationService.authenticateMember($scope.loginUsername, $scope.loginPassword).then(function(success) {
