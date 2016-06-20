@@ -27,5 +27,5 @@ var httpsServer = https.createServer(config.credentials, app);
 
 httpServer.listen(config.port);
 console.log('Listening on port ' + config.port + '...');
-httpsServer.listen(config.sslport);
-console.log('Listening on port ' + config.sslport + '...');
+//httpsServer.listen(config.sslport);
+//console.log('Listening on port ' + config.sslport + '...');
