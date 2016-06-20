@@ -248,6 +248,16 @@ function campaignService($q, $http, Campaign) {
     }
   };
 }
+angular.module('app').factory('configService', ['$window', configService]);
+function configService($window) {
+  var config = {}
+  if ($window.config) {
+    angular.extend(config, $window.config);
+  }
+  return {
+    config: config
+  };
+}
 angular.module('app').factory('identityService', ['$window', 'Member', identityService]);
 function identityService($window, Member) {
   var currentMember;
@@ -702,6 +712,9 @@ function volunteerEventService($q, $http, $upload) {
     }
   };
 }
+angular.module('app').controller('boardOnlyCtrl', boardOnlyCtrl);
+boardOnlyCtrl.$inject = ['$scope'];
+function boardOnlyCtrl($scope) {}
 angular.module('app').controller('campaignsCtrl', campaignsCtrl);
 campaignsCtrl.$inject = ['$scope', '$sce', '$location', 'campaignService'];
 function campaignsCtrl($scope, $sce, $location, campaignService) {
@@ -741,9 +754,6 @@ function campaignsCtrl($scope, $sce, $location, campaignService) {
 }
 
 
-angular.module('app').controller('boardOnlyCtrl', boardOnlyCtrl);
-boardOnlyCtrl.$inject = ['$scope'];
-function boardOnlyCtrl($scope) {}
 angular.module('app').controller('confirmModalCtrl', confirmModalCtrl);
 confirmModalCtrl.$inject = ['$scope', '$modalInstance', 'message'];
 function confirmModalCtrl ($scope, $modalInstance, message) {
@@ -919,6 +929,26 @@ function inventoryCtrl($scope, inventoryService, notifierService, identityServic
 
   $scope.getInventoryItems();
 }
+angular.module('app').controller('loginCtrl', loginCtrl);
+loginCtrl.$inject = ['$scope', '$location', '$window', 'notifierService', 'authorizationService', 'configService'];
+function loginCtrl($scope, $location, $window, notifierService, authorizationService, configService) {
+  var forceSSL = function() {
+    if ($location.protocol() !== 'https') {
+      $window.location.href = $location.absUrl().replace('http', 'https').replace(configService.config.port, configService.config.sslport);
+    }
+  }
+  forceSSL();
+  $scope.login = function() {
+    authorizationService.authenticateMember($scope.loginUsername, $scope.loginPassword).then(function(success) {
+      if (success) {
+        notifierService.notify('You have successfully signed in!');
+        $location.path('/');
+      } else {
+        notifierService.error('Username/Password combination incorrect');
+      }
+    });
+  };
+}
 angular.module('app').controller('memberCreateCtrl', memberCreateCtrl);
 memberCreateCtrl.$inject = ['$scope', '$location', 'notifierService', 'memberService'];
 function memberCreateCtrl($scope, $location, notifierService, memberService) {
@@ -956,20 +986,6 @@ function memberCreateCtrl($scope, $location, notifierService, memberService) {
 
   $scope.onFileSelect = function($files) {
     $scope.img = $files[0];
-  };
-}
-angular.module('app').controller('loginCtrl', loginCtrl);
-loginCtrl.$inject = ['$scope', '$location', 'notifierService', 'authorizationService'];
-function loginCtrl($scope, $location, notifierService, authorizationService) {
-  $scope.login = function() {
-    authorizationService.authenticateMember($scope.loginUsername, $scope.loginPassword).then(function(success) {
-      if (success) {
-        notifierService.notify('You have successfully signed in!');
-        $location.path('/');
-      } else {
-        notifierService.error('Username/Password combination incorrect');
-      }
-    });
   };
 }
 angular.module('app').controller('memberEditCtrl', memberEditCtrl);

@@ -20,6 +20,10 @@ var campaignsPath = rootPath + 'public/app/views/campaigns/campaigns/';
 var membersPath = rootPath + 'public/app/views/members/members/';
 var videosPath = rootPath + '/public/app/views/results/videos/';
 var env = process.env.NODE_ENV = process.env.NODE_ENV || 'development';
+var fs = require('fs');
+
+var privateKey  = fs.readFileSync('resources/certs/server.key', 'utf8');
+var certificate = fs.readFileSync('resources/certs/server.crt', 'utf8');
 
 var environments = {
   /**
@@ -31,6 +35,10 @@ var environments = {
       url: 'mongodb://localhost:27017/adventuresforthecure',
       debugMode: true
     },
+    credentials: {
+      key: privateKey,
+      cert: certificate
+    },
     rootPath: rootPath,
     sponsorLogosPath: sponsorLogosPath,
     sponsorLogosUrl: sponsorLogosUrl,
@@ -40,6 +48,7 @@ var environments = {
     jerseyImagesPath: jerseyImagesPath,
     jerseyImagesUrl: jerseyImagesUrl,
     port: process.env.PORT || 3030,
+    sslport: process.env.SSLPORT || 3031,
     emailer: {
       password: process.env.AFC_EMAIL_PASSWORD
     }
@@ -53,6 +62,10 @@ var environments = {
       url: 'mongodb://' + process.env.AFC_MONGO_USERNAME + ':' + process.env.AFC_MONGO_PASSWORD + '@ds053597.mongolab.com:53597/adventuresforthecure',
       debugMode: false
     },
+    credentials: {
+      key: privateKey,
+      cert: certificate
+    },
     rootPath: rootPath,
     sponsorLogosPath: sponsorLogosPath,
     sponsorLogosUrl: sponsorLogosUrl,
@@ -62,6 +75,7 @@ var environments = {
     jerseyImagesPath: jerseyImagesPath,
     jerseyImagesUrl: jerseyImagesUrl,
     port: process.env.PORT || 80,
+    sslport: process.env.SSLPORT || 443,
     emailer: {
       password: process.env.AFC_EMAIL_PASSWORD
     }

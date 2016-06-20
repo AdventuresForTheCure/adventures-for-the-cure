@@ -57,12 +57,16 @@ module.exports = function(app, config) {
 
   app.get('/robots.txt', function(req, res) {
     res.render('robots');
-  })
+  });
 
   // ensure that the client side application does ALL of the routing
   app.get('*', function(req, res) {
+    var bootstrappedConfig = {
+      port: config.port,
+      sslport: config.sslport
+    };
     res.render('index', {
-      bootstrappedMember: req.user
+      bootstrappedConfig: bootstrappedConfig
     });
   });
 };
