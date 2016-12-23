@@ -15,9 +15,21 @@ exports.getInventoryItems = function(req, res) {
       for (var i = 0; i < data.length; i++) {
         var item = data[i];
         var category = 'General';
+        var imgPath = '';
         if (item.IsTrackedAsInventory && item.QuantityOnHand > 0 && item.Name.indexOf('test') < 0) {
           if (item.Name.indexOf('shirt') >= 0) {
             category = 'T-Shirts'
+          } else if (item.Code.indexOf('STICKER') === 0) {
+            category = 'Stickers'
+            if (item.Code === 'STICKER-AFC-BUMPER') {
+              imgPath = 'resources/images/website/AFC_white_large.JPG'
+            } else if (item.Code === 'STICKER-AFCHUB-SMALL-WHITE') {
+              imgPath = 'resources/images/website/AFC_Hub_resize.JPG'
+            } else if (item.Code === 'STICKER-AFC-SMALL-BLACK') {
+              imgPath = 'resources/images/website/AFC_black_small.JPG'
+            } else if (item.Code === 'STICKER-AFC-SMALL-CLEAR') {
+              imgPath = 'resources/images/website/AFC_vinyl.JPG'
+            }
           } else if (item.Name.indexOf('2012') === 0) {
             category = '2012 Kit'
           } else if (item.Name.indexOf('2013') === 0) {
@@ -42,7 +54,8 @@ exports.getInventoryItems = function(req, res) {
             name: item.Name,
             category: category,
             price: item.SalesDetails.UnitPrice,
-            quantity: item.QuantityOnHand
+            quantity: item.QuantityOnHand,
+            imgPath: imgPath
           });
         }
         // TODO add the DVDs even though their quantity is 0
