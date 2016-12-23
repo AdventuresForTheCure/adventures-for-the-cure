@@ -22,13 +22,13 @@ exports.getInventoryItems = function(req, res) {
           } else if (item.Code.indexOf('STICKER') === 0) {
             category = 'Stickers'
             if (item.Code === 'STICKER-AFC-BUMPER') {
-              imgPath = 'resources/images/website/AFC_white_large.JPG'
+              imgPath = 'img/stickers/AFC_white_large.JPG'
             } else if (item.Code === 'STICKER-AFCHUB-SMALL-WHITE') {
-              imgPath = 'resources/images/website/AFC_Hub_resize.JPG'
+              imgPath = 'img/stickers/AFC_Hub_resize.JPG'
             } else if (item.Code === 'STICKER-AFC-SMALL-BLACK') {
-              imgPath = 'resources/images/website/AFC_black_small.JPG'
+              imgPath = 'img/stickers/AFC_black_small.JPG'
             } else if (item.Code === 'STICKER-AFC-SMALL-CLEAR') {
-              imgPath = 'resources/images/website/AFC_vinyl.JPG'
+              imgPath = 'img/stickers/AFC_vinyl.JPG'
             }
           } else if (item.Name.indexOf('2012') === 0) {
             category = '2012 Kit'
