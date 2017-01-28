@@ -715,6 +715,39 @@ function volunteerEventService($q, $http, $upload) {
 angular.module('app').controller('boardOnlyCtrl', boardOnlyCtrl);
 boardOnlyCtrl.$inject = ['$scope'];
 function boardOnlyCtrl($scope) {}
+angular.module('app').controller('confirmModalCtrl', confirmModalCtrl);
+confirmModalCtrl.$inject = ['$scope', '$modalInstance', 'message'];
+function confirmModalCtrl ($scope, $modalInstance, message) {
+  $scope.message = message;
+  $scope.confirm = function () {
+    $modalInstance.close(true);
+  };
+
+  $scope.cancel = function () {
+    $modalInstance.dismiss();
+  };
+}
+angular.module('app').factory('confirmModalService', ['$modal', '$q', confirmModalService]);
+function confirmModalService($modal, $q) {
+  return {
+    showModal: function (message) {
+      var deferred = $q.defer();
+      var modalInstance = $modal.open({
+        templateUrl: '/partials/confirmModal/confirm-modal',
+        controller: confirmModalCtrl,
+        resolve: {
+          message: function () {
+            return message;
+          }
+        }
+      });
+      modalInstance.result.then(function () {
+        deferred.resolve(true);
+      });
+      return deferred.promise;
+    }
+  }
+}
 angular.module('app').controller('campaignsCtrl', campaignsCtrl);
 campaignsCtrl.$inject = ['$scope', '$sce', '$location', 'campaignService'];
 function campaignsCtrl($scope, $sce, $location, campaignService) {
@@ -754,39 +787,6 @@ function campaignsCtrl($scope, $sce, $location, campaignService) {
 }
 
 
-angular.module('app').controller('confirmModalCtrl', confirmModalCtrl);
-confirmModalCtrl.$inject = ['$scope', '$modalInstance', 'message'];
-function confirmModalCtrl ($scope, $modalInstance, message) {
-  $scope.message = message;
-  $scope.confirm = function () {
-    $modalInstance.close(true);
-  };
-
-  $scope.cancel = function () {
-    $modalInstance.dismiss();
-  };
-}
-angular.module('app').factory('confirmModalService', ['$modal', '$q', confirmModalService]);
-function confirmModalService($modal, $q) {
-  return {
-    showModal: function (message) {
-      var deferred = $q.defer();
-      var modalInstance = $modal.open({
-        templateUrl: '/partials/confirmModal/confirm-modal',
-        controller: confirmModalCtrl,
-        resolve: {
-          message: function () {
-            return message;
-          }
-        }
-      });
-      modalInstance.result.then(function () {
-        deferred.resolve(true);
-      });
-      return deferred.promise;
-    }
-  }
-}
 angular.module('app').controller('inventoryCtrl', inventoryCtrl);
 inventoryCtrl.$inject = ['$scope', 'inventoryService', 'notifierService', 'identityService', 'confirmModalService'];
 function inventoryCtrl($scope, inventoryService, notifierService, identityService, confirmModalService) {
@@ -1082,6 +1082,12 @@ function memberListCtrl($scope, $location, notifierService, memberService, ident
 
   getMembers();
 }
+angular.module('app').controller('memberOnlyCtrl', memberOnlyCtrl);
+memberOnlyCtrl.$inject = ['$scope', 'jerseyImagesService'];
+function memberOnlyCtrl($scope, jerseyImagesService) {
+  jerseyImagesService.getJerseyImages().then(function(jerseyImages) {
+  $scope.jerseyImages = jerseyImages;
+});}
 angular.module('app').controller('membersCtrl', membersCtrl);
 membersCtrl.$inject = ['$scope', '$location', '$window', 'memberService', 'notifierService', 'identityService'];
 function membersCtrl($scope, $location, $window, memberService, notifierService, identityService) {
@@ -1155,12 +1161,6 @@ function membersCtrl($scope, $location, $window, memberService, notifierService,
   };
 }
 
-angular.module('app').controller('memberOnlyCtrl', memberOnlyCtrl);
-memberOnlyCtrl.$inject = ['$scope', 'jerseyImagesService'];
-function memberOnlyCtrl($scope, jerseyImagesService) {
-  jerseyImagesService.getJerseyImages().then(function(jerseyImages) {
-  $scope.jerseyImages = jerseyImages;
-});}
 angular.module('app').controller('navbarLoginCtrl', navbarLoginCtrl);
 navbarLoginCtrl.$inject = ['$scope', '$location', 'identityService', 'notifierService', 'authorizationService'];
 function navbarLoginCtrl($scope, $location, identityService, notifierService, authorizationService) {
