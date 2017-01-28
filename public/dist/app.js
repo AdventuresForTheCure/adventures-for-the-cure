@@ -932,12 +932,6 @@ function inventoryCtrl($scope, inventoryService, notifierService, identityServic
 angular.module('app').controller('loginCtrl', loginCtrl);
 loginCtrl.$inject = ['$scope', '$location', '$window', 'notifierService', 'authorizationService', 'configService'];
 function loginCtrl($scope, $location, $window, notifierService, authorizationService, configService) {
-  var forceSSL = function() {
-    if ($location.protocol() !== 'https') {
-      $window.location.href = $location.absUrl().replace('http', 'https').replace(configService.config.port, configService.config.sslport);
-    }
-  }
-  forceSSL();
   $scope.login = function() {
     authorizationService.authenticateMember($scope.loginUsername, $scope.loginPassword).then(function(success) {
       if (success) {
@@ -1088,12 +1082,6 @@ function memberListCtrl($scope, $location, notifierService, memberService, ident
 
   getMembers();
 }
-angular.module('app').controller('memberOnlyCtrl', memberOnlyCtrl);
-memberOnlyCtrl.$inject = ['$scope', 'jerseyImagesService'];
-function memberOnlyCtrl($scope, jerseyImagesService) {
-  jerseyImagesService.getJerseyImages().then(function(jerseyImages) {
-  $scope.jerseyImages = jerseyImages;
-});}
 angular.module('app').controller('membersCtrl', membersCtrl);
 membersCtrl.$inject = ['$scope', '$location', '$window', 'memberService', 'notifierService', 'identityService'];
 function membersCtrl($scope, $location, $window, memberService, notifierService, identityService) {
@@ -1167,6 +1155,12 @@ function membersCtrl($scope, $location, $window, memberService, notifierService,
   };
 }
 
+angular.module('app').controller('memberOnlyCtrl', memberOnlyCtrl);
+memberOnlyCtrl.$inject = ['$scope', 'jerseyImagesService'];
+function memberOnlyCtrl($scope, jerseyImagesService) {
+  jerseyImagesService.getJerseyImages().then(function(jerseyImages) {
+  $scope.jerseyImages = jerseyImages;
+});}
 angular.module('app').controller('navbarLoginCtrl', navbarLoginCtrl);
 navbarLoginCtrl.$inject = ['$scope', '$location', 'identityService', 'notifierService', 'authorizationService'];
 function navbarLoginCtrl($scope, $location, identityService, notifierService, authorizationService) {

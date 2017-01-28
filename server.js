@@ -1,6 +1,5 @@
 var express = require('express');
 var http = require('http');
-var https = require('https');
 
 var app = express();
 
@@ -23,9 +22,6 @@ require('./server/config/routes')(app, config);
 
 console.log('configuring servers');
 var httpServer = http.createServer(app);
-var httpsServer = https.createServer(config.credentials, app);
 
 httpServer.listen(config.port);
 console.log('Listening on port ' + config.port + '...');
-//httpsServer.listen(config.sslport);
-//console.log('Listening on port ' + config.sslport + '...');
