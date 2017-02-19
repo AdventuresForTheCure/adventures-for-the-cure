@@ -144,3 +144,11 @@ a {
 div[name='inventoryItemList'] form > .row, div[name='inventoryItemList'] > .row {
     border-top: solid grey thin;
 }
+
+.table-centered {
+  text-align: center;
+}
+
+.table-centered td {
+  padding-right: 20px;
+}
