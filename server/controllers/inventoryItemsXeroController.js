@@ -38,6 +38,8 @@ exports.getInventoryItems = function(req, res) {
             category = '2014 Kit'
           } else if (item.Name.indexOf('2015') === 0) {
             category = '2015 Kit'
+          } else if (item.Name.indexOf('2018') === 0) {
+            category = '2018 Kit'
           } else if (item.Name.indexOf('Hat') === 0) {
             category = 'Hats'
           } else if (item.Name.indexOf('AFC Water Bottle') === 0) {
