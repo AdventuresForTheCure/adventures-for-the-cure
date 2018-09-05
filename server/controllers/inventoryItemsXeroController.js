@@ -17,6 +17,12 @@ exports.getInventoryItems = function(req, res) {
         var category = 'General';
         var imgPath = '';
         if (item.IsTrackedAsInventory && item.QuantityOnHand > 0 && item.Name.indexOf('test') < 0) {
+          // add mug image
+          if (item.Code === 'ESC-2018-MUG' === 0) {
+            imgPath = 'img/mugs/ESC-2018-MUG-2.jpg'
+          }
+
+          // figure out category stuff
           if (item.Name.indexOf('shirt') >= 0) {
             category = 'T-Shirts'
           } else if (item.Code.indexOf('STICKER') === 0) {
