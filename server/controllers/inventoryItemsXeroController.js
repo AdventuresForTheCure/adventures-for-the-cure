@@ -18,7 +18,7 @@ exports.getInventoryItems = function(req, res) {
         var imgPath = '';
         if (item.IsTrackedAsInventory && item.QuantityOnHand > 0 && item.Name.indexOf('test') < 0) {
           // add mug image
-          if (item.Code === 'ESC-2018-MUG' === 0) {
+          if (item.Code === 'ESC-2018-MUG') {
             imgPath = 'img/mugs/ESC-2018-MUG-2.jpg'
           }
 
