@@ -1,19 +1,19 @@
-.col-lg-12(ng-controller='loginCtrl')
-  .well
-    form.form-horizontal(name="loginForm")
-      fieldset
-        legend Log In
-        .form-group
-          label.col-md-2.control-label(for="username") Username (Email)
-          .col-md-10
-            input.form-control(name="username", type="email", placeholder="Username (Email)", ng-model="loginUsername", required, autocomplete="off" )
-        .form-group
-          label.col-md-2.control-label(for="password") Password
-          .col-md-10
-            input.form-control(name="password", type="password", placeholder="Password", ng-model="loginPassword", required, autocomplete="off" )
-        .form-group
-          .col-md-10.col-md-offset-2
-            .pull-right
-              button.btn.btn-primary(ng-click="login()", ng-disabled="loginForm.$invalid") Log In
-              | &nbsp;
-              a.btn.btn-default(href="/") Cancel
+//.col-lg-12(ng-controller='loginCtrl')
+//  .well
+//    form.form-horizontal(name="loginForm")
+//      fieldset
+//        legend Log In
+//        .form-group
+//          label.col-md-2.control-label(for="username") Username (Email)
+//          .col-md-10
+//            input.form-control(name="username", type="email", placeholder="Username (Email)", ng-model="loginUsername", required, autocomplete="off" )
+//        .form-group
+//          label.col-md-2.control-label(for="password") Password
+//          .col-md-10
+//            input.form-control(name="password", type="password", placeholder="Password", ng-model="loginPassword", required, autocomplete="off" )
+//        .form-group
+//          .col-md-10.col-md-offset-2
+//            .pull-right
+//              button.btn.btn-primary(ng-click="login()", ng-disabled="loginForm.$invalid") Log In
+//              | &nbsp;
+//              a.btn.btn-default(href="/") Cancel

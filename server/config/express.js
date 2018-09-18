@@ -10,8 +10,8 @@ module.exports = function(app, config) {
   app.use(logger('combined'));
   app.use(bodyParser());
   app.use(cookieSession({secret: 'afc anyth!ng is possible'}));
-  app.use(passport.initialize());
-  app.use(passport.session());
+  // app.use(passport.initialize());
+  // app.use(passport.session());
 
   // ensure that all public requests go to the /public directory
   app.use(express.static(config.rootPath + '/public'));
