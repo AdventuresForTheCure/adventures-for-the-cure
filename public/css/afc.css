@@ -103,6 +103,10 @@ body#rides a#rides
 	min-height: 335px;
 }
 
+.large-height {
+  min-height: 370px;
+}
+
 .small-height {
 	min-height: 150px;
 }
