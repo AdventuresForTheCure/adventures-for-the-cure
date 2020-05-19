@@ -65,12 +65,10 @@ Member.toMemberData = function(member) {
     data.bio = member.bio;
   }
   if (member.imgPath) {
-    data.imgPath = member.imgPath.replace('http://', 'https://');
-    console.log('data.imgPath: ' + data.imgPath);
+    data.imgPath = member.imgPath;
   }
   if (member.imgPathTmp) {
-    data.imgPathTmp = member.imgPathTmp.replace('http://', 'https://');
-    console.log('data.imgPathTmp: ' + data.imgPathTmp);
+    data.imgPathTmp = member.imgPathTmp;
   }
   if (member.roles) {
     var roles = JSON.parse(member.roles);
