@@ -1,7 +1,7 @@
 # Adventures For the Cure
 
 ## Goals
-* To replace http://adventuresforthecure.com
+* To replace https://adventuresforthecure.com
   * Currently it is a php, javascript, html application running on a Go Daddy server
   * This new version will be a MEAN stack implementation running on a Heroku server with a Mongo database backend
 * After all funcationality has been replaced add in the following:

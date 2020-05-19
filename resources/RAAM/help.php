@@ -7,7 +7,7 @@
 			someone you know would be willing to lend us their vehicle or sponsor the rental of one of 
 			these vehicles please send an email to <b class="email">adventuresforthecure@gmail.com</b>.  
 			Possible sponsors can see our 
-			<a href="http://adventuresforthecure.com/docs/2008%20RAAM/raam_sponsor_req.pdf">sponsor\'s 
+			<a href="https://adventuresforthecure.com/docs/2008%20RAAM/raam_sponsor_req.pdf">sponsor\'s 
 			request form</a> for additional sponsorship information.
 		</div>';
 	include('../php/page.php');
