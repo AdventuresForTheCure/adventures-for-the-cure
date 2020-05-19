@@ -15,7 +15,7 @@ exports.saveVolunteerEvent = function(req, res) {
       if (!result) {
         volunteerEventData.imgPath = '';
       } else {
-        volunteerEventData.imgPath = result.url;
+        volunteerEventData.imgPath = result.secure_url;
       }
 
       // create the item
