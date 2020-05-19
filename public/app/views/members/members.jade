@@ -34,7 +34,6 @@
       p.member-bio(ng-if='!editMode')
         | {{selectedMember.bio}}
       p(ng-if='ableToEdit()' style='text-align:right')
-        a(ng-if='editMode' ng-click='saveMember()' href='') Save
-        &nbsp;
+        a(ng-if='editMode' ng-click='saveMember()' href='') Save &nbsp;
         a(ng-if='editMode' ng-click='cancel()' href='') Cancel
         a(ng-if='!editMode' ng-click='enableEditMode()' href='') Edit
