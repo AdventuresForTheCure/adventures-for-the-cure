@@ -23,7 +23,7 @@ exports.saveMember = function(req, res, next) {
         if (!result) {
           memberData.imgPath = '';
         } else {
-          memberData.imgPath = result.url;
+          memberData.imgPath = result.secure_url;
         }
         // save member data
         saveMemberData(req, res, memberData);
@@ -82,7 +82,7 @@ exports.updateMember = function(req, res) {
         cloudinaryWrapper.saveImg(req.files.img, imgName, function (err, result) {
           if (err) { errorHandler.sendError(req, res, err); }
           else {
-            memberData.imgPath = result.url;
+            memberData.imgPath = result.secure_url;
             updateMember(req, res, memberId, memberData);
           }
         });
@@ -126,7 +126,7 @@ exports.updateMemberTmpImg = function(req, res) {
         cloudinaryWrapper.saveImg(req.files.file, imgName, function (err, result) {
           if (err) { errorHandler.sendError(req, res, err); }
           else {
-            memberData.imgPathTmp = result.url;
+            memberData.imgPathTmp = result.secure_url;
             updateMember(req, res, memberId, memberData);
           }
         });
