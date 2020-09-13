@@ -1,4 +1,5 @@
 .idea
 node_modules
 public/app/vendor
+server/certs
 Thumbs.db
