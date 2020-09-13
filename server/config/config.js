@@ -22,8 +22,8 @@ var videosPath = rootPath + 'public/app/views/results/videos/';
 var env = process.env.NODE_ENV = process.env.NODE_ENV || 'development';
 var fs = require('fs');
 
-var privateKey  = fs.readFileSync(rootPath + 'server/certs/server.key', 'utf8');
-var certificate = fs.readFileSync(rootPath + 'server/certs/server.crt', 'utf8');
+var privateKey  = fs.readFileSync(rootPath + 'server/certs/www_adventuresforthecure_com.key', 'utf8');
+var certificate = fs.readFileSync(rootPath + 'server/certs/www_adventuresforthecure_com.pem', 'utf8');
 
 var environments = {
   /**

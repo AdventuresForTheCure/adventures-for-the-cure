@@ -1,7 +1,7 @@
 var crypto = require("crypto");
 var oauth = require("oauth");
 var config = require('../config/config');
-var rsa_key = require('fs').readFileSync(config.rootPath + 'server/certs/privatekey.pem');
+var rsa_key = require('fs').readFileSync(config.rootPath + 'server/certs/www_adventuresforthecure_com.pem');
 
 function Xero(key, secret) {
   this._key = key;
