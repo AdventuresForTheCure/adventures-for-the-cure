@@ -156,3 +156,12 @@ div[name='inventoryItemList'] form > .row, div[name='inventoryItemList'] > .row 
 .table-centered td {
   padding-right: 20px;
 }
+
+.summer-running-challenge-input-label {
+    font-weight: normal;
+    margin-left: 4px;
+}
+
+.summer-running-challenge-header {
+    padding-bottom: 4px;
+}
