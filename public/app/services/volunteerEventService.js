@@ -18,24 +18,26 @@ function volunteerEventService($q, $http, $upload) {
   }
 
   return {
-    deleteVolunteerEvent: function(volunteerEvent) {
+    deleteVolunteerEvent: function (volunteerEvent) {
       var dfd = $q.defer();
-      $http.delete('/api/volunteerEvents/' + volunteerEvent._id)
-        .success(function(data, status, headers, config) {
+      $http
+        .delete('/api/volunteerEvents/' + volunteerEvent._id)
+        .success(function (data, status, headers, config) {
           dfd.resolve();
         })
-        .error(function(error, status, headers, config) {
+        .error(function (error, status, headers, config) {
           dfd.reject(error.reason);
         });
       return dfd.promise;
     },
 
-    getVolunteerEvents: function() {
+    getVolunteerEvents: function () {
       var dfd = $q.defer();
       var config = {
-        transformResponse: transformResponse
+        transformResponse: transformResponse,
       };
-      $http.get('/api/volunteerEvents/', config)
+      $http
+        .get('/api/volunteerEvents/', config)
         .success(function (data, status, headers, config) {
           dfd.resolve(data);
         })
@@ -45,23 +47,24 @@ function volunteerEventService($q, $http, $upload) {
       return dfd.promise;
     },
 
-    getVolunteerEvent: function(name) {
+    getVolunteerEvent: function (name) {
       var dfd = $q.defer();
       var config = {
-        transformResponse: transformResponse
+        transformResponse: transformResponse,
       };
-      $http.get('/api/volunteerEvents/' + name, config)
-        .success(function(data, status, headers, config) {
+      $http
+        .get('/api/volunteerEvents/' + name, config)
+        .success(function (data, status, headers, config) {
           formatDate(data);
           dfd.resolve(data);
         })
-        .error(function(error, status, headers, config) {
+        .error(function (error, status, headers, config) {
           dfd.reject(error.reason);
         });
       return dfd.promise;
     },
 
-    saveVolunteerEvent: function(volunteerEvent) {
+    saveVolunteerEvent: function (volunteerEvent) {
       var dfd = $q.defer();
 
       // if the volunteerEvent has an id then it is an 'update'
@@ -71,39 +74,45 @@ function volunteerEventService($q, $http, $upload) {
         url = '/api/volunteerEvents/' + volunteerEvent._id;
       }
 
-      $upload.upload({
-        url: url,
-        data: volunteerEvent,
-        file: volunteerEvent.img
-      }).progress(function(evt) {
-      }).success(function(data, status, headers, config) {
-        // file is uploaded successfully
-        formatDate(data);
-        dfd.resolve(data);
-      }).error(function(error, status, headers, config) {
-        dfd.reject(error.reason);
-      });
+      $upload
+        .upload({
+          url: url,
+          data: volunteerEvent,
+          file: volunteerEvent.img,
+        })
+        .progress(function (evt) {})
+        .success(function (data, status, headers, config) {
+          // file is uploaded successfully
+          formatDate(data);
+          dfd.resolve(data);
+        })
+        .error(function (error, status, headers, config) {
+          dfd.reject(error.reason);
+        });
 
       return dfd.promise;
     },
 
-    saveVolunteerEventTmpImg: function(volunteerEvent) {
+    saveVolunteerEventTmpImg: function (volunteerEvent) {
       var dfd = $q.defer();
       var url = '/api/volunteerEvents/tmpImg/' + volunteerEvent._id;
 
-      $upload.upload({
-        url: url,
-        file: volunteerEvent.imgTmp
-      }).progress(function(evt) {
-      }).success(function(data, status, headers, config) {
-        // file is uploaded successfully
-        formatDate(data);
-        dfd.resolve(data);
-      }).error(function(error, status, headers, config) {
-        dfd.reject(error.reason);
-      });
+      $upload
+        .upload({
+          url: url,
+          file: volunteerEvent.imgTmp,
+        })
+        .progress(function (evt) {})
+        .success(function (data, status, headers, config) {
+          // file is uploaded successfully
+          formatDate(data);
+          dfd.resolve(data);
+        })
+        .error(function (error, status, headers, config) {
+          dfd.reject(error.reason);
+        });
 
       return dfd.promise;
-    }
+    },
   };
 }

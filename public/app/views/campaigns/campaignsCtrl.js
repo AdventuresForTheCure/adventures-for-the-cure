@@ -4,11 +4,11 @@ function campaignsCtrl($scope, $sce, $location, campaignService) {
   $scope.selectedCampaign = undefined;
   $scope.selectedCampaignHtml = '';
 
-  campaignService.getCampaigns().then(function(campaigns) {
+  campaignService.getCampaigns().then(function (campaigns) {
     $scope.campaigns = campaigns;
     var selectedCampaignName = $location.hash();
     if (selectedCampaignName === '') {
-      $scope.selectCampaign(campaigns[campaigns.length-1]);
+      $scope.selectCampaign(campaigns[campaigns.length - 1]);
     } else {
       var campaign;
       for (var i = 0; i < campaigns.length; i++) {
@@ -26,8 +26,8 @@ function campaignsCtrl($scope, $sce, $location, campaignService) {
     }
   });
 
-  $scope.selectCampaign = function(campaign) {
-    campaignService.getCampaign(campaign.name).then(function(campaignHtml) {
+  $scope.selectCampaign = function (campaign) {
+    campaignService.getCampaign(campaign.name).then(function (campaignHtml) {
       // use $sce.trustAsHtml to tell angular that the html received is 'safe' to display
       $scope.selectedCampaign = campaign;
       $scope.selectedCampaignHtml = $sce.trustAsHtml(campaignHtml);
@@ -35,4 +35,3 @@ function campaignsCtrl($scope, $sce, $location, campaignService) {
     });
   };
 }
-

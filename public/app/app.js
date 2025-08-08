@@ -1,6 +1,6 @@
 angular.module('app', ['ngResource', 'ngRoute', 'ui.bootstrap', 'angularFileUpload']);
 
-angular.module('app').config(function($routeProvider, $locationProvider) {
+angular.module('app').config(function ($routeProvider, $locationProvider) {
   // var routeRoleChecks = {
   //   admin: { auth: function(authorizationService) {
   //     return authorizationService.authorizeAuthorizedMemberForRoute('admin');
@@ -26,30 +26,18 @@ angular.module('app').config(function($routeProvider, $locationProvider) {
 
   // configure the available routes
   $routeProvider
-    .when('/', { redirectTo: '/home'
-    })
-    .when('/home', { templateUrl: '/partials/home/home'
-    })
-    .when('/donate', { templateUrl: '/partials/donate/donate'
-    })
-    .when('/events', { templateUrl: '/partials/events/events'
-    })
-    .when('/rides', { templateUrl: '/partials/rides/rides'
-    })
-    .when('/members', { templateUrl: '/partials/members/members'
-    })
-    .when('/results', { templateUrl: '/partials/results/results'
-    })
-    .when('/campaigns', { templateUrl: '/partials/campaigns/campaigns'
-    })
-    .when('/sponsor-logos', { templateUrl: '/partials/sponsorLogos/sponsor-logos'
-    })
-    .when('/inventory', { templateUrl: '/partials/inventory/inventory'
-    })
-    .when('/contact', { templateUrl: '/partials/contact/contact'
-    })
-    .when('/join', { templateUrl: '/partials/join/join'
-    })
+    .when('/', { redirectTo: '/home' })
+    .when('/home', { templateUrl: '/partials/home/home' })
+    .when('/donate', { templateUrl: '/partials/donate/donate' })
+    .when('/events', { templateUrl: '/partials/events/events' })
+    .when('/rides', { templateUrl: '/partials/rides/rides' })
+    .when('/members', { templateUrl: '/partials/members/members' })
+    .when('/results', { templateUrl: '/partials/results/results' })
+    .when('/campaigns', { templateUrl: '/partials/campaigns/campaigns' })
+    .when('/sponsor-logos', { templateUrl: '/partials/sponsorLogos/sponsor-logos' })
+    .when('/inventory', { templateUrl: '/partials/inventory/inventory' })
+    .when('/contact', { templateUrl: '/partials/contact/contact' })
+    .when('/join', { templateUrl: '/partials/join/join' })
     // .when('/login', { templateUrl: '/partials/login/login',
     //   controller: 'loginCtrl'
     // })
@@ -78,7 +66,7 @@ angular.module('app').config(function($routeProvider, $locationProvider) {
     //   resolve: routeRoleChecks.boardWithFullProfile
     // })
     .otherwise({
-      templateUrl: '/partials/invalidPage/invalidPage'
+      templateUrl: '/partials/invalidPage/invalidPage',
     });
 });
 
@@ -86,8 +74,8 @@ angular.module('app').config(function($routeProvider, $locationProvider) {
  * If any route is attempted that the user is not authorized for then send
  * the user back to the home page
  */
-angular.module('app').run(function($rootScope, $location, notifierService, identityService) {
-  $rootScope.$on('$routeChangeError', function(evt, current, previous, rejection) {
+angular.module('app').run(function ($rootScope, $location, notifierService, identityService) {
+  $rootScope.$on('$routeChangeError', function (evt, current, previous, rejection) {
     if (rejection === 'not authorized') {
       notifierService.error('You are not authorized to view this page.  Are you logged in?');
       $location.path('/login');
@@ -95,7 +83,9 @@ angular.module('app').run(function($rootScope, $location, notifierService, ident
       notifierService.error('You must upload a bio and picture before you can view this page!');
       $location.path('/member-edit/' + identityService.currentMember._id);
     } else if (rejection === 'not authorized, membership is not active') {
-      notifierService.error('You are not an active member of AFC, please contact adventuresforthecure@gmail.com with questions');
+      notifierService.error(
+        'You are not an active member of AFC, please contact adventuresforthecure@gmail.com with questions'
+      );
       $location.path('/member-edit/' + identityService.currentMember._id);
     }
   });

@@ -14,27 +14,27 @@ function inventoryCtrl($scope, inventoryService, notifierService, identityServic
     'Movies',
     'Saucony Running Gear',
     'Water Bottles',
-    'Winged Foot T-shirts and Sweats'
+    'Winged Foot T-shirts and Sweats',
   ];
   $scope.isLoading = false;
 
-  $scope.ableToEdit = function() {
+  $scope.ableToEdit = function () {
     if (identityService.currentMember && identityService.currentMember.isInventory()) {
       return true;
     } else {
       return false;
     }
-  }
+  };
 
-  $scope.isAdmin = function() {
+  $scope.isAdmin = function () {
     if (identityService.currentMember && identityService.currentMember.isAdmin()) {
       return true;
     } else {
       return false;
     }
-  }
+  };
 
-  $scope.inEditMode = function(inventoryItem) {
+  $scope.inEditMode = function (inventoryItem) {
     if (identityService.currentMember && identityService.currentMember.isInventory() && inventoryItem.inEditMode) {
       return true;
     } else {
@@ -42,7 +42,7 @@ function inventoryCtrl($scope, inventoryService, notifierService, identityServic
     }
   };
 
-  $scope.toggleEditMode = function(inventoryItem, index) {
+  $scope.toggleEditMode = function (inventoryItem, index) {
     inventoryItem.inEditMode = !inventoryItem.inEditMode;
     if (inventoryItem.inEditMode) {
       inventoryItem.master = angular.copy(inventoryItem);
@@ -54,57 +54,69 @@ function inventoryCtrl($scope, inventoryService, notifierService, identityServic
     }
   };
 
-  $scope.update = function(inventoryItem) {
+  $scope.update = function (inventoryItem) {
     inventoryItem.inEditMode = false;
-    inventoryService.save(inventoryItem).then(function(item) {
-      notifierService.notify('Inventory item was update');
-    }, function(reason) {
-      notifierService.error(reason);
-    });
+    inventoryService.save(inventoryItem).then(
+      function (item) {
+        notifierService.notify('Inventory item was update');
+      },
+      function (reason) {
+        notifierService.error(reason);
+      }
+    );
   };
 
-  $scope.createItem = function() {
-    inventoryService.save($scope.newItem).then(function(item) {
-      notifierService.notify('New item was created');
-      $scope.getInventoryItems();
-    }, function(reason) {
-      notifierService.error(reason);
-    });
+  $scope.createItem = function () {
+    inventoryService.save($scope.newItem).then(
+      function (item) {
+        notifierService.notify('New item was created');
+        $scope.getInventoryItems();
+      },
+      function (reason) {
+        notifierService.error(reason);
+      }
+    );
   };
 
-  $scope.resetForm = function() {
+  $scope.resetForm = function () {
     $scope.newItem = newItem();
   };
 
-  $scope.delete = function(inventoryItem) {
+  $scope.delete = function (inventoryItem) {
     var message = 'Are you sure you want to delete the item: ' + inventoryItem.name + '?';
-    confirmModalService.showModal(message).then(function(isConfirmed) {
+    confirmModalService.showModal(message).then(function (isConfirmed) {
       if (isConfirmed) {
-        inventoryService.delete(inventoryItem).then(function(item) {
-          $scope.getInventoryItems();
-          notifierService.notify('Inventory item was deleted');
-        }, function(reason) {
-          notifierService.error(reason);
-        });
+        inventoryService.delete(inventoryItem).then(
+          function (item) {
+            $scope.getInventoryItems();
+            notifierService.notify('Inventory item was deleted');
+          },
+          function (reason) {
+            notifierService.error(reason);
+          }
+        );
       }
-    })
+    });
   };
 
-  $scope.onFileSelect = function($files) {
+  $scope.onFileSelect = function ($files) {
     $scope.newItem.img = $files[0];
   };
 
-  $scope.onUpdatedFileSelect = function(inventoryItem, $files) {
+  $scope.onUpdatedFileSelect = function (inventoryItem, $files) {
     inventoryItem.img = $files[0];
     inventoryItem.loadingImg = true;
-    inventoryService.saveImg(inventoryItem).then(function(updatedInventoryItem) {
-      inventoryItem.loadingImg = false;
-      inventoryItem.imgPath = updatedInventoryItem.imgPath;
-      inventoryItem.img = $files[0];
-    }, function(reason) {
-      inventoryItem.loadingImg = false;
-      notifierService.error('Error uploading image, please try again...');
-    });
+    inventoryService.saveImg(inventoryItem).then(
+      function (updatedInventoryItem) {
+        inventoryItem.loadingImg = false;
+        inventoryItem.imgPath = updatedInventoryItem.imgPath;
+        inventoryItem.img = $files[0];
+      },
+      function (reason) {
+        inventoryItem.loadingImg = false;
+        notifierService.error('Error uploading image, please try again...');
+      }
+    );
   };
 
   function newItem() {
@@ -114,28 +126,31 @@ function inventoryCtrl($scope, inventoryService, notifierService, identityServic
       quantity: 0,
       price: 0,
       salePrice: undefined,
-      img: undefined
-    }
-  };
+      img: undefined,
+    };
+  }
 
-  $scope.getInventoryItems = function() {
+  $scope.getInventoryItems = function () {
     $scope.isLoading = true;
-//    inventoryService.getInventoryItems().then(function(inventoryItems) {
-    inventoryService.getXeroInventoryItems().then(function(inventoryItems) {
-      $scope.isLoading = false;
-      $scope.inventoryItems = {};
-      for (var i = 0; i < inventoryItems.length; i++) {
-        var inventoryItem = inventoryItems[i];
-        if (angular.isUndefined($scope.inventoryItems[inventoryItem.category])) {
-          $scope.inventoryItems[inventoryItem.category] = [];
+    //    inventoryService.getInventoryItems().then(function(inventoryItems) {
+    inventoryService.getXeroInventoryItems().then(
+      function (inventoryItems) {
+        $scope.isLoading = false;
+        $scope.inventoryItems = {};
+        for (var i = 0; i < inventoryItems.length; i++) {
+          var inventoryItem = inventoryItems[i];
+          if (angular.isUndefined($scope.inventoryItems[inventoryItem.category])) {
+            $scope.inventoryItems[inventoryItem.category] = [];
+          }
+          $scope.inventoryItems[inventoryItem.category].push(inventoryItem);
+          inventoryItem.inEditMode = false;
         }
-        $scope.inventoryItems[inventoryItem.category].push(inventoryItem);
-        inventoryItem.inEditMode = false;
+      },
+      function (reason) {
+        $scope.isLoading = false;
+        notifierService.error(reason);
       }
-    }, function(reason) {
-      $scope.isLoading = false;
-      notifierService.error(reason);
-    });
+    );
   };
 
   $scope.getInventoryItems();

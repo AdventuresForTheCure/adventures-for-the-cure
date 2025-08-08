@@ -7,20 +7,20 @@ function identityService($window, Member) {
   }
   return {
     currentMember: currentMember,
-    isAuthenticated: function() {
+    isAuthenticated: function () {
       return !!this.currentMember;
     },
-    isAuthorized: function(role) {
+    isAuthorized: function (role) {
       return !!this.currentMember && this.currentMember.isRole(role);
     },
-    isAdmin: function() {
+    isAdmin: function () {
       return !!this.currentMember && this.currentMember.isRole('admin');
     },
-    isBoard: function() {
+    isBoard: function () {
       return !!this.currentMember && this.currentMember.isRole('board');
     },
-    isInventory: function() {
+    isInventory: function () {
       return !!this.currentMember && this.currentMember.isRole('inventory');
-    }
+    },
   };
 }

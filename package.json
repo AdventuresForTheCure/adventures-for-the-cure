@@ -8,7 +8,10 @@
   },
   "scripts": {
     "start": "node app",
-    "postinstall": "gulp"
+    "postinstall": "gulp",
+    "lint": "eslint \"public/app/**/*.js\"",
+    "lint:fix": "eslint \"public/app/**/*.js\" --fix",
+    "format": "prettier --write \"public/app/**/*.js\""
   },
   "engines": {
     "node": "6.9.x",

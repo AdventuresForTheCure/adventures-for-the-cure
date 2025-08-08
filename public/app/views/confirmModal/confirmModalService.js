@@ -9,13 +9,13 @@ function confirmModalService($modal, $q) {
         resolve: {
           message: function () {
             return message;
-          }
-        }
+          },
+        },
       });
       modalInstance.result.then(function () {
         deferred.resolve(true);
       });
       return deferred.promise;
-    }
-  }
+    },
+  };
 }

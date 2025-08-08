@@ -10,24 +10,26 @@ function memberService($q, $http, $upload, Member) {
   }
 
   return {
-    deleteMember: function(member) {
+    deleteMember: function (member) {
       var dfd = $q.defer();
-      $http.delete('/api/members/' + member._id)
-        .success(function(data, status, headers, config) {
+      $http
+        .delete('/api/members/' + member._id)
+        .success(function (data, status, headers, config) {
           dfd.resolve();
         })
-        .error(function(error, status, headers, config) {
+        .error(function (error, status, headers, config) {
           dfd.reject(error.reason);
         });
       return dfd.promise;
     },
 
-    getMembers: function() {
+    getMembers: function () {
       var dfd = $q.defer();
       var config = {
-        transformResponse: transformResponse
+        transformResponse: transformResponse,
       };
-      $http.get('/api/members/', config)
+      $http
+        .get('/api/members/', config)
         .success(function (data, status, headers, config) {
           dfd.resolve(data);
         })
@@ -37,12 +39,13 @@ function memberService($q, $http, $upload, Member) {
       return dfd.promise;
     },
 
-    getActiveMembers: function() {
+    getActiveMembers: function () {
       var dfd = $q.defer();
       var config = {
-        transformResponse: transformResponse
+        transformResponse: transformResponse,
       };
-      $http.get('/api/members/active/', config)
+      $http
+        .get('/api/members/active/', config)
         .success(function (data, status, headers, config) {
           dfd.resolve(data);
         })
@@ -52,23 +55,24 @@ function memberService($q, $http, $upload, Member) {
       return dfd.promise;
     },
 
-    getMember: function(name) {
+    getMember: function (name) {
       // because we need to get a html file as the content for a given member
       // we must use the $http.get method and not the Member resource.  The Member
       // resource will only give us json as a $resource result but $http.get will give us
       // our desired html in the response.
       var dfd = $q.defer();
-      $http.get('/api/members/' + name, {})
-        .success(function(data, status, headers, config) {
+      $http
+        .get('/api/members/' + name, {})
+        .success(function (data, status, headers, config) {
           dfd.resolve(data);
         })
-        .error(function(error, status, headers, config) {
+        .error(function (error, status, headers, config) {
           dfd.reject(error.reason);
         });
       return dfd.promise;
     },
 
-    saveMember: function(member) {
+    saveMember: function (member) {
       var dfd = $q.defer();
 
       // if the member has an id then it is an 'update'
@@ -78,25 +82,29 @@ function memberService($q, $http, $upload, Member) {
         url = '/api/members/' + member._id;
       }
 
-      $upload.upload({
-        url: url,
-        data: member,
-        file: member.img
-      }).progress(function(evt) {
-        console.log('percent: ' + parseInt(100.0 * evt.loaded / evt.total));
-      }).success(function(data, status, headers, config) {
-        // file is uploaded successfully
-        console.log(data);
-        dfd.resolve(data);
-      }).error(function(error, status, headers, config) {
-        console.log(error);
-        dfd.reject(error.reason);
-      });
+      $upload
+        .upload({
+          url: url,
+          data: member,
+          file: member.img,
+        })
+        .progress(function (evt) {
+          console.log('percent: ' + parseInt((100.0 * evt.loaded) / evt.total));
+        })
+        .success(function (data, status, headers, config) {
+          // file is uploaded successfully
+          console.log(data);
+          dfd.resolve(data);
+        })
+        .error(function (error, status, headers, config) {
+          console.log(error);
+          dfd.reject(error.reason);
+        });
 
       return dfd.promise;
     },
 
-    updateActiveStatus: function(member) {
+    updateActiveStatus: function (member) {
       var dfd = $q.defer();
 
       if (member.isActive) {
@@ -104,36 +112,41 @@ function memberService($q, $http, $upload, Member) {
       } else {
         url = '/api/member/deactivate/' + member._id;
       }
-      $http.get(url, {})
-        .success(function(data, status, headers, config) {
+      $http
+        .get(url, {})
+        .success(function (data, status, headers, config) {
           dfd.resolve(data);
         })
-        .error(function(error, status, headers, config) {
+        .error(function (error, status, headers, config) {
           dfd.reject(error.reason);
         });
 
       return dfd.promise;
     },
 
-    saveMemberTmpImg: function(member) {
+    saveMemberTmpImg: function (member) {
       var dfd = $q.defer();
       var url = '/api/members/tmpImg/' + member._id;
 
-      $upload.upload({
-        url: url,
-        file: member.imgTmp
-      }).progress(function(evt) {
-        console.log('percent: ' + parseInt(100.0 * evt.loaded / evt.total));
-      }).success(function(data, status, headers, config) {
-        // file is uploaded successfully
-        console.log(data);
-        dfd.resolve(data);
-      }).error(function(error, status, headers, config) {
-        console.log(error);
-        dfd.reject(error.reason);
-      });
+      $upload
+        .upload({
+          url: url,
+          file: member.imgTmp,
+        })
+        .progress(function (evt) {
+          console.log('percent: ' + parseInt((100.0 * evt.loaded) / evt.total));
+        })
+        .success(function (data, status, headers, config) {
+          // file is uploaded successfully
+          console.log(data);
+          dfd.resolve(data);
+        })
+        .error(function (error, status, headers, config) {
+          console.log(error);
+          dfd.reject(error.reason);
+        });
 
       return dfd.promise;
-    }
+    },
   };
 }
