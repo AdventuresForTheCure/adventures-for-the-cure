@@ -1,4 +1,3 @@
-var emailer = require('../utilities/emailer');
 var htmlUtils = require('../utilities/htmlUtils');
 
 /**
@@ -27,9 +26,6 @@ exports.sendError = function(req, res, err, status) {
 
   // log the error
   console.error(errMsg);
-
-  // email the error to the admins
-  emailer.sendErrorMessageEMail(errMsg);
 
   // set the status to 400 if it was not explicitly set already
   status = (status) ? status : 400;
