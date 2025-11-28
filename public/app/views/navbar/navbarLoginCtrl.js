@@ -11,8 +11,19 @@ function navbarLoginCtrl($scope, $location, identityService, notifierService, au
   //     $location.path('/');
   //   });
   // };
-  //
-  // $scope.isActive = function (viewLocation) {
-  //   return viewLocation === $location.path();
-  // };
+
+  $scope.isCollapsed = true;
+
+  $scope.toggleCollapse = function () {
+    $scope.isCollapsed = !$scope.isCollapsed;
+  };
+
+  $scope.isActive = function (viewLocation) {
+    return viewLocation === $location.path();
+  };
+
+  // Close menu when a link is clicked
+  $scope.$on('$routeChangeSuccess', function () {
+    $scope.isCollapsed = true;
+  });
 }

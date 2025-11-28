@@ -1,15 +1,14 @@
-.navbar.navbar-inverse.navbar-fixed-top(ng-controller='navbarLoginCtrl' role='navigation')
+.navbar.navbar-inverse.navbar-fixed-top(ng-controller='navbarLoginCtrl' role='navigation' ng-init="isCollapsed = true")
   .container-fluid
     .navbar-header
-      button(type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar")
+      button(type="button" class="navbar-toggle" ng-click="isCollapsed = !isCollapsed" ng-class="{collapsed: isCollapsed}")
         span.sr-only Toggle navigation
         span.icon-bar
         span.icon-bar
         span.icon-bar
-      </button>
       a.navbar-brand(href='/')
         img(src='/img/afc.jpg')
-    .collapse.navbar-collapse(id='navbar')
+    .collapse.navbar-collapse(collapse='isCollapsed')
       ul.nav.navbar-nav.navbar-left
         li(ng-class='{ active: isActive("/home")}')
           a(href='/home') Home
