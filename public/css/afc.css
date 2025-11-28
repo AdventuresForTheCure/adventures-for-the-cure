@@ -299,17 +299,21 @@ footer {
 
     /* Typography */
     h4 {
-        font-size: 1.25rem;
-        margin-bottom: 1rem;
+        font-size: 2rem;
+        /* Approx 20px */
+        margin-bottom: 1.5rem;
     }
 
     h5 {
-        font-size: 1.1rem;
+        font-size: 1.6rem;
+        /* Approx 16px */
     }
 
     p {
-        font-size: 0.95rem;
+        font-size: 1.6rem;
+        /* Approx 16px */
         line-height: 1.6;
+        margin-bottom: 1.5rem;
     }
 
     /* Cards/Wells */
@@ -346,7 +350,6 @@ footer {
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        padding: 12px 20px;
     }
 
     /* Navbar */
