@@ -28,6 +28,17 @@ body {
   padding: 0.8rem 0.72rem;
 }
 
+.afc-navbar .navbar-toggler {
+  min-width: 44px;
+  min-height: 44px;
+  padding: 0.55rem;
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
+.afc-navbar .navbar-toggler:focus {
+  box-shadow: 0 0 0 0.2rem rgba(255, 255, 255, 0.35);
+}
+
 .afc-navbar .nav-link.active {
   color: #fff;
   font-weight: 700;
@@ -89,13 +100,38 @@ body {
 }
 
 @media (max-width: 991px) {
+  body {
+    padding-top: 82px;
+  }
+
   .afc-navbar .navbar-brand img {
     max-height: 44px;
   }
 
   .afc-navbar .navbar-collapse {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    left: 0;
     max-height: calc(100vh - 72px);
+    max-height: calc(100dvh - 72px);
     overflow-y: auto;
+    overscroll-behavior: contain;
+    padding: 0.5rem 1rem 1rem;
+    background: #161616;
+    box-shadow: 0 8px 14px rgba(0, 0, 0, 0.2);
+  }
+
+  .afc-navbar .nav-link {
+    display: flex;
+    min-height: 44px;
+    align-items: center;
+    padding: 0.7rem 0.85rem;
+    border-radius: 0.35rem;
+  }
+
+  .afc-navbar .nav-link.active {
+    background: rgba(255, 255, 255, 0.12);
   }
 
   .sponsor-logo-list {
@@ -104,7 +140,61 @@ body {
 }
 
 @media (max-width: 575px) {
+  body {
+    padding-top: 78px;
+    padding-bottom: 24px;
+  }
+
   .afc-navbar .navbar-brand img {
     max-width: calc(100vw - 100px);
+    max-height: 40px;
+  }
+
+  .afc-page > .row {
+    --bs-gutter-x: 0.75rem;
+  }
+
+  .afc-main-content > .well,
+  .afc-main-content > .row {
+    margin-bottom: 0.85rem;
+  }
+
+  .afc-main-content .well {
+    min-height: 0;
+    padding: 1rem;
+    border-radius: 0.75rem;
+  }
+
+  .afc-main-content .well p,
+  .legacy-content p {
+    font-size: 1rem;
+    line-height: 1.65;
+  }
+
+  .afc-main-content h1 {
+    font-size: clamp(1.75rem, 8vw, 2.25rem);
+  }
+
+  .legacy-content a:not(.afc-action-button) {
+    display: inline;
+    min-height: 0;
+  }
+
+  .legacy-content .afc-action-button {
+    display: inline-flex;
+    min-height: 44px;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+
+  .legacy-content table {
+    display: block;
+    max-width: 100%;
+    overflow-x: auto;
+  }
+
+  .afc-footer {
+    padding: 1rem 0.75rem;
   }
 }

@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { cleanup, render, screen } from '@testing-library/react';
+import { cleanup, fireEvent, render, screen } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import App from './App.jsx';
 
@@ -29,6 +29,22 @@ describe('site routes', () => {
     expect(Array.from(navigation.querySelectorAll('a.nav-link'), (link) => link.textContent)).toEqual([
       'Home', 'Join', 'Events', 'Rides', 'Campaigns', 'Contact'
     ]);
+  });
+
+  it('opens the mobile navigation and closes it after choosing a page', () => {
+    render(<MemoryRouter initialEntries={['/home']}><App /></MemoryRouter>);
+
+    const menuButton = screen.getByRole('button', {name: 'Open navigation menu'});
+    const menu = screen.getByRole('navigation', {name: 'Main navigation'}).querySelector('#afc-navigation');
+
+    expect(menu.classList.contains('show')).toBe(false);
+    fireEvent.click(menuButton);
+    expect(menu.classList.contains('show')).toBe(true);
+    expect(menuButton.getAttribute('aria-expanded')).toBe('true');
+
+    fireEvent.click(screen.getByRole('link', {name: 'Events'}));
+    expect(menu.classList.contains('show')).toBe(false);
+    expect(screen.getByRole('heading', {name: 'AFC Events'})).toBeTruthy();
   });
 
   it('shows the fallback for retired top level pages', () => {

@@ -1,4 +1,5 @@
-import { NavLink, Navigate, Route, Routes } from 'react-router-dom';
+import { NavLink, Navigate, Route, Routes, useLocation } from 'react-router-dom';
+import { useEffect, useState } from 'react';
 import { ToastContainer } from 'react-toastify';
 import Campaigns from './pages/Campaigns.jsx';
 import LegacyContent from './LegacyContent.jsx';
@@ -17,20 +18,40 @@ const links = [
 ];
 
 function Navigation() {
+  const [isOpen, setIsOpen] = useState(false);
+  const location = useLocation();
+
+  useEffect(() => {
+    setIsOpen(false);
+  }, [location.pathname]);
+
   return (
     <nav className="navbar navbar-expand-lg navbar-dark afc-navbar fixed-top" aria-label="Main navigation">
       <div className="container-fluid">
         <NavLink className="navbar-brand" to="/home" aria-label="Adventures For the Cure home">
           <img src="/img/afc.jpg" alt="Adventures For the Cure" />
         </NavLink>
-        <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#afc-navigation" aria-controls="afc-navigation" aria-expanded="false" aria-label="Toggle navigation">
+        <button
+          className="navbar-toggler"
+          type="button"
+          aria-controls="afc-navigation"
+          aria-expanded={isOpen}
+          aria-label={isOpen ? 'Close navigation menu' : 'Open navigation menu'}
+          onClick={() => setIsOpen((open) => !open)}
+        >
           <span className="navbar-toggler-icon" />
         </button>
-        <div className="collapse navbar-collapse" id="afc-navigation">
+        <div className={`collapse navbar-collapse${isOpen ? ' show' : ''}`} id="afc-navigation">
           <ul className="navbar-nav me-auto">
             {links.map(([label, to]) => (
               <li className="nav-item" key={to}>
-                <NavLink className={({ isActive }) => `nav-link${isActive ? ' active' : ''}`} to={to}>{label}</NavLink>
+                <NavLink
+                  className={({ isActive }) => `nav-link${isActive ? ' active' : ''}`}
+                  to={to}
+                  onClick={() => setIsOpen(false)}
+                >
+                  {label}
+                </NavLink>
               </li>
             ))}
           </ul>
