@@ -1,52 +1,33 @@
 # Adventures For the Cure
 
-## Goals
-* To replace https://adventuresforthecure.com
-  * Currently it is a php, javascript, html application running on a Go Daddy server
-  * This new version will be a MEAN stack implementation running on a Heroku server with a Mongo database backend
-* After all funcationality has been replaced add in the following:
-  * Team member login/roles
-  * Board member login/roles
-  * Secured member only resources/pages
-  * Member profile update/delete/creation
-  * Inventory management/order placement
+Legacy website built with Node.js, Express, Jade, and AngularJS. The project targets Node 6.9.x and npm 3.10.x; its older dependencies may not work with modern Node versions.
 
-## Deployment links
-* Development: http://enigmatic-eyrie-7804.herokuapp.com/
+## Setup
 
-## How to recreate a project like this one
-* To create a project like this one perform the following steps:
-  * npm init
-  * npm install express jade --save
-  * git init
-  * (create /README.md file)
-  * (create /.gitignore file)
-  * git add -A
-  * git commit -m "first commit"
-  * npm install bower -g --save
-  * (create /server directory)
-  * (create /public directory)
-  * (create /.bowerrc file)
-  * bower init
-  * bower install jquery --save
-  * bower install toastr --save
-  * bower install angular angular-resource angular-route --save
-  * (create /server.js file)
+In PowerShell, from the project root:
 
-## How to write tests
-* npm install mocha -g --save
-* npm install karma-mocha karma-chai-plugins superagent expect.js --save-dev
-* npm install jasmine-node-karma --save-dev
+```powershell
+npm install
+.\node_modules\.bin\bower.cmd install
+```
 
-* To add to heroku
-  * git remote add heroku git@INSERT_HEROKU_APP_NAME.git
-    * for example: git remote add heroku git@heroku.com:enigmatic-eyrie-7804.git
-  * git push heroku master
+## Run locally
 
-* To add to github
-  * git remote add origin https://github.com/INSERT_GITHUB_USERNAME/INSERT_PROJECT_NAME.git
-    * for example: git remote add origin https://github.com/pblair12/adventures-for-the-cure.git
-  * git push -u origin master
-  
-# Environmental Variables
- * You must have the following set: XERO_CONSUMER_KEY, XERO_CONSUMER_SECRET
+```powershell
+npm run start-local
+```
+
+The site listens on port `3030` by default. Set `PORT` to use a different port.
+
+## Build and development tasks
+
+The local Gulp executable is `node_modules/.bin/gulp` (`gulp.cmd` on Windows).
+
+```powershell
+.\node_modules\.bin\gulp.cmd                 # Default: lint client JavaScript and build public/dist/app.js
+.\node_modules\.bin\gulp.cmd public-all      # Clean and rebuild the client bundle
+.\node_modules\.bin\gulp.cmd server-all      # Lint server JavaScript
+.\node_modules\.bin\gulp.cmd development     # Build, lint server code, watch files, and restart the server
+```
+
+Gulp also defines `public-test` and `server-test`, which look for tests in `test/public/` and `test/server/`. Those directories currently contain no test files.

@@ -519,3 +519,176 @@ footer {
         transform: translateY(-8px) rotate(-45deg);
     }
 }
+
+/* Patapsco 100 campaign page */
+.campaign-ptap2026 {
+    max-width: 900px;
+    margin: 0 auto;
+    color: #333;
+}
+
+.campaign-ptap2026__hero {
+    padding: 12px 12px 28px;
+    text-align: center;
+    border-bottom: 1px solid #eee;
+}
+
+.campaign-ptap2026__eyebrow {
+    margin: 0 0 8px;
+    color: #990000;
+    font-size: 0.9em;
+    font-weight: bold;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.campaign-ptap2026__hero h1 {
+    margin: 0 0 12px;
+    color: #333;
+    font-size: 2.8em;
+    font-weight: 700;
+}
+
+.campaign-ptap2026__hero h1 span {
+    color: #cc0000;
+}
+
+.campaign-ptap2026__intro {
+    max-width: 650px;
+    margin: 0 auto 20px;
+    font-size: 1.15em;
+    line-height: 1.6;
+}
+
+.campaign-ptap2026__logo {
+    display: block;
+    width: 100%;
+    max-width: 420px;
+    height: auto;
+    margin: 0 auto;
+}
+
+.campaign-ptap2026__panel {
+    margin-top: 22px;
+    padding: 24px;
+    background: #fff;
+    border: 1px solid #eee;
+    border-radius: 10px;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+}
+
+.campaign-ptap2026__fundraising {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.campaign-ptap2026__fundraising-summary,
+.campaign-ptap2026__donate {
+    flex: 1 1 280px;
+    padding: 8px 18px;
+    text-align: center;
+}
+
+.campaign-ptap2026__fundraising-summary {
+    border-right: 1px solid #eee;
+}
+
+.campaign-ptap2026__raised-label {
+    margin: 10px 0 0;
+    color: #555;
+}
+
+.campaign-ptap2026__raised-amount {
+    margin: 0;
+    color: #cc0000;
+    font-size: 2.6em;
+    font-weight: 700;
+    line-height: 1.2;
+}
+
+.campaign-ptap2026__note {
+    color: #777;
+    font-size: 0.92em;
+}
+
+.campaign-ptap2026__donate p {
+    line-height: 1.6;
+}
+
+.campaign-ptap2026__paypal-button {
+    max-width: 100%;
+    height: auto;
+}
+
+.campaign-ptap2026__panel h2 {
+    margin: 0 0 14px;
+    color: #990000;
+    font-size: 1.5em;
+}
+
+.campaign-ptap2026__story p {
+    line-height: 1.6;
+}
+
+.campaign-ptap2026__mailing-intro {
+    margin-top: 22px;
+}
+
+.campaign-ptap2026__address {
+    margin: 0 0 8px;
+    line-height: 1.6;
+}
+
+.campaign-ptap2026__route .strava-embed-placeholder {
+    width: 100%;
+    max-width: 100%;
+    overflow: hidden;
+}
+
+.campaign-ptap2026__route iframe {
+    max-width: 100%;
+}
+
+.campaign-ptap2026__runners ul {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.campaign-ptap2026__runners li {
+    flex: 0 0 33.333%;
+    padding: 7px 12px 7px 20px;
+    line-height: 1.4;
+}
+
+@media (max-width: 767px) {
+    .campaign-ptap2026__hero h1 {
+        font-size: 2.2em;
+    }
+
+    .campaign-ptap2026__panel {
+        padding: 18px;
+    }
+
+    .campaign-ptap2026__fundraising-summary {
+        border-right: 0;
+        border-bottom: 1px solid #eee;
+    }
+
+    .campaign-ptap2026__runners li {
+        flex-basis: 50%;
+    }
+}
+
+@media (max-width: 420px) {
+    .campaign-ptap2026__panel {
+        padding: 16px 14px;
+    }
+
+    .campaign-ptap2026__runners li {
+        flex-basis: 100%;
+    }
+}
