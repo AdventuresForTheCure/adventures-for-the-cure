@@ -502,7 +502,7 @@ footer {
     text-align: center;
 }
 
-.campaign-ptap2026__action-button {
+.afc-action-button {
     display: inline-block;
     padding: 10px 20px;
     color: #fff;
@@ -512,8 +512,8 @@ footer {
     font-weight: 700;
 }
 
-.campaign-ptap2026__action-button:hover,
-.campaign-ptap2026__action-button:focus {
+.afc-action-button:hover,
+.afc-action-button:focus {
     color: #fff;
     background: #990000;
 }

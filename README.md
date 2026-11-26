@@ -26,7 +26,7 @@ npm run start-local
 
 This builds the frontend and starts Express on <http://localhost:3030>. It also builds automatically, so you do not need to run `npm run build` first.
 
-`npm run build` creates the production files in `dist/`. Run it before `npm start`, which starts Express without building. Production also requires `AFC_SESSION_SECRET`; `PORT` can change the default server port.
+`npm run build` creates the production files in `dist/`. Run it before `npm start`, which starts Express without building. `PORT` can change the default server port.
 
 ## Checks
 

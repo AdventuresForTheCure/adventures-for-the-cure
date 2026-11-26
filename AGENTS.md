@@ -34,5 +34,5 @@ The React app uses React Router. Some informational pages still render existing 
 - When changing a retained informational HTML page, inspect its React route and shared CSS context. Avoid reviving removed Jade or AngularJS paths.
 - The current server has no database, upload provider, or outgoing email service. Public `mailto:` links are part of site content and open the visitor's mail application.
 - Read current code and `git status` before editing. Preserve unrelated working-tree changes.
-- Keep secrets and tokens out of source and documentation. Configure the production session secret through the environment and rotate any real credentials that were previously exposed in source.
+- Keep secrets and tokens out of source and documentation. Do not add session configuration unless an active feature requires it; rotate any real credentials previously exposed in source.
 - Report the checks actually run and their outcomes.
