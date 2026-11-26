@@ -69,10 +69,37 @@ body {
   padding-left: 1.15rem;
 }
 
+.campaign-list {
+  padding-left: 0;
+  list-style: none;
+}
+
 .campaign-list li,
 .content-link-list li,
 .sponsor-logo-list li {
   margin: 0.35rem 0;
+}
+
+.campaign-list li {
+  position: relative;
+  margin: 0.12rem 0;
+  padding-left: 0.9rem;
+}
+
+.campaign-list li::before {
+  position: absolute;
+  top: 50%;
+  left: 0.15rem;
+  width: 0.4rem;
+  height: 0.4rem;
+  border: 1.5px solid #b00000;
+  border-radius: 50%;
+  content: '';
+  transform: translateY(-50%);
+}
+
+.campaign-list li.is-active::before {
+  background: #b00000;
 }
 
 .campaign-list__item,
@@ -85,9 +112,20 @@ body {
   text-decoration: underline;
 }
 
+.campaign-list__item {
+  color: #8a3f3f;
+  font-size: 0.8rem;
+  font-weight: 400;
+  line-height: 1.35;
+  text-decoration: none;
+}
+
 .campaign-list__item.is-active {
-  color: #333;
-  font-weight: 700;
+  padding: 0.12rem 0.35rem;
+  border-radius: 0.25rem;
+  background: #f8eeee;
+  color: #6b2929;
+  font-weight: 400;
   text-decoration: none;
 }
 
@@ -260,7 +298,7 @@ body {
     max-height: min(55vh, 420px);
     margin-top: 0.8rem;
     overflow-y: auto;
-    padding: 0.25rem 0 0.25rem 1.15rem;
+    padding: 0.25rem 0;
     border-top: 1px solid #eee;
   }
 
@@ -273,9 +311,13 @@ body {
     border-bottom: 1px solid #eee;
   }
 
+  .campaign-list li::before {
+    left: 0.15rem;
+  }
+
   .campaign-list__item {
     width: 100%;
     min-height: 44px;
-    padding: 0.6rem 0.25rem;
+    padding: 0.6rem 0.25rem 0.6rem 0.9rem;
   }
 }

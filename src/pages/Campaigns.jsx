@@ -106,7 +106,7 @@ export default function Campaigns() {
           {error && <p role="alert" className="text-danger">Unable to load campaigns: {error}</p>}
           <ul id="afc-campaign-list" className={`campaign-list${campaignListOpen ? ' is-open' : ''}`} aria-labelledby="campaign-list-title">
             {campaigns.map((campaign) => (
-              <li key={campaign.name}>
+              <li key={campaign.name} className={campaign.name === selected ? 'is-active' : undefined}>
                 <button
                   type="button"
                   className={campaign.name === selected ? 'campaign-list__item is-active' : 'campaign-list__item'}
