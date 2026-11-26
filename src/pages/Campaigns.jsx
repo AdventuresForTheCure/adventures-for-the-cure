@@ -10,6 +10,7 @@ export default function Campaigns() {
   const [selected, setSelected] = useState('');
   const [campaignHtml, setCampaignHtml] = useState('');
   const [error, setError] = useState('');
+  const [campaignListOpen, setCampaignListOpen] = useState(false);
 
   useEffect(() => {
     getJson('/api/campaigns')
@@ -51,6 +52,10 @@ export default function Campaigns() {
   }, [campaigns, location.hash, selected]);
 
   useEffect(() => {
+    setCampaignListOpen(false);
+  }, [location.hash]);
+
+  useEffect(() => {
     if (!selected) return;
     let active = true;
     setCampaignHtml('');
@@ -81,9 +86,25 @@ export default function Campaigns() {
           <p>Email <a className="email" href="mailto:afc-board-of-directors@googlegroups.com">afc-board-of-directors@googlegroups.com</a> to learn how to start your own AFC campaign.</p>
         </div>
         <div className="well">
-          <h2 className="h4">AFC Campaign List</h2>
+          <div className="campaign-list__header">
+            <h2 className="h4" id="campaign-list-title">AFC Campaign List</h2>
+            <button
+              type="button"
+              className="campaign-list__toggle"
+              aria-label={campaignListOpen ? 'Hide campaign list' : 'Show campaign list'}
+              aria-controls="afc-campaign-list"
+              aria-expanded={campaignListOpen}
+              onClick={() => setCampaignListOpen((open) => !open)}
+            >
+              <span className="campaign-list__hamburger" aria-hidden="true">
+                <span />
+                <span />
+                <span />
+              </span>
+            </button>
+          </div>
           {error && <p role="alert" className="text-danger">Unable to load campaigns: {error}</p>}
-          <ul className="campaign-list">
+          <ul id="afc-campaign-list" className={`campaign-list${campaignListOpen ? ' is-open' : ''}`} aria-labelledby="campaign-list-title">
             {campaigns.map((campaign) => (
               <li key={campaign.name}>
                 <button
@@ -94,6 +115,7 @@ export default function Campaigns() {
                     setError('');
                     setSelected(campaign.name);
                     const hash = `#${encodeURIComponent(campaign.name)}`;
+                    setCampaignListOpen(false);
                     if (location.hash !== hash) {
                       navigate({pathname: location.pathname, search: location.search, hash});
                     }

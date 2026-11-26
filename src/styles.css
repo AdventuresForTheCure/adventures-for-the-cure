@@ -91,6 +91,21 @@ body {
   text-decoration: none;
 }
 
+.campaign-list__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.campaign-list__header h2 {
+  margin-bottom: 1rem;
+}
+
+.campaign-list__toggle {
+  display: none;
+}
+
 .sponsor-logo-list {
   columns: 2;
 }
@@ -196,5 +211,71 @@ body {
 
   .afc-footer {
     padding: 1rem 0.75rem;
+  }
+}
+
+@media (max-width: 767px) {
+  .campaign-list__header {
+    margin-bottom: 0;
+  }
+
+  .campaign-list__header h2 {
+    margin: 0;
+  }
+
+  .campaign-list__toggle {
+    display: inline-flex;
+    width: 46px;
+    min-width: 46px;
+    height: 44px;
+    align-items: center;
+    justify-content: center;
+    padding: 0.55rem;
+    color: #222;
+    background: #fff;
+    border: 1px solid #bbb;
+    border-radius: 0.4rem;
+  }
+
+  .campaign-list__toggle:focus-visible {
+    outline: 3px solid rgba(176, 0, 0, 0.3);
+    outline-offset: 2px;
+  }
+
+  .campaign-list__hamburger,
+  .campaign-list__hamburger span {
+    display: block;
+    width: 22px;
+  }
+
+  .campaign-list__hamburger span {
+    height: 2px;
+    margin: 4px 0;
+    background: currentColor;
+    border-radius: 2px;
+  }
+
+  .campaign-list {
+    display: none;
+    max-height: min(55vh, 420px);
+    margin-top: 0.8rem;
+    overflow-y: auto;
+    padding: 0.25rem 0 0.25rem 1.15rem;
+    border-top: 1px solid #eee;
+  }
+
+  .campaign-list.is-open {
+    display: block;
+  }
+
+  .campaign-list li {
+    margin: 0;
+    border-bottom: 1px solid #eee;
+  }
+
+  .campaign-list__item {
+    width: 100%;
+    min-height: 44px;
+    padding: 0.6rem 0.25rem;
   }
 }

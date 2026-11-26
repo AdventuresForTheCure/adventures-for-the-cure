@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { cleanup, fireEvent, render, screen } from '@testing-library/react';
+import { cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import App from './App.jsx';
 
@@ -45,6 +45,26 @@ describe('site routes', () => {
     fireEvent.click(screen.getByRole('link', {name: 'Events'}));
     expect(menu.classList.contains('show')).toBe(false);
     expect(screen.getByRole('heading', {name: 'AFC Events'})).toBeTruthy();
+  });
+
+  it('toggles the campaign list on small screens and closes it after selecting a campaign', async () => {
+    vi.stubGlobal('fetch', vi.fn(async (url) => ({
+      ok: true,
+      json: async () => [{name: '2026 Campaign'}, {name: '2025 Campaign'}],
+      text: async () => `<article>${url}</article>`
+    })));
+    render(<MemoryRouter initialEntries={['/campaigns']}><App /></MemoryRouter>);
+
+    const toggle = screen.getByRole('button', {name: 'Show campaign list'});
+    const list = document.getElementById('afc-campaign-list');
+    fireEvent.click(toggle);
+    expect(list.classList.contains('is-open')).toBe(true);
+    expect(toggle.getAttribute('aria-expanded')).toBe('true');
+
+    const campaignButton = await screen.findByRole('button', {name: '2026 Campaign'});
+    fireEvent.click(campaignButton);
+    await waitFor(() => expect(list.classList.contains('is-open')).toBe(false));
+    expect(toggle.getAttribute('aria-expanded')).toBe('false');
   });
 
   it('shows the fallback for retired top level pages', () => {
