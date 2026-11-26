@@ -1,4 +1,8 @@
 .idea
 node_modules
-public/app/vendor
+dist
+coverage
+.env
+.env.*
+!.env.example
 Thumbs.db

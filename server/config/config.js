@@ -1,75 +1,22 @@
-/**
- * Configure the application.
- *
- * You can set additional heroku environmental variables like this:
- *   $ heroku config:set GITHUB_USERNAME=joesmith
- *   Adding config vars and restarting myapp... done, v12
- *   GITHUB_USERNAME: joesmith
- *
- *   $ heroku config
- *   GITHUB_USERNAME: joesmith
- *   OTHER_VAR:       production
- */
 var path = require('path');
-var rootPath = path.normalize(__dirname + '/../../');
-var sponsorLogosPath = rootPath + 'public/img/sponsors/2016/highres/';
-var sponsorLogosUrl = 'img/sponsors/2016/highres/';
-var jerseyImagesPath = rootPath + 'public/img/jerseys/2016';
-var jerseyImagesUrl = 'img/jerseys/2016';
-var campaignsPath = rootPath + 'public/app/views/campaigns/campaigns/';
-var membersPath = rootPath + 'public/app/views/members/members/';
-var videosPath = rootPath + 'public/app/views/results/videos/';
-var env = process.env.NODE_ENV = process.env.NODE_ENV || 'development';
-var fs = require('fs');
+var crypto = require('crypto');
+require('dotenv').config({path: path.resolve(__dirname, '../..', '.env')});
 
-// var privateKey  = fs.readFileSync(rootPath + 'server/certs/www_adventuresforthecure_com.key', 'utf8');
-// var certificate = fs.readFileSync(rootPath + 'server/certs/www_adventuresforthecure_com.pem', 'utf8');
+var rootPath = path.resolve(__dirname, '../..');
+var env = process.env.NODE_ENV || 'development';
+var sessionSecret = process.env.AFC_SESSION_SECRET;
 
-var environments = {
-  /**
-   * Development configuration
-   */
-  development: {
-    env: env,
-    db: {
-      url: 'mongodb://localhost:27017/adventuresforthecure',
-      debugMode: true
-    },
-    rootPath: rootPath,
-    sponsorLogosPath: sponsorLogosPath,
-    sponsorLogosUrl: sponsorLogosUrl,
-    campaignsPath: campaignsPath,
-    membersPath: membersPath,
-    videosPath: videosPath,
-    jerseyImagesPath: jerseyImagesPath,
-    jerseyImagesUrl: jerseyImagesUrl,
-    port: process.env.PORT || 3030,
-    emailer: {
-      password: process.env.AFC_EMAIL_PASSWORD
-    }
-  },
-  /**
-   * Production configuration
-   */
-  production: {
-    env: env,
-    db: {
-      url: 'mongodb://' + process.env.AFC_MONGO_USERNAME + ':' + process.env.AFC_MONGO_PASSWORD + '@ds053597.mongolab.com:53597/adventuresforthecure',
-      debugMode: false
-    },
-    rootPath: rootPath,
-    sponsorLogosPath: sponsorLogosPath,
-    sponsorLogosUrl: sponsorLogosUrl,
-    campaignsPath: campaignsPath,
-    membersPath: membersPath,
-    videosPath: videosPath,
-    jerseyImagesPath: jerseyImagesPath,
-    jerseyImagesUrl: jerseyImagesUrl,
-    port: process.env.PORT || 80,
-    emailer: {
-      password: process.env.AFC_EMAIL_PASSWORD
-    }
-  }
+if (env === 'production' && !sessionSecret) {
+  throw new Error('AFC_SESSION_SECRET must be configured in production');
+}
+
+module.exports = {
+  env: env,
+  rootPath: rootPath,
+  publicPath: path.join(rootPath, 'public'),
+  distPath: path.join(rootPath, 'dist'),
+  appPath: path.join(rootPath, 'dist', 'index.html'),
+  campaignsPath: path.join(rootPath, 'public/app/views/campaigns/campaigns'),
+  port: Number(process.env.PORT || 3030),
+  sessionSecret: sessionSecret || crypto.randomBytes(32).toString('hex')
 };
-
-module.exports = environments[env];

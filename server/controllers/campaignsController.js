@@ -1,31 +1,20 @@
-var Campaign = require('../models/Campaign');
-var dirReader = require('dir-reader');
 var config = require('../config/config');
-var errorHandler = require('../utilities/errorHandler');
+var contentFiles = require('../utilities/contentFiles');
 
-exports.getCampaigns = function(req, res) {
-  var campaigns = [];
-  var dir = config.campaignsPath;
-  dirReader.getDirItems(dir, function(err, files) {
-    if(err) { errorHandler.sendError(req, res, err); }
-    var i = 0;
-    for(i = 0; i < files.length; i++) {
-      var campaign = new Campaign();
-      campaign.name = files[i].fileName.replace('.html', '');
-      campaigns.push(campaign);
-    }
-    return res.send(campaigns);
-  });
+exports.getCampaigns = async function(req, res, next) {
+  try {
+    var files = await contentFiles.listFiles(config.campaignsPath, '.html');
+    res.json(files.map(function(fileName) { return {name: fileName.slice(0, -5)}; }));
+  } catch (error) {
+    next(error);
+  }
 };
 
-exports.getCampaign = function(req, res) {
-  var dir = config.campaignsPath;
-  var campaignName = req.params.name;
-  dirReader.getFileContents(dir, campaignName + '.html', function (err, data) {
-    if(err) { errorHandler.sendError(req, res, err); }
-    else {
-      res.set('Content-Type', 'text/html');
-      return res.send(data.fileContent);
-    }
-  });
+exports.getCampaign = async function(req, res, next) {
+  try {
+    var html = await contentFiles.readContent(config.campaignsPath, req.params.name, '.html');
+    res.type('html').send(html);
+  } catch (error) {
+    next(error);
+  }
 };

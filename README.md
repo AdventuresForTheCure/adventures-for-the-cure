@@ -1,33 +1,40 @@
 # Adventures For the Cure
 
-Legacy website built with Node.js, Express, Jade, and AngularJS. The project targets Node 6.9.x and npm 3.10.x; its older dependencies may not work with modern Node versions.
+The site runs on Node.js 26, Express 5, React, and Vite. Campaign and video pages are HTML content under `public/app/views/` and are served by the Express API.
 
-## Setup
+## Install
 
-In PowerShell, from the project root:
-
-```powershell
+```sh
 npm install
-.\node_modules\.bin\bower.cmd install
 ```
 
 ## Run locally
 
-```powershell
+For day-to-day development, run this once:
+
+```sh
+npm run dev
+```
+
+This starts both the Vite frontend and Express API. Open <http://localhost:5173>. Vite proxies API requests to Express on port `3030`; no separate terminal or build step is needed.
+
+For a production-like local run, use:
+
+```sh
 npm run start-local
 ```
 
-The site listens on port `3030` by default. Set `PORT` to use a different port.
+This builds the frontend and starts Express on <http://localhost:3030>. It also builds automatically, so you do not need to run `npm run build` first.
 
-## Build and development tasks
+`npm run build` creates the production files in `dist/`. Run it before `npm start`, which starts Express without building. Production also requires `AFC_SESSION_SECRET`; `PORT` can change the default server port.
 
-The local Gulp executable is `node_modules/.bin/gulp` (`gulp.cmd` on Windows).
+## Checks
 
-```powershell
-.\node_modules\.bin\gulp.cmd                 # Default: lint client JavaScript and build public/dist/app.js
-.\node_modules\.bin\gulp.cmd public-all      # Clean and rebuild the client bundle
-.\node_modules\.bin\gulp.cmd server-all      # Lint server JavaScript
-.\node_modules\.bin\gulp.cmd development     # Build, lint server code, watch files, and restart the server
+```sh
+npm test             # Server route/content-link checks and React tests
+npm run test:server  # Server tests only
+npm run test:client  # React tests only
+npm run audit        # npm security audit
 ```
 
-Gulp also defines `public-test` and `server-test`, which look for tests in `test/public/` and `test/server/`. Those directories currently contain no test files.
+Edit client behavior in `src/`, site images and styles in `public/`, and campaign/video content in their existing HTML directories. Build output in `dist/` is generated.

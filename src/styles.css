@@ -1,0 +1,110 @@
+@import url('/css/afc.css');
+@import url('/css/site.css');
+
+body {
+  padding-top: 86px;
+}
+
+.afc-navbar {
+  min-height: 72px;
+  background: #161616;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+.afc-navbar .navbar-brand {
+  display: flex;
+  align-items: center;
+  margin-right: 1.25rem;
+}
+
+.afc-navbar .navbar-brand img {
+  width: auto;
+  max-width: 305px;
+  max-height: 54px;
+  object-fit: contain;
+}
+
+.afc-navbar .nav-link {
+  padding: 0.8rem 0.72rem;
+}
+
+.afc-navbar .nav-link.active {
+  color: #fff;
+  font-weight: 700;
+}
+
+.afc-page {
+  min-height: calc(100vh - 170px);
+}
+
+.afc-main-content > .well,
+.afc-main-content > .row {
+  margin-bottom: 1rem;
+}
+
+.legacy-content img,
+.legacy-content iframe {
+  max-width: 100%;
+}
+
+.legacy-content img {
+  height: auto;
+}
+
+.campaign-list,
+.content-link-list,
+.sponsor-logo-list {
+  margin: 0;
+  padding-left: 1.15rem;
+}
+
+.campaign-list li,
+.content-link-list li,
+.sponsor-logo-list li {
+  margin: 0.35rem 0;
+}
+
+.campaign-list__item,
+.text-link {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: #b00000;
+  text-align: left;
+  text-decoration: underline;
+}
+
+.campaign-list__item.is-active {
+  color: #333;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.sponsor-logo-list {
+  columns: 2;
+}
+
+.afc-footer {
+  padding: 1.5rem 0;
+}
+
+@media (max-width: 991px) {
+  .afc-navbar .navbar-brand img {
+    max-height: 44px;
+  }
+
+  .afc-navbar .navbar-collapse {
+    max-height: calc(100vh - 72px);
+    overflow-y: auto;
+  }
+
+  .sponsor-logo-list {
+    columns: 1;
+  }
+}
+
+@media (max-width: 575px) {
+  .afc-navbar .navbar-brand img {
+    max-width: calc(100vw - 100px);
+  }
+}

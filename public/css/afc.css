@@ -10,33 +10,8 @@
     width: 180px;
 }
 
-.polka-dots {
-    background-image: url("/test/img/polka-dots.jpg");
-}
-
 .form-group {
     padding-left: 10px;
-}
-
-form[name='inventoryItemForm'] {
-    width: 100%;
-}
-
-form[name='inventoryItemForm'] input.inventory-item-name-input {
-    width: 275px;
-}
-
-form[name='inventoryItemForm'] input.inventory-item-number-input {
-    width: 75px;
-}
-
-.inventory-item-delete {
-    height: 25px;
-    margin-bottom: 2px;
-}
-
-select.inventory-item-select {
-    width: 100%;
 }
 
 body {
@@ -67,7 +42,6 @@ body#about a#about,
 body#members a#members,
 body#campaigns a#campaigns,
 body#results a#results,
-body#inventory a#inventory,
 body#join a#members,
 body#rides a#rides {
     background-color: #080808 \9;
@@ -76,6 +50,7 @@ body#rides a#rides {
 }
 
 .well {
+    margin-bottom: 20px;
     padding: 20px;
     background-color: #ffffff;
     border: none;
@@ -163,11 +138,6 @@ a:hover {
     right: 50px;
     top: 300px;
     width: 90%;
-}
-
-div[name='inventoryItemList'] form>.row,
-div[name='inventoryItemList']>.row {
-    border-top: solid grey thin;
 }
 
 .table-centered {
@@ -527,6 +497,53 @@ footer {
     color: #333;
 }
 
+.campaign-ptap2026__join {
+    margin: 0 0 18px;
+    text-align: center;
+}
+
+.campaign-ptap2026__action-button {
+    display: inline-block;
+    padding: 10px 20px;
+    color: #fff;
+    background: #b00000;
+    border: 0;
+    border-radius: 6px;
+    font-weight: 700;
+}
+
+.campaign-ptap2026__action-button:hover,
+.campaign-ptap2026__action-button:focus {
+    color: #fff;
+    background: #990000;
+}
+
+.campaign-ptap2026__partner-link {
+    text-decoration: underline;
+    text-underline-offset: 0.15em;
+}
+
+.campaign-ptap2026__partner-logo-link {
+    display: inline-block;
+    margin: 6px auto 12px;
+    padding: 8px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+}
+
+.campaign-ptap2026__partner-logo {
+    display: block;
+    width: 100%;
+    max-width: 180px;
+    max-height: 80px;
+    height: auto;
+    object-fit: contain;
+    margin: 0 auto;
+    background-color: #fff;
+    opacity: 1;
+}
+
 .campaign-ptap2026__hero {
     padding: 12px 12px 28px;
     text-align: center;
@@ -560,10 +577,10 @@ footer {
     line-height: 1.6;
 }
 
-.campaign-ptap2026__logo {
+.legacy-content .campaign-ptap2026__logo {
     display: block;
     width: 100%;
-    max-width: 420px;
+    max-width: 400px;
     height: auto;
     margin: 0 auto;
 }
