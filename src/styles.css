@@ -310,6 +310,7 @@ body {
   .campaign-list li {
     margin: 0;
     border-bottom: 1px solid #eee;
+    text-align: left;
   }
 
   .campaign-list li::before {
@@ -317,8 +318,10 @@ body {
   }
 
   .campaign-list__item {
+    display: block;
     width: 100%;
     min-height: 44px;
     padding: 0.6rem 0.25rem 0.6rem 0.9rem;
+    text-align: left;
   }
 }
