@@ -1,6 +1,7 @@
 var fs = require('fs');
 var path = require('path');
 var campaigns = require('../controllers/campaignsController');
+var site = require('../controllers/siteController');
 var cache = require('./cache');
 
 module.exports = function(app, config) {
@@ -15,7 +16,9 @@ module.exports = function(app, config) {
     res.status(404).json({reason: 'API endpoint not found'});
   });
 
-  app.get('/campaigns/:slug', campaigns.getCampaignPage);
+  app.get('/sitemap.xml', site.getSitemap);
+  app.get('/home', function(req, res) { res.redirect(301, '/'); });
+  app.get(['/', '/join', '/events', '/rides', '/contact', '/campaigns', '/campaigns/:slug'], site.renderPage);
 
   var builtIndex = path.join(config.distPath, 'index.html');
   var appIndex = fs.existsSync(builtIndex) ? builtIndex : path.join(config.rootPath, 'index.html');

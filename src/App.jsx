@@ -11,9 +11,10 @@ import joinHtml from '../public/app/views/join/join.html?raw';
 import sponsorsHtml from '../public/app/views/sponsors/sponsors.html?raw';
 import footerHtml from '../public/app/views/footer/footer.html?raw';
 import invalidHtml from '../public/app/views/invalidPage/invalidPage.html?raw';
+import { applyPageMetadata, clearPageMetadata, siteSeo } from './pageMetadata.js';
 
 const links = [
-  ['Home', '/home'], ['Join', '/join'], ['Events', '/events'],
+  ['Home', '/'], ['Join', '/join'], ['Events', '/events'],
   ['Rides', '/rides'], ['Campaigns', '/campaigns'], ['Contact', '/contact']
 ];
 
@@ -65,22 +66,36 @@ function Sponsors() {
   return <aside className="col-lg-3"><div dangerouslySetInnerHTML={{ __html: sponsorsHtml }} /></aside>;
 }
 
-function PageLayout() {
+function RouteMetadata() {
+  const location = useLocation();
+
+  useEffect(() => {
+    if (!siteSeo.pages[location.pathname]) return undefined;
+    applyPageMetadata(location.pathname);
+    return clearPageMetadata;
+  }, [location.pathname]);
+
+  return null;
+}
+
+function PageLayout({ initialData }) {
   return (
     <>
+      <RouteMetadata />
       <Navigation />
       <main className="container-fluid afc-page">
         <div className="row">
           <section className="col-lg-9 afc-main-content">
             <Routes>
-              <Route path="/" element={<Navigate to="/home" replace />} />
+              <Route path="/" element={<LegacyContent html={homeHtml} />} />
+              <Route path="/home" element={<Navigate to="/" replace />} />
               <Route path="/home" element={<LegacyContent html={homeHtml} />} />
               <Route path="/events" element={<LegacyContent html={eventsHtml} />} />
               <Route path="/rides" element={<LegacyContent html={ridesHtml} />} />
               <Route path="/join" element={<LegacyContent html={joinHtml} />} />
               <Route path="/contact" element={<LegacyContent html={contactHtml} />} />
-              <Route path="/campaigns" element={<Campaigns />} />
-              <Route path="/campaigns/:slug" element={<Campaigns />} />
+              <Route path="/campaigns" element={<Campaigns initialData={initialData} />} />
+              <Route path="/campaigns/:slug" element={<Campaigns initialData={initialData} />} />
               <Route path="*" element={<LegacyContent html={invalidHtml} />} />
             </Routes>
           </section>
@@ -93,6 +108,6 @@ function PageLayout() {
   );
 }
 
-export default function App() {
-  return <PageLayout />;
+export default function App({ initialData }) {
+  return <PageLayout initialData={initialData} />;
 }

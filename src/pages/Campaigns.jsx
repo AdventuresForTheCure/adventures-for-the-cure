@@ -1,11 +1,12 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
 import { getHtml, getJson } from '../api.js';
+import { applyCustomMetadata, clearPageMetadata, siteSeo } from '../pageMetadata.js';
 
 function getCampaignSlug(campaign) {
   if (campaign.slug) return campaign.slug;
   return campaign.name
-    .replace(/^\d{4}(?:-\d{2}(?:-\d{2})?)?\s+/, '')
+    .replace(/^\d{4}-\d{2}(?:-\d{2})?\s+/, '')
     .normalize('NFKD')
     .replace(/[\u0300-\u036f]/g, '')
     .toLowerCase()
@@ -14,34 +15,35 @@ function getCampaignSlug(campaign) {
 }
 
 function getCampaignTitle(campaign) {
-  return campaign.title || campaign.name.replace(/^\d{4}(?:-\d{2}(?:-\d{2})?)?\s+/, '').trim();
+  return campaign.title || campaign.name.replace(/^\d{4}-\d{2}(?:-\d{2})?\s+/, '').trim();
 }
 
-function updateMeta(attribute, key, value) {
-  let element = document.head.querySelector(`meta[${attribute}="${key}"]`);
-  if (!element) {
-    element = document.createElement('meta');
-    element.setAttribute(attribute, key);
-    document.head.appendChild(element);
-  }
-  element.setAttribute('content', value);
-  element.dataset.campaignMeta = 'true';
+function escapeHtml(value) {
+  return String(value)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
 }
 
-function updateCanonical(href) {
-  let element = document.head.querySelector('link[rel="canonical"]');
-  if (!element) {
-    element = document.createElement('link');
-    element.rel = 'canonical';
-    document.head.appendChild(element);
-  }
-  element.href = href;
-  element.dataset.campaignMeta = 'true';
+function ensureCampaignHeading(html, title) {
+  let headingCount = 0;
+  const normalized = html.replace(/<h1\b([^>]*)>([\s\S]*?)<\/h1>/gi, (heading, attributes, content) => {
+    headingCount += 1;
+    if (headingCount === 1) return `<h1${attributes}>${content}</h1>`;
+    return `<h2${attributes}>${content}</h2>`;
+  });
+
+  return headingCount ? normalized : `<h1>${escapeHtml(title)}</h1>${normalized}`;
 }
 
 function getCampaignPreview(campaignHtml, campaignTitle) {
   if (!campaignHtml) {
-    return {description: `Explore the ${campaignTitle} campaign from Adventures For the Cure.`, image: ''};
+    return {
+      description: `Explore the ${campaignTitle} campaign from Adventures For the Cure.`,
+      image: `${siteSeo.siteUrl}${siteSeo.organization.logo}`
+    };
   }
 
   const content = document.createElement('div');
@@ -49,12 +51,12 @@ function getCampaignPreview(campaignHtml, campaignTitle) {
   content.querySelectorAll('script, style').forEach((element) => element.remove());
   const description = (content.textContent || '').replace(/\s+/g, ' ').trim();
   const imageSource = content.querySelector('img')?.getAttribute('src');
-  let image = '';
+  let image = `${siteSeo.siteUrl}${siteSeo.organization.logo}`;
   if (imageSource && !/^(data:|javascript:)/i.test(imageSource)) {
     try {
       image = new URL(imageSource, window.location.href).href;
     } catch {
-      image = '';
+      image = `${siteSeo.siteUrl}${siteSeo.organization.logo}`;
     }
   }
 
@@ -66,24 +68,27 @@ function getCampaignPreview(campaignHtml, campaignTitle) {
   };
 }
 
-export default function Campaigns() {
+export default function Campaigns({ initialData }) {
   const location = useLocation();
   const navigate = useNavigate();
   const { slug } = useParams();
-  const [campaigns, setCampaigns] = useState([]);
-  const [selected, setSelected] = useState('');
-  const [campaignHtml, setCampaignHtml] = useState('');
+  const initialCampaign = initialData?.selectedCampaign || null;
+  const initialContentName = useRef(initialCampaign?.name || '');
+  const [campaigns, setCampaigns] = useState(initialData?.campaigns || []);
+  const [selected, setSelected] = useState(initialCampaign?.name || '');
+  const [campaignHtml, setCampaignHtml] = useState(initialData?.campaignHtml || '');
   const [error, setError] = useState('');
   const [campaignListOpen, setCampaignListOpen] = useState(false);
 
   useEffect(() => {
+    if (initialData?.campaigns?.length) return;
     getJson('/api/campaigns')
       .then((items) => {
         const sorted = items.slice().sort((a, b) => b.name.localeCompare(a.name));
         setCampaigns(sorted);
       })
       .catch((requestError) => setError(requestError.message));
-  }, []);
+  }, [initialData]);
 
   useEffect(() => {
     if (!campaigns.length) return;
@@ -97,8 +102,21 @@ export default function Campaigns() {
         hashName = '';
       }
       campaign = campaigns.find((item) => item.name === hashName);
+      if (campaign) {
+        navigate(`/campaigns/${getCampaignSlug(campaign)}${location.search}`, {replace: true});
+      }
     }
-    if (!campaign && !slug) campaign = campaigns[0];
+
+    if (!slug && !location.hash) {
+      campaign = campaigns[0] || null;
+      if (!campaign) {
+        setSelected('');
+        setCampaignHtml('');
+        setError('');
+        return;
+      }
+      navigate(`/campaigns/${getCampaignSlug(campaign)}${location.search}`, {replace: true});
+    }
 
     if (!campaign) {
       setSelected('');
@@ -110,7 +128,7 @@ export default function Campaigns() {
     setError('');
     setSelected(campaign.name);
     const campaignPath = `/campaigns/${getCampaignSlug(campaign)}`;
-    if (location.pathname !== campaignPath || location.hash) {
+    if (slug && location.pathname !== campaignPath) {
       navigate({pathname: campaignPath, search: location.search}, {replace: true});
     }
   }, [campaigns, location.hash, location.pathname, location.search, navigate, slug]);
@@ -120,7 +138,12 @@ export default function Campaigns() {
   }, [location.pathname]);
 
   useEffect(() => {
-    if (!selected) return;
+    if (!selected) return undefined;
+    if (initialContentName.current === selected) {
+      initialContentName.current = '';
+      return undefined;
+    }
+
     let active = true;
     setCampaignHtml('');
     getHtml(`/api/campaigns/${encodeURIComponent(selected)}`)
@@ -129,11 +152,15 @@ export default function Campaigns() {
     return () => { active = false; };
   }, [selected]);
 
+  const renderedCampaignHtml = selected
+    ? ensureCampaignHeading(campaignHtml, campaigns.find((campaign) => campaign.name === selected)?.title || selected)
+    : '';
+
   useEffect(() => {
-    if (!campaignHtml.includes('strava-embed-placeholder')) return;
+    if (!renderedCampaignHtml.includes('strava-embed-placeholder')) return undefined;
 
     const routeSection = document.querySelector('.campaign-ptap2026__route');
-    if (!routeSection) return;
+    if (!routeSection) return undefined;
 
     const embedScript = document.createElement('script');
     embedScript.src = 'https://strava-embeds.com/embed.js';
@@ -141,7 +168,7 @@ export default function Campaigns() {
     routeSection.appendChild(embedScript);
 
     return () => embedScript.remove();
-  }, [campaignHtml]);
+  }, [renderedCampaignHtml]);
 
   const selectedCampaign = campaigns.find((campaign) => campaign.name === selected);
 
@@ -149,29 +176,11 @@ export default function Campaigns() {
     if (!selectedCampaign) return undefined;
 
     const title = `${getCampaignTitle(selectedCampaign)} | Adventures For the Cure`;
-    const path = `/campaigns/${getCampaignSlug(selectedCampaign)}`;
-    const canonicalUrl = new URL(path, window.location.origin).href;
-    const preview = getCampaignPreview(campaignHtml, getCampaignTitle(selectedCampaign));
-    document.title = title;
-    updateMeta('name', 'description', preview.description);
-    updateMeta('property', 'og:type', 'website');
-    updateMeta('property', 'og:title', title);
-    updateMeta('property', 'og:description', preview.description);
-    updateMeta('property', 'og:url', canonicalUrl);
-    updateMeta('name', 'twitter:card', preview.image ? 'summary_large_image' : 'summary');
-    updateMeta('name', 'twitter:title', title);
-    updateMeta('name', 'twitter:description', preview.description);
-    if (preview.image) {
-      updateMeta('property', 'og:image', preview.image);
-      updateMeta('name', 'twitter:image', preview.image);
-    }
-    updateCanonical(canonicalUrl);
-
-    return () => {
-      document.title = 'Adventures For the Cure';
-      document.head.querySelectorAll('[data-campaign-meta="true"]').forEach((element) => element.remove());
-    };
-  }, [campaignHtml, selectedCampaign]);
+    const canonicalUrl = new URL(`/campaigns/${getCampaignSlug(selectedCampaign)}`, siteSeo.siteUrl).href;
+    const preview = getCampaignPreview(renderedCampaignHtml, getCampaignTitle(selectedCampaign));
+    applyCustomMetadata({title, description: preview.description, canonicalUrl, imageUrl: preview.image});
+    return clearPageMetadata;
+  }, [renderedCampaignHtml, selectedCampaign]);
 
   return (
     <div className="row campaign-browser">
@@ -190,11 +199,7 @@ export default function Campaigns() {
               aria-expanded={campaignListOpen}
               onClick={() => setCampaignListOpen((open) => !open)}
             >
-              <span className="campaign-list__hamburger" aria-hidden="true">
-                <span />
-                <span />
-                <span />
-              </span>
+              <span className="campaign-list__hamburger" aria-hidden="true"><span /><span /><span /></span>
             </button>
           </div>
           {error && <p role="alert" className="text-danger">{campaigns.length ? error : `Unable to load campaigns: ${error}`}</p>}
@@ -218,9 +223,15 @@ export default function Campaigns() {
         </div>
       </aside>
       <section className="col-lg-8" aria-live="polite">
-        {campaignHtml
-          ? <div className="well legacy-content" dangerouslySetInnerHTML={{ __html: campaignHtml }} />
-          : <div className="well" aria-busy="true">{error ? 'Campaign unavailable.' : 'Loading campaign…'}</div>}
+        {selected
+          ? renderedCampaignHtml
+            ? <div className="well legacy-content" dangerouslySetInnerHTML={{ __html: renderedCampaignHtml }} />
+            : <div className="well" aria-busy="true">{error ? 'Campaign unavailable.' : 'Loading campaign…'}</div>
+          : <div className="well campaign-archive-intro">
+              <h1>Charity Fundraising Campaigns</h1>
+              <p>Adventures For the Cure turns cycling and other adventures into opportunities to raise money and awareness for charitable causes. Browse current and past campaigns, or email us to learn how to start a campaign of your own.</p>
+              <p>Our campaigns have supported children with diabetes through Camp Nejeda and children with disabilities in Kenya through Kupenda for the Children.</p>
+            </div>}
       </section>
     </div>
   );

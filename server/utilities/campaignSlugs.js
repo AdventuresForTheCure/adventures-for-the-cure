@@ -9,8 +9,8 @@ function slugify(value) {
 
 exports.createCampaignEntries = function(names) {
   var entries = names.map(function(name) {
-    var datePrefix = name.match(/^(\d{4})(?:-\d{2}(?:-\d{2})?)?\s+/);
-    var title = name.replace(/^\d{4}(?:-\d{2}(?:-\d{2})?)?\s+/, '').trim() || name;
+    var datePrefix = name.match(/^(\d{4})-\d{2}(?:-\d{2})?\s+/);
+    var title = name.replace(/^\d{4}-\d{2}(?:-\d{2})?\s+/, '').trim() || name;
     return {
       name: name,
       title: title,
@@ -31,7 +31,11 @@ exports.createCampaignEntries = function(names) {
     if (usedSlugs.has(slug)) slug = entry.fullSlug;
     if (usedSlugs.has(slug)) slug += '-' + (index + 1);
     usedSlugs.add(slug);
-    return {name: entry.name, title: entry.title, slug: slug};
+    var title = entry.title;
+    if (baseCounts.get(entry.baseSlug) > 1 && entry.year && !new RegExp('\\b' + entry.year + '$').test(title)) {
+      title += ' ' + entry.year;
+    }
+    return {name: entry.name, title: title, slug: slug};
   });
 };
 

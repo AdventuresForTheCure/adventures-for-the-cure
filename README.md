@@ -28,6 +28,12 @@ This builds the frontend and starts Express on <http://localhost:3030>. It also 
 
 `npm run build` creates the production files in `dist/`. Run it before `npm start`, which starts Express without building. `PORT` can change the default server port.
 
+## Search visibility
+
+Production builds include server-rendered HTML for public page routes and the campaign archive. Campaign detail pages have dedicated `/campaigns/<slug>` URLs. Express also provides `/sitemap.xml`, and `public/robots.txt` allows public crawling while excluding API endpoints.
+
+After deployment, verify `https://www.adventuresforthecure.com/` in Google Search Console and submit `https://www.adventuresforthecure.com/sitemap.xml`. Search Console ownership verification and sitemap submission require access to the site’s Search Console property. The robots policy allows all crawlers, including crawlers used for AI search and model training.
+
 ## Checks
 
 ```sh

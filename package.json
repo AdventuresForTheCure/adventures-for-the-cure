@@ -9,10 +9,10 @@
     "start-local": "npm run build && node server.js",
     "server:dev": "node --watch server.js",
     "dev": "concurrently --kill-others --names api,web \"npm:server:dev\" \"vite --host 0.0.0.0\"",
-    "build": "vite build",
+    "build": "vite build && vite build --config vite.ssr.config.mjs",
     "heroku-postbuild": "npm run build",
     "test": "npm run test:server && npm run test:client",
-    "test:server": "node --test test/server/*.test.js",
+    "test:server": "npm run build && node --test test/server/*.test.js",
     "test:client": "vitest run",
     "audit": "npm audit --audit-level=low"
   },

@@ -1,0 +1,37 @@
+{
+  "siteUrl": "https://www.adventuresforthecure.com",
+  "organization": {
+    "name": "Adventures For the Cure",
+    "description": "A nonprofit team using cycling and adventure to raise money and awareness for charitable causes.",
+    "email": "afc-board-of-directors@googlegroups.com",
+    "logo": "/img/afc.jpg"
+  },
+  "pages": {
+    "/": {
+      "title": "Adventures For the Cure | Charity Fundraising Through Adventure",
+      "description": "Adventures For the Cure is a nonprofit team using cycling and adventure to support charitable causes through fundraising and community events.",
+      "image": "/img/banner.png"
+    },
+    "/join": {
+      "title": "Join Adventures For the Cure | Fundraise Through Sport",
+      "description": "Join Adventures For the Cure, a Maryland-based endurance sports team that brings fundraising, volunteering, and community together."
+    },
+    "/events": {
+      "title": "Maryland Charity Events | Adventures For the Cure",
+      "description": "Find charity events hosted by Adventures For the Cure in Maryland, including the annual Rockburn Cross event.",
+      "image": "/img/events/rockburncross.jpg"
+    },
+    "/rides": {
+      "title": "Catonsville Cycling Ride | Westside Worlds with AFC",
+      "description": "Join the Westside Worlds Tuesday ride starting at Catonsville Bikes. Seasonal start times and route details are shared with the ride group."
+    },
+    "/contact": {
+      "title": "Contact Adventures For the Cure | Maryland Nonprofit",
+      "description": "Contact Adventures For the Cure about membership, fundraising campaigns, donations, and charitable partnerships."
+    },
+    "/campaigns": {
+      "title": "Charity Fundraising Campaigns | Adventures For the Cure",
+      "description": "Explore current and past Adventures For the Cure campaigns, learn how endurance adventures support charitable causes, or start a campaign of your own."
+    }
+  }
+}

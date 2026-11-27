@@ -44,7 +44,7 @@ describe('site routes', () => {
 
     fireEvent.click(screen.getByRole('link', {name: 'Events'}));
     expect(menu.classList.contains('show')).toBe(false);
-    expect(screen.getByRole('heading', {name: 'AFC Events'})).toBeTruthy();
+    expect(screen.getByRole('heading', {name: 'AFC Charity Events in Maryland'})).toBeTruthy();
   });
 
   it('toggles the campaign list on small screens and closes it after selecting a campaign', async () => {
@@ -62,6 +62,7 @@ describe('site routes', () => {
     expect(toggle.getAttribute('aria-expanded')).toBe('true');
 
     const campaignLink = await screen.findByRole('link', {name: '2026 Campaign'});
+    expect(campaignLink.getAttribute('href')).toBe('/campaigns/2026-campaign');
     fireEvent.click(campaignLink);
     await waitFor(() => expect(list.classList.contains('is-open')).toBe(false));
     expect(toggle.getAttribute('aria-expanded')).toBe('false');
@@ -78,7 +79,7 @@ describe('site routes', () => {
   it('shows only the WsW ride on the rides page', () => {
     render(<MemoryRouter initialEntries={['/rides']}><App /></MemoryRouter>);
 
-    expect(screen.getByRole('heading', {name: 'Westside Worlds (WsW)'})).toBeTruthy();
+    expect(screen.getByRole('heading', {name: 'Westside Worlds (WsW) Ride'})).toBeTruthy();
     expect(screen.queryByRole('heading', {name: 'The ROOST'})).toBeNull();
     expect(screen.queryByRole('heading', {name: '8am Saturday Hub Ride'})).toBeNull();
     expect(screen.queryByRole('heading', {name: '10am Saturday Hub Ride'})).toBeNull();
