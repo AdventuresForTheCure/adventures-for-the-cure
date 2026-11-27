@@ -66,6 +66,16 @@ function Sponsors() {
   return <aside className="col-lg-3"><div dangerouslySetInnerHTML={{ __html: sponsorsHtml }} /></aside>;
 }
 
+function ScrollToTop() {
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+
+  return null;
+}
+
 function RouteMetadata() {
   const location = useLocation();
 
@@ -81,6 +91,7 @@ function RouteMetadata() {
 function PageLayout({ initialData }) {
   return (
     <>
+      <ScrollToTop />
       <RouteMetadata />
       <Navigation />
       <main className="container-fluid afc-page">

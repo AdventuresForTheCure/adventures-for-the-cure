@@ -186,9 +186,6 @@ export default function Campaigns({ initialData }) {
     <div className="row campaign-browser">
       <aside className="col-lg-4">
         <div className="well">
-          <p>Email <a className="email" href="mailto:afc-board-of-directors@googlegroups.com">afc-board-of-directors@googlegroups.com</a> to learn how to start your own AFC campaign.</p>
-        </div>
-        <div className="well">
           <div className="campaign-list__header">
             <h2 className="h4" id="campaign-list-title">AFC Campaign List</h2>
             <button
