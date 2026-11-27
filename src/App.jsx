@@ -80,6 +80,7 @@ function PageLayout() {
               <Route path="/join" element={<LegacyContent html={joinHtml} />} />
               <Route path="/contact" element={<LegacyContent html={contactHtml} />} />
               <Route path="/campaigns" element={<Campaigns />} />
+              <Route path="/campaigns/:slug" element={<Campaigns />} />
               <Route path="*" element={<LegacyContent html={invalidHtml} />} />
             </Routes>
           </section>

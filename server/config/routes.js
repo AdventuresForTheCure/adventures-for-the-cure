@@ -15,6 +15,8 @@ module.exports = function(app, config) {
     res.status(404).json({reason: 'API endpoint not found'});
   });
 
+  app.get('/campaigns/:slug', campaigns.getCampaignPage);
+
   var builtIndex = path.join(config.distPath, 'index.html');
   var appIndex = fs.existsSync(builtIndex) ? builtIndex : path.join(config.rootPath, 'index.html');
   app.use(function(req, res, next) {

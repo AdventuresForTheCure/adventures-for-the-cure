@@ -61,8 +61,8 @@ describe('site routes', () => {
     expect(list.classList.contains('is-open')).toBe(true);
     expect(toggle.getAttribute('aria-expanded')).toBe('true');
 
-    const campaignButton = await screen.findByRole('button', {name: '2026 Campaign'});
-    fireEvent.click(campaignButton);
+    const campaignLink = await screen.findByRole('link', {name: '2026 Campaign'});
+    fireEvent.click(campaignLink);
     await waitFor(() => expect(list.classList.contains('is-open')).toBe(false));
     expect(toggle.getAttribute('aria-expanded')).toBe('false');
   });
