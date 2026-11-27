@@ -114,7 +114,8 @@ body {
 
 .campaign-list__item {
   color: #8a3f3f;
-  font-size: 0.8rem;
+  font-family: inherit;
+  font-size: 1rem;
   font-weight: 400;
   line-height: 1.35;
   text-decoration: none;
